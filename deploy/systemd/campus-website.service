@@ -1,0 +1,17 @@
+[Unit]
+Description=campus_pro Website (FastAPI)
+After=network-online.target campus-redis.service
+Wants=network-online.target
+Requires=campus-redis.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/campus_pro/website
+EnvironmentFile=/opt/campus_pro/campus.env
+ExecStart=/opt/campus_pro/website/.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 5005 --workers 2 --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

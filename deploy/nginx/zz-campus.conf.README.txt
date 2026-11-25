@@ -1,0 +1,9 @@
+map_hash_bucket_size 由 htw.conf 统一设置；本文件须按字母序排在其后（zz- 前缀）加载。
+
+公网入口 19003 → upstream campus_web（台式机 10.66.0.4:5005 主 / 云端 127.0.0.1:5005 备），
+门禁与 19002 相同的双通道：X-Gateway-Token 头 或 cookie campus_gw。
+首次访问：http://<公网IP>:19003/__gate?token=<GATEWAY_TOKEN>
+
+安装：
+  cp zz-campus.conf /etc/nginx/conf.d/zz-campus.conf
+  nginx -t && systemctl reload nginx

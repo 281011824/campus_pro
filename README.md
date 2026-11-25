@@ -1,7 +1,25 @@
-# 班主任工作台与智能体
+# campus_pro · 班主任工作台与智能体
 
 > 京山市中等职业技术学校 · 班主任工作台与智能体系统
 > FastAPI + SQLite + 原生 JS（零前端构建）· 多角色一体化平台
+>
+> 项目代号：**campus_pro**（GitHub: `281011824/campus_pro`）
+
+## 🚀 当前部署（campus_pro）
+
+| 项 | 云端 | 台式机（业务主库） |
+|----|------|--------------------|
+| 部署目录 | `/opt/campus_pro` | `/opt/campus_pro` |
+| 应用进程 | `127.0.0.1:5005`（systemd `campus-website`）| `10.66.0.4:5005`（`bin/start.sh` 常驻）|
+| Redis | `127.0.0.1:6381`（`campus-redis`）| `127.0.0.1:6381` |
+| Worker | `campus-worker`（`-m tasks.interfaces.worker`）| `bin/start.sh` 托管 |
+| 数据库 | `/opt/campus_pro/runtime/dywork.db` | `/opt/campus_pro/runtime/dywork.db` |
+| 访问入口 | `http://124.221.26.96:19003`（nginx → 台式机主 / 云端备）| — |
+
+> 原有 `/opt/school_pro`（`htw-*` 服务、19002 入口）保持运行，互不影响；
+> 新栈使用独立端口（5005 / 6381 / 19003）与独立数据库副本。
+>
+> 云端 19003 需在云控制台安全组放行后才能从公网访问。
 
 ## ✅ 代码有效性声明
 

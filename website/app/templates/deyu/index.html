@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>政教处工作台 · 京山市中等职业技术学校</title>
+<link rel="stylesheet" href="/static/deyu/app.css?v=20261123e">
+<style>
+.dc-axis{font-size:8px !important;fill:#c94a4a !important}
+.dc-trend svg{width:auto !important;min-width:100% !important;height:auto !important}
+.dc-trend{overflow-x:scroll !important;overflow-y:hidden !important}
+.dc-trend::-webkit-scrollbar{height:10px}
+.dc-trend::-webkit-scrollbar-track{background:#F4EFE4;border-radius:5px}
+.dc-trend::-webkit-scrollbar-thumb{background:#c94a4a;border-radius:5px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <aside class="side">
+    <div class="brand">
+      <span class="seal">德</span>
+      <div class="brand-text">
+        <b>政教处工作台</b>
+        <small>京山市中等职业技术学校</small>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <button type="button" class="on" data-view="home">概览</button>
+      <div class="nav-sep"></div>
+      <button type="button" data-view="criteria">德育指标</button>
+      <button type="button" data-view="records">德育登记</button>
+      <button type="button" data-view="stats">全校统计</button>
+      <div class="nav-sep"></div>
+      <button type="button" data-view="roster">名单与寝室</button>
+    </nav>
+    <div class="side-foot">
+      <div class="who">
+        <span class="avatar" id="avatar">政</span>
+        <div><b id="userName">加载中…</b><small id="userRole">政教处</small></div>
+      </div>
+      <button type="button" class="logout" id="logout">退出登录</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">政教处概览</h1>
+        <p id="pageSub">全校德育治理总览</p>
+      </div>
+      <div class="top-right">
+        <span class="today" id="today"></span>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- 概览 -->
+      <section class="view on" id="view-home">
+        <div class="kpis">
+          <div class="kpi"><div class="k">待确认事件</div><div class="v" id="kpiPending">—</div>
+            <div class="s">班主任确认后计分</div></div>
+          <div class="kpi"><div class="k">今日登记</div><div class="v" id="kpiToday">—</div>
+            <div class="s">事件日期为今天</div></div>
+          <div class="kpi"><div class="k">重点学生</div><div class="v" id="kpiFocus">—</div>
+            <div class="s">扣分超阈值 / 高频 / 连续下滑</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>本周重点对象</h2><span class="badge danger" id="homeFocusCount">0 项</span></div>
+          <div class="card-body flush">
+            <div class="tbl-scroll">
+              <table>
+                <thead><tr><th>类型</th><th>对象</th><th>原因</th><th>分数</th></tr></thead>
+                <tbody id="homeFocusBody"></tbody>
+              </table>
+            </div>
+            <div class="loading" id="homeFocusEmpty" hidden>本周暂无重点对象</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 德育指标 -->
+      <section class="view" id="view-criteria">
+        <div class="toolbar">
+          <button type="button" class="btn primary" id="criteriaAddBtn">新增指标</button>
+          <span class="spacer"></span>
+          <span class="hint">分值范围 -20 ~ 20；修改分值不影响已登记事件的历史快照。</span>
+        </div>
+        <div class="cols-2">
+          <div class="card">
+            <div class="card-head"><h2>掌声鼓励</h2><span class="badge ok" id="praiseCount">0 项</span></div>
+            <div class="card-body flush">
+              <div class="tbl-scroll">
+                <table>
+                  <thead><tr><th>名称</th><th>分值</th><th>状态</th><th>操作</th></tr></thead>
+                  <tbody id="criteriaPraise"></tbody>
+                </table>
+              </div>
+              <div class="loading" id="criteriaPraiseEmpty" hidden>暂无指标</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>有待改善</h2><span class="badge danger" id="improveCount">0 项</span></div>
+            <div class="card-body flush">
+              <div class="tbl-scroll">
+                <table>
+                  <thead><tr><th>名称</th><th>分值</th><th>状态</th><th>操作</th></tr></thead>
+                  <tbody id="criteriaImprove"></tbody>
+                </table>
+              </div>
+              <div class="loading" id="criteriaImproveEmpty" hidden>暂无指标</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 德育登记 -->
+      <section class="view" id="view-records">
+        <div class="card">
+          <div class="card-head"><h2>登记德育事件</h2><span class="badge">全校登记 · 待班主任确认后计分</span></div>
+          <div class="card-body">
+            <div class="form-grid">
+              <div class="form-field">
+                <label>班级</label>
+                <select id="regClass"></select>
+              </div>
+              <div class="form-field">
+                <label>学生</label>
+                <select id="regStudent"></select>
+              </div>
+              <div class="form-field">
+                <label>德育指标</label>
+                <select id="regCriteria"></select>
+              </div>
+              <div class="form-field">
+                <label>事件日期</label>
+                <input type="date" id="regDate">
+              </div>
+              <div class="form-field full">
+                <label>事实描述<span class="req">*</span></label>
+                <textarea id="regFact" rows="2" placeholder="只写事实，不作定性"></textarea>
+              </div>
+              <div class="form-field full">
+                <button type="button" class="btn primary" id="regSubmit">提交登记</button>
+                <span class="hint" id="regHint">提交后状态为待确认，不计分。</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>待确认</h2><span class="badge warn" id="pendingCount">0 条</span></div>
+          <div class="card-body flush">
+            <div class="tbl-scroll">
+              <table>
+                <thead><tr><th>事件日期</th><th>班级 / 学生</th><th>指标</th><th>分值</th><th>事实</th><th>登记人</th><th>操作</th></tr></thead>
+                <tbody id="pendingBody"></tbody>
+              </table>
+            </div>
+            <div class="loading" id="pendingEmpty" hidden>暂无待确认事件</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>最近登记</h2><span class="badge">最近 100 条</span></div>
+          <div class="card-body flush">
+            <div class="tbl-scroll">
+              <table>
+                <thead><tr><th>事件日期</th><th>班级 / 学生</th><th>指标</th><th>分值</th><th>状态</th><th>事实</th><th>登记人</th></tr></thead>
+                <tbody id="recentBody"></tbody>
+              </table>
+            </div>
+            <div class="loading" id="recentEmpty" hidden>暂无登记记录</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 全校统计 -->
+      <section class="view" id="view-stats">
+        <div class="toolbar">
+          <label class="fl">周期
+            <select id="statPeriod">
+              <option value="week">本周</option>
+              <option value="month">本月</option>
+              <option value="term">本学期</option>
+            </select>
+          </label>
+          <label class="fl">年级
+            <select id="statGrade"><option value="">全部年级</option></select>
+          </label>
+          <label class="fl">班级
+            <select id="statClass"><option value="">全部班级</option></select>
+          </label>
+          <label class="fl">指标
+            <select id="statCriteria"><option value="">全部指标</option></select>
+          </label>
+          <span class="spacer"></span>
+          <button type="button" class="btn" id="statRefresh">刷新</button>
+          <button type="button" class="btn primary" id="statExport">导出 Excel</button>
+        </div>
+
+        <div id="statKpis"></div>
+
+        <div class="card">
+          <div class="card-head"><h2>重点对象</h2><span class="badge danger" id="statFocusCount">0 项</span></div>
+          <div class="card-body">
+            <div id="statFocusCards"></div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h2>加分 / 扣分与净分趋势</h2><span class="badge" id="statTrendRange">—</span></div>
+            <div class="card-body">
+              <div class="chart" id="statTrend"></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>指标构成</h2><span class="badge">仅已确认事件</span></div>
+            <div class="card-body">
+              <div id="statCriteriaMix"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>班级净分对比</h2><span class="badge">点击条形图筛选班级 · 区间不排名</span></div>
+          <div class="card-body">
+            <div id="statClassBars"></div>
+          </div>
+          <div class="card-body flush">
+            <div class="tbl-scroll">
+              <table>
+                <thead><tr><th>班级</th><th>净分</th><th>加 / 扣分</th><th>区间</th></tr></thead>
+                <tbody id="statClassBody"></tbody>
+              </table>
+            </div>
+            <div class="loading" id="statClassEmpty" hidden>当前筛选范围内无班级</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 名单与寝室 -->
+      <section class="view" id="view-roster">
+        <div class="tabs" id="rosterTabs">
+          <button type="button" class="on" data-tab="students">学生名单与学号</button>
+          <button type="button" data-tab="dorms">寝室分配</button>
+        </div>
+
+        <!-- 名单页 -->
+        <div id="rosterStudents">
+          <div class="toolbar">
+            <label class="fl">班级
+              <select id="rosterClass"></select>
+            </label>
+            <button type="button" class="btn ghost" id="rosterClassAdd">新增班级</button>
+            <button type="button" class="btn ghost" id="rosterClassEdit">编辑班级</button>
+            <button type="button" class="btn ghost" id="rosterClassDel">删除班级</button>
+            <span class="spacer"></span>
+            <a class="btn ghost" id="rosterTpl" href="/api/v1/deyu/students/template">下载模板</a>
+            <button type="button" class="btn primary" id="rosterUploadBtn">上传名单</button>
+            <input type="file" id="rosterFile" accept=".xlsx" hidden>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h2>学生名单</h2>
+              <div class="toolbar" style="margin:0">
+                <span class="badge" id="rosterStuBadge">0 人</span>
+                <span class="hint" id="rosterSelHint">未选择学生</span>
+                <button type="button" class="btn primary" id="rosterAddStu">新增学生</button>
+                <button type="button" class="btn danger" id="rosterDelete" disabled>删除选中</button>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="tbl-scroll">
+                <table>
+                  <thead><tr>
+                    <th style="width:36px"><input type="checkbox" id="rosterPickAll" aria-label="全选"></th>
+                    <th>学号</th><th>姓名</th><th>性别</th><th>专业</th><th>年级</th><th>班级</th>
+                    <th>宿舍号</th><th>住宿类型</th><th>家长姓名</th><th>家长关系</th>
+                    <th>家长电话</th><th>床位号</th><th>家庭住址</th><th>状态</th><th>操作</th>
+                  </tr></thead>
+                  <tbody id="rosterBody"></tbody>
+                </table>
+              </div>
+              <div class="loading" id="rosterEmpty">选择班级后加载学生名单</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head">
+              <h2>导入结果</h2>
+              <div class="toolbar" style="margin:0">
+                <span class="badge" id="importBadge">尚未导入</span>
+                <button type="button" class="btn ghost" id="importErrBtn" hidden>下载错误明细</button>
+              </div>
+            </div>
+            <div class="card-body flush">
+              <div class="tbl-scroll">
+                <table>
+                  <thead><tr><th>行号</th><th>班级</th><th>姓名</th><th>学号</th><th>结果</th><th>说明</th></tr></thead>
+                  <tbody id="importBody"></tbody>
+                </table>
+              </div>
+              <div class="loading" id="importEmpty">上传含「班级、姓名、性别、学号(可空)」及专业/宿舍/家长等列的 xlsx 文件</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>学号编排</h2><span class="badge" id="numberRule">规则：年级2位 + 班号2位 + 序号2位</span></div>
+            <div class="card-body">
+              <div class="toolbar">
+                <label class="fl">学号前缀
+                  <input type="text" id="numberPrefix" placeholder="默认 年级+班号" style="width:120px">
+                </label>
+                <label class="fl">序号位数
+                  <input type="number" id="numberWidth" value="2" min="1" max="6" style="width:66px">
+                </label>
+                <span class="spacer"></span>
+                <button type="button" class="btn" id="numberPreview">生成预览</button>
+                <button type="button" class="btn primary" id="numberApply" disabled>应用学号</button>
+              </div>
+              <div class="tbl-scroll">
+                <table>
+                  <thead><tr><th>学号</th><th>学生</th><th>姓名</th><th>状态</th></tr></thead>
+                  <tbody id="numberBody"></tbody>
+                </table>
+              </div>
+              <div class="loading" id="numberEmpty">选择班级后点击「生成预览」，预览不写入数据库。</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 寝室页 -->
+        <div id="rosterDorms" hidden>
+          <div class="toolbar">
+            <label class="fl">班级
+              <select id="dormClass"></select>
+            </label>
+            <span class="spacer"></span>
+            <span class="hint" id="dormHint">先选寝室，再勾选学生；性别与余量不满足将整单拒绝。</span>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>寝室</h2><span class="badge" id="dormBadge">0 间</span></div>
+            <div class="card-body">
+              <div class="dorm-grid" id="dormGrid"></div>
+              <div class="loading" id="dormEmpty" hidden>暂无寝室，请先在管理台维护</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><h2>学生</h2><span class="badge" id="dormPickBadge">已选 0 人</span></div>
+            <div class="card-body">
+              <div class="toolbar">
+                <button type="button" class="btn primary" id="dormAssign" disabled>分配到所选寝室</button>
+                <button type="button" class="btn danger" id="dormUnassign" disabled>移出寝室</button>
+                <span class="spacer"></span>
+                <span class="hint" id="dormSelHint">未选择寝室</span>
+              </div>
+              <div class="stu-pick" id="dormStudents"></div>
+              <div class="loading" id="dormStuEmpty">请选择班级</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<!-- 通用表单弹窗 -->
+<div class="modal" id="formModal" hidden>
+  <div class="modal-box" id="formModalBox">
+    <div class="modal-head">
+      <h3 id="formTitle">编辑</h3>
+      <button type="button" class="modal-x" id="formClose" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body" id="formBody"></div>
+    <div class="modal-foot">
+      <button type="button" class="btn" id="formCancel">取消</button>
+      <button type="button" class="btn primary" id="formSubmit">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 确认弹窗 -->
+<div class="modal" id="confirmModal" hidden>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3 id="confirmTitle">确认操作</h3>
+      <button type="button" class="modal-x" id="confirmClose" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body"><p class="confirm-box" id="confirmText"></p></div>
+    <div class="modal-foot">
+      <button type="button" class="btn" id="confirmCancel">取消</button>
+      <button type="button" class="btn danger" id="confirmOk">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- 名单冲突确认 -->
+<div class="modal" id="conflictModal" hidden>
+  <div class="modal-box wide">
+    <div class="modal-head">
+      <h3>名单冲突确认</h3>
+      <button type="button" class="modal-x" id="conflictClose" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body">
+      <p class="confirm-box" id="conflictText"></p>
+      <div class="tbl-scroll" style="max-height:300px;overflow:auto">
+        <table>
+          <thead><tr><th>行号</th><th>班级</th><th>学号</th><th>姓名</th><th>处理</th></tr></thead>
+          <tbody id="conflictBody"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn" id="conflictKeep">保留旧数据</button>
+      <button type="button" class="btn primary" id="conflictOverwrite">使用新名单覆盖</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="/static/deyu/charts.js?v=20261125compact"></script>
+<script src="/static/deyu/app.js?v=20261123k"></script>
+</body>
+</html>
+

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#8E1B1B">
+<title>统一登录 · 京山市中等职业技术学校</title>
+<link rel="stylesheet" href="/static/vendor/bootstrap/bootstrap.min.css">
+<link rel="preload" as="image" href="/static/login/bg.jpg?v=20261125u">
+<link rel="stylesheet" href="/static/login/style.css?v=20261125u">
+</head>
+<body class="gov-login">
+
+<main class="login-shell">
+
+  <!-- 左侧：平台标识与说明 -->
+  <section class="login-brand" aria-label="平台介绍">
+    <div class="brand-inner">
+      <div class="brand-head">
+        <span class="brand-mark" aria-hidden="true">京</span>
+        <div class="brand-school">
+          <span class="school-name">京山市中等职业技术学校</span>
+          <span class="school-en">JINGSHAN SECONDARY VOCATIONAL SCHOOL</span>
+        </div>
+      </div>
+
+      <h1 class="brand-title">智慧校园工作台</h1>
+      <p class="brand-sub">德育数字化 · 协同育人一体化平台</p>
+
+      <span class="brand-rule" aria-hidden="true"></span>
+
+      <ul class="brand-points">
+        <li>
+          <span class="point-key">多角色统一入口</span>
+          <span class="point-desc">管理员 / 政教处 / 班主任 / 教官寝管 / 学生 / 家长，一处登录、自动识别</span>
+        </li>
+        <li>
+          <span class="point-key">共建空间 · 共享上下文</span>
+          <span class="point-desc">按角色与对象区分权限，数据不出校，全流程留痕</span>
+        </li>
+        <li>
+          <span class="point-key">学生成长 · 家长协同</span>
+          <span class="point-desc">测评画像、成长时间轴、分享码与家长端，正向成长共同见证</span>
+        </li>
+      </ul>
+
+      <div class="brand-foot">
+        <span class="brand-seal">校内试用</span>
+        <span>版本 v1.9 · 仅限授权人员使用</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 右侧：登录卡片 -->
+  <section class="login-panel">
+    <div class="login-card">
+      <header class="card-head">
+        <p class="card-eyebrow">Sign In</p>
+        <h2 class="card-title">统一登录</h2>
+        <p class="card-desc">请选择您的身份，使用对应账号登录</p>
+      </header>
+
+      <!-- 三身份分段控件 -->
+      <div class="seg" id="roleSeg" role="tablist" aria-label="选择登录身份">
+        <button type="button" class="seg-btn" data-role="staff" role="tab" aria-selected="true">
+          <span class="seg-label">工作账号</span>
+          <span class="seg-sub">教师 / 管理员</span>
+        </button>
+        <button type="button" class="seg-btn" data-role="student" role="tab" aria-selected="false">
+          <span class="seg-label">学生账号</span>
+          <span class="seg-sub">学号即账号</span>
+        </button>
+        <button type="button" class="seg-btn" data-role="parent" role="tab" aria-selected="false">
+          <span class="seg-label">家长入口</span>
+          <span class="seg-sub">查看孩子</span>
+        </button>
+      </div>
+
+      <!-- ========== 工作账号 ========== -->
+      <div class="role-pane" data-pane="staff">
+        <form id="loginForm" data-next="{{ next_url }}" data-role="staff" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="username">工号 / 账号</label>
+            <input
+              type="text" class="form-control gov-input" id="username"
+              name="username" autocomplete="username" autocapitalize="off"
+              spellcheck="false" placeholder="请输入工号或登录账号" required>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label" for="password">密码</label>
+            <div class="pwd-wrap">
+              <input
+                type="password" class="form-control gov-input" id="password"
+                name="password" autocomplete="current-password"
+                placeholder="请输入密码" required>
+              <button type="button" class="pwd-toggle" id="pwdToggle"
+                aria-label="显示密码" aria-pressed="false">显示</button>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="rememberMe">
+              <label class="form-check-label" for="rememberMe">记住账号</label>
+            </div>
+            <span class="hint">忘记密码请联系管理员</span>
+          </div>
+
+          <div class="form-alert" id="formAlert" role="alert" aria-live="polite"></div>
+
+          <button type="submit" class="btn gov-btn w-100" id="submitBtn">登 录</button>
+        </form>
+
+        <div class="card-divider"><span>或</span></div>
+
+        {% if wecom_enabled %}
+        <a class="wecom-btn" href="{{ wecom_login_url }}">企业微信登录</a>
+        <p class="card-note">已开通企业微信免密登录</p>
+        {% else %}
+        <span class="wecom-btn is-disabled" role="link" aria-disabled="true">企业微信登录</span>
+        <p class="card-note">企业微信免密登录待管理员开通</p>
+        {% endif %}
+      </div>
+
+      <!-- ========== 学生账号 ========== -->
+      <div class="role-pane" data-pane="student" hidden>
+        <form id="loginFormStudent" data-next="/api/student" data-role="student" novalidate>
+          <div class="mb-3">
+            <label class="form-label" for="student_no">学号</label>
+            <input
+              type="text" class="form-control gov-input" id="student_no"
+              name="student_no" autocomplete="username" autocapitalize="off"
+              inputmode="numeric" spellcheck="false"
+              placeholder="请输入学号（例如 240315）" required>
+          </div>
+
+          <div class="mb-2">
+            <label class="form-label" for="student_pw">密码</label>
+            <div class="pwd-wrap">
+              <input
+                type="password" class="form-control gov-input" id="student_pw"
+                name="student_pw" autocomplete="current-password"
+                placeholder="初始密码与学号相同" required>
+              <button type="button" class="pwd-toggle" id="pwdToggleStudent"
+                aria-label="显示密码" aria-pressed="false">显示</button>
+            </div>
+          </div>
+
+          <div class="form-alert" id="formAlertStudent" role="alert" aria-live="polite"></div>
+
+          <button type="submit" class="btn gov-btn w-100" id="submitBtnStudent">登 录</button>
+        </form>
+
+        <div class="hintbox hintbox-info">
+          <b>提示</b> 初始密码即学号，首次登录后请尽快到「我的 → 修改密码」设置新口令。
+        </div>
+      </div>
+
+      <!-- ========== 家长入口 ========== -->
+      <div class="role-pane" data-pane="parent" hidden>
+        <div class="parent-entry">
+          <a class="gov-btn w-100 d-inline-flex justify-content-center align-items-center"
+             href="/api/family/login">
+            我已绑定 · 家长登录
+          </a>
+          <p class="card-note">使用学号 + 自设口令登录家长端</p>
+
+          <button type="button" class="parent-howto" id="parentHowtoToggle" aria-expanded="false">
+            未绑定？如何绑定孩子
+            <span class="caret" aria-hidden="true">▾</span>
+          </button>
+
+          <div class="parent-howto-body" id="parentHowtoBody" hidden>
+            <ol>
+              <li>让您的孩子用自己的学号登录学生端（初始密码=学号）；</li>
+              <li>进入「隐私与数据权利」页，点击「为家长生成绑定码」；</li>
+              <li>把 6 位绑定码发给您，打开本页点击上方按钮按提示完成绑定。</li>
+            </ol>
+            <p class="tiny">绑定码 10 分钟内有效且一次性使用；绑定后可设置自己的登录口令。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="login-foot">
+      © 2026 京山市中等职业技术学校 · 智慧校园工作台 · 建议使用 Chrome / Edge 浏览器访问
+    </footer>
+  </section>
+
+</main>
+
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/login/login.js?v=20261125u"></script>
+</body>
+</html>

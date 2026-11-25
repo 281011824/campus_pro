@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>学生成长模块 · 重构方案 v1.0</title>
+<style>
+  :root{
+    --red:#4a0c0c;--red2:#6d1515;--gold:#c8a45c;--gold2:#a9863f;
+    --cream:#faf7f2;--paper:#fffdf9;--ink:#2b2118;--muted:#7a6a58;--line:#e6dccb;
+    --ok:#2e6b4f;--okbg:#eaf3ee;--warn:#8a6a1f;--warnbg:#fbf3e0;
+    --na:#6b6257;--nabg:#f1ece4;--risk:#8c2f2f;--riskbg:#f8eaea;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",system-ui,sans-serif;
+    line-height:1.78;font-size:15px}
+  a{color:var(--red2);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  .hero{background:
+      radial-gradient(circle at 88% 8%,rgba(200,164,92,.20),transparent 42%),
+      linear-gradient(135deg,#3d0909 0%,#4a0c0c 45%,#611212 100%);
+    color:#f7efe2;padding:46px 28px 40px;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-70px;top:-70px;width:300px;height:300px;
+    border:1px solid rgba(200,164,92,.28);border-radius:50%;
+    box-shadow:0 0 0 36px rgba(200,164,92,.05),0 0 0 72px rgba(200,164,92,.035)}
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1}
+  .hero .school{font-size:13px;letter-spacing:.18em;color:#d9c39a}
+  .hero h1{font-size:34px;line-height:1.3;margin:10px 0 8px;letter-spacing:.04em}
+  .hero .sub{font-size:15px;color:#e8dcc8;max-width:860px}
+  .hero .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{font-size:12.5px;padding:5px 12px;border-radius:999px;
+    border:1px solid rgba(200,164,92,.45);color:#f0e4cd;background:rgba(200,164,92,.08)}
+  .chip.solid{background:var(--gold);color:#3b2405;border-color:var(--gold);font-weight:700}
+
+  .stats{max-width:1180px;margin:-26px auto 0;padding:0 28px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;z-index:2}
+  .stat{background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;box-shadow:0 8px 22px rgba(74,12,12,.07)}
+  .stat b{display:block;font-size:23px;color:var(--red);line-height:1.25}
+  .stat span{font-size:12.5px;color:var(--muted)}
+
+  .layout{max-width:1180px;margin:34px auto 0;padding:0 28px 90px;
+    display:grid;grid-template-columns:228px minmax(0,1fr);gap:34px;align-items:start}
+  aside.toc{position:sticky;top:22px;background:var(--paper);border:1px solid var(--line);
+    border-radius:10px;padding:16px 14px;font-size:13px}
+  aside.toc .t{font-weight:700;color:var(--red);margin:0 0 10px 6px;letter-spacing:.08em}
+  aside.toc ol{list-style:none;margin:0;padding:0}
+  aside.toc li{margin:1px 0}
+  aside.toc a{display:block;padding:6px 8px;border-radius:6px;color:#514639;line-height:1.5}
+  aside.toc a:hover{background:#f3ece1;text-decoration:none;color:var(--red)}
+  aside.toc .sub a{padding-left:20px;font-size:12.5px;color:#6f6153}
+
+  main{min-width:0}
+  section.doc{background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:28px 32px;margin-bottom:22px}
+  section.doc>h2{margin:0 0 6px;font-size:22px;color:var(--red);letter-spacing:.03em;
+    padding-bottom:10px;border-bottom:2px solid var(--gold)}
+  section.doc>h2 .no{color:var(--gold2);margin-right:8px}
+  h3{font-size:16.5px;margin:22px 0 8px;color:#3d2a1e}
+  h4{font-size:14px;margin:0 0 6px;color:var(--red2);letter-spacing:.04em}
+  p{margin:8px 0}
+  .muted{color:var(--muted)}
+  .small{font-size:12.5px}
+  .lead{font-size:14.5px;color:#4b3d30}
+  ul,ol{margin:6px 0 6px 20px;padding:0}
+  li{margin:3px 0}
+  code{font-family:Consolas,Monaco,monospace;font-size:12.5px;background:#f4eee4;
+    padding:1px 5px;border-radius:4px;color:#5a3a1a}
+
+  .pill{display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;
+    border-radius:999px;white-space:nowrap;vertical-align:2px}
+  .pill.ok{background:var(--okbg);color:var(--ok);border:1px solid #cfe4d7}
+  .pill.warn{background:var(--warnbg);color:var(--warn);border:1px solid #eddfb7}
+  .pill.na{background:var(--nabg);color:var(--na);border:1px solid #e2dbd0}
+  .pill.risk{background:var(--riskbg);color:var(--risk);border:1px solid #ecd2d2}
+
+  .table-wrap{overflow-x:auto;margin:10px 0 4px;border:1px solid var(--line);border-radius:8px}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+  th{background:var(--red);color:#f7efe2;font-weight:600;text-align:left;
+    padding:9px 10px;white-space:nowrap;letter-spacing:.03em}
+  td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fcf9f4}
+  td.center,th.center{text-align:center}
+  .yes{color:var(--ok);font-weight:700}
+  .no{color:#b0a698}
+  .part{color:var(--warn);font-weight:700}
+
+  .callout{background:#fbf6ec;border:1px solid #ecdfc4;border-radius:8px;
+    padding:13px 16px;margin:12px 0;font-size:13.5px;color:#57452f}
+  .callout b{color:var(--red2)}
+  .callout.risk{background:var(--riskbg);border-color:#ecd2d2;color:#6d2a2a}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+  .mini{background:#fcf9f4;border:1px solid var(--line);border-radius:8px;padding:13px 15px}
+  .mini h4{margin-bottom:4px}
+  .mini p,.mini ul{font-size:13px;margin:4px 0}
+  .mini ul{margin-left:18px}
+
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0;font-size:12.5px}
+  .flow .node{background:#fbf6ec;border:1px solid #e8d9bd;border-radius:6px;
+    padding:6px 11px;color:#5a4020}
+  .flow .arrow{color:var(--gold2);font-weight:700}
+
+  .axis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+  .axis .stage{background:#fcf9f4;border:1px solid var(--line);border-radius:8px;padding:14px}
+  .axis .stage .tag{display:inline-block;font-size:11.5px;font-weight:700;color:#fff;
+    background:var(--red);border-radius:4px;padding:1px 7px;margin-bottom:6px}
+  .axis .stage h4{margin:2px 0 4px}
+  .axis .stage p,.axis .stage ul{font-size:12.5px;margin:4px 0}
+  .axis .stage ul{margin-left:17px}
+
+  .dim-table td:first-child{white-space:nowrap;font-weight:700;color:var(--red2)}
+  .weight{color:var(--muted);font-size:12px}
+
+  /* ---------------- 方案预览 mockup ---------------- */
+  .mock{display:grid;grid-template-columns:196px minmax(0,1fr);border:1px solid #dbcbb2;
+    border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 10px 26px rgba(74,12,12,.08);margin:14px 0}
+  .mock-side{background:#fbf7ef;border-right:1px solid #eadfcc;padding:12px 10px}
+  .mock-side .mt{font-size:12.5px;font-weight:700;color:var(--red);padding:0 6px 8px}
+  .mock-search{font-size:11.5px;color:#a2957f;background:#fff;border:1px solid #e6dccb;
+    border-radius:5px;padding:5px 8px;margin-bottom:8px}
+  .mock-stu{display:flex;justify-content:space-between;align-items:center;
+    padding:6px 8px;border-radius:5px;font-size:11.5px;color:#5b4c3a;margin:2px 0}
+  .mock-stu.on{background:#f2e6d2;color:var(--red);font-weight:700}
+  .mock-stu span{font-size:10px;color:#9b8b75;font-weight:400}
+  .mock-main{padding:14px 16px}
+  .mock-head{display:flex;align-items:center;gap:10px;border-bottom:1px dashed #e6dccb;
+    padding-bottom:10px;margin-bottom:10px}
+  .mock-ava{width:38px;height:38px;border-radius:50%;background:var(--red);color:#f7efe2;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .mock-head h4{margin:0;font-size:14px;color:#33241a}
+  .mock-head p{margin:0;font-size:11px;color:#8e7f6b}
+  .mock-tags{margin-left:auto;display:flex;gap:6px}
+  .mock-tags span{font-size:10.5px;background:#f4eee4;color:#7a6242;
+    border:1px solid #e7dcc9;border-radius:999px;padding:1px 8px}
+  .mock-dims{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px}
+  .mock-dim{background:#fcf9f4;border:1px solid #ede3d3;border-radius:6px;padding:8px}
+  .mock-dim .k{font-size:10.5px;color:#7c6c58;display:flex;justify-content:space-between}
+  .mock-dim .k b{color:var(--red);font-size:11px}
+  .mock-dim .bar{height:5px;border-radius:3px;background:#eee4d4;margin-top:5px;overflow:hidden}
+  .mock-dim .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--red3,#8c2323));border-radius:3px}
+  .mock-cols{display:grid;grid-template-columns:1.35fr 1fr;gap:12px}
+  .mock-box{border:1px solid #ede3d3;border-radius:6px;padding:10px 11px;background:#fffdf9}
+  .mock-box .bt{font-size:11.5px;font-weight:700;color:var(--red2);margin-bottom:7px;
+    display:flex;justify-content:space-between}
+  .mock-box .bt em{font-style:normal;font-weight:400;color:#9b8b75;font-size:10px}
+  .tl{position:relative;padding-left:14px}
+  .tl::before{content:"";position:absolute;left:4px;top:4px;bottom:4px;width:1px;background:#e3d6c1}
+  .tl .it{position:relative;margin:0 0 9px}
+  .tl .it::before{content:"";position:absolute;left:-13px;top:5px;width:6px;height:6px;
+    border-radius:50%;background:var(--gold);border:1px solid #fff}
+  .tl .it b{font-size:11.5px;color:#3f2f21;display:block}
+  .tl .it span{font-size:10px;color:#9b8b75}
+  .rep p{font-size:10.5px;margin:0 0 6px;color:#6a5a47}
+  .rep .line{height:5px;border-radius:3px;background:#f0e8db;margin:5px 0}
+  .rep .btn{display:inline-block;font-size:10px;background:var(--red);color:#fff;
+    border-radius:4px;padding:3px 8px;margin-top:4px}
+  .mock-note{font-size:11.5px;color:var(--muted);margin-top:8px}
+
+  .checklist{list-style:none;margin:8px 0;padding:0}
+  .checklist li{position:relative;padding:7px 0 7px 30px;border-bottom:1px dashed var(--line);font-size:13.5px}
+  .checklist li:last-child{border-bottom:none}
+  .checklist li::before{content:"";position:absolute;left:2px;top:12px;width:13px;height:13px;
+    border:1.5px solid var(--gold2);border-radius:3px;background:#fff}
+  .checklist .who{float:right;color:var(--muted);font-size:12px}
+
+  .src{font-size:12.5px}
+  .src li{margin:4px 0;word-break:break-all}
+
+  footer.doc-foot{max-width:1180px;margin:0 auto;padding:0 28px 50px;color:var(--muted);
+    font-size:12px;text-align:center}
+
+  @media (max-width:960px){
+    .layout{grid-template-columns:1fr;padding:0 18px 60px}
+    aside.toc{position:static;order:-1}
+    .stats{grid-template-columns:1fr 1fr;padding:0 18px}
+    .cards,.axis{grid-template-columns:1fr}
+    .mock{grid-template-columns:1fr}
+    .mock-side{display:none}
+    .mock-cols{grid-template-columns:1fr}
+    .mock-dims{grid-template-columns:1fr 1fr}
+    .hero{padding:34px 18px 30px}
+    .hero h1{font-size:26px}
+    section.doc{padding:22px 18px}
+  }
+  @media print{
+    body{background:#fff;font-size:12px}
+    .hero{background:#4a0c0c !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    aside.toc{display:none}
+    .layout{display:block;max-width:none;padding:0}
+    section.doc{break-inside:avoid;border:1px solid #ddd}
+    .mock{break-inside:avoid}
+    th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="school">京山市中等职业技术学校 · 政教处 / 信息中心</div>
+    <h1>学生成长模块重构方案</h1>
+    <p class="sub">针对现有成长档案“只有名册与四类记录”的不足，参考上海、山东、青岛中职综评政策与多所学校、产品的成熟做法，提出适合中职学生的“一轴五维三阶”成长档案方案。</p>
+    <div class="meta">
+      <span class="chip solid">方案 v1.0</span>
+      <span class="chip">2026-11-20</span>
+      <span class="chip">适用：2601—2617 班</span>
+      <span class="chip">状态：待评审</span>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>5+1</b><span>五育维度 + 职业成长主线</span></div>
+  <div class="stat"><b>3 阶</b><span>适应期 / 发展期 / 出师期</span></div>
+  <div class="stat"><b>20</b><span>可记录观测点，覆盖技能证书与实习</span></div>
+  <div class="stat"><b>0</b><span>不合成总分、不排名、不公开处分</span></div>
+</div>
+
+<div class="layout">
+  <aside class="toc">
+    <p class="t">目 录</p>
+    <ol>
+      <li><a href="#diagnose">一、现状诊断</a></li>
+      <li><a href="#benchmark">二、外部成熟做法</a></li>
+      <li><a href="#scheme">三、方案总览</a></li>
+      <li><a href="#ui">四、页面与交互</a></li>
+      <li><a href="#index">五、中职版指标体系</a></li>
+      <li><a href="#model">六、数据模型与接口</a></li>
+      <li><a href="#rules">七、权限与红线</a></li>
+      <li><a href="#roadmap">八、分期落地</a></li>
+      <li><a href="#accept">九、验收标准</a></li>
+      <li><a href="#sources">参考来源</a></li>
+    </ol>
+  </aside>
+
+  <main>
+
+    <section class="doc" id="diagnose">
+      <h2><span class="no">一</span>现状诊断</h2>
+      <p class="lead">现在的“成长档案”本质上是<b>一张学生表 + 一个弹窗 + 四类文本记录</b>：能查、能记，但看不出“成长”，也支撑不了学期评价、实习就业和上级检查。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>现状</th><th>问题</th><th>后果</th></tr></thead>
+          <tbody>
+            <tr><td>名册 + 弹窗档案</td><td>信息平铺，没有主线；打开后仍是表格与字段</td><td>班主任看不到变化，学生没有成长感</td></tr>
+            <tr><td>只有特长、兴趣、奖惩、家访四类记录</td><td>没有对接五育与中职职业素养，缺技能证书、实训实习、志愿服务、劳动教育</td><td>学期评语、毕业档案、评优推荐缺少证据</td></tr>
+            <tr><td>记录是一条条文本</td><td>没有维度、没有佐证、没有确认状态、没有学期归属</td><td>无法汇总，也无法证明记录真实</td></tr>
+            <tr><td>只能班主任手工录入</td><td>任课教师、企业导师、学生本人无法参与</td><td>记录来源单一，班主任负担重</td></tr>
+            <tr><td>没有学期报告</td><td>期末评语、综合素质评价、毕业档案都要另做</td><td>集中突击补材料，质量不稳定</td></tr>
+            <tr><td>没有时间轴与对比</td><td>看不到“比上学期进步在哪”</td><td>评价只剩结果，缺少增值与激励</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout risk"><b>核心判断：</b>问题不在页面样式，而在<b>缺少一套面向中职学生的成长记录模型</b>。继续在弹窗里加字段，只会把表格做得更长；必须重构为“维度 + 证据 + 学期 + 报告”的档案体系。</div>
+    </section>
+
+    <section class="doc" id="benchmark">
+      <h2><span class="no">二</span>外部成熟做法</h2>
+      <p class="lead">以下做法分别来自省级政策、学校实践和成熟产品。我们只取适合中职、且能在现有 SQLite + 工作台架构下落地的部分，不照搬 K12 的“分数排名”和重运营玩法。</p>
+
+      <h3>2.1 政策基线</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>来源</th><th>核心框架</th><th>可借鉴点</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>上海市《中等职业学校学生综合素质评价实施办法》（沪教委规〔2021〕5号）</td>
+              <td>道德与公民素养、技能与学习素养、运动与身心健康、审美与艺术素养、劳动与职业素养五个维度</td>
+              <td>写实记录 → 整理遴选 → 公示确认 → 录入系统 → 增值评价 → 形成纪实报告；每学期确认，毕业生成档案</td>
+            </tr>
+            <tr>
+              <td>山东省《中等职业学校学生综合素质评价实施方案》（鲁教职发〔2017〕1号）</td>
+              <td>思想品德、学业水平、艺体素养、职业素养、社会实践</td>
+              <td>学生自评 + 学校评价 + 整理遴选 + 审核公示；公示不少于 5 天，材料保存至毕业后 3 年，录入后不得修改</td>
+            </tr>
+            <tr>
+              <td>青岛市教育局《关于开展职业学校学生综合素质评价工作的通知》（2016）</td>
+              <td>思想品德与公民素养、身心健康、学业水平与专业技能、艺术素养、职业素养与实践能力</td>
+              <td>多元评价主体（学生、班主任、任课教师、同学、家长、企业、社区）；以学生个人成长档案为载体</td>
+            </tr>
+            <tr>
+              <td>教育部《中等职业学校德育大纲（2014 年修订）》</td>
+              <td>学生品德评定纳入综合素质评价</td>
+              <td>品德评定要结合思想实际与行为表现，作为评优评奖重要依据</td>
+            </tr>
+            <tr>
+              <td>教育部《大中小学劳动教育指导纲要（试行）》（2020）</td>
+              <td>结合专业特点开展日常生活劳动、服务性劳动、生产劳动</td>
+              <td>劳动教育要进专业、进实习，记录劳动过程与职业荣誉感</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2.2 学校实践</h3>
+      <div class="cards">
+        <div class="mini">
+          <h4>淮北树人中专“C5+12”</h4>
+          <p>以品德发展、学业发展、身心发展、艺术审美、劳动实践五大板块为基础，细化为十二个具体项目，用结构化框架记录成长轨迹。</p>
+          <p class="small muted">启示：维度不宜过多，关键是每个维度都有可记录的具体项目。</p>
+        </div>
+        <div class="mini">
+          <h4>上海逸夫职校《成长手册》</h4>
+          <p>设“道德规范园、文化技能园、成长健康园、职业规划园、实训实习园、成果分享园”等板块，从入学第一年就记录职业启蒙、实训实习与毕业实习评价。</p>
+          <p class="small muted">启示：中职成长档案必须把“职业规划—实训—实习—就业”作为主线。</p>
+        </div>
+        <div class="mini">
+          <h4>烟台机电工业学校成长档案</h4>
+          <p>目录为：毕业生基本情况、思想品德、学业水平、艺体与劳动素养、职业素养、社会实践、过程性评价、学生自评与教师评语。</p>
+          <p class="small muted">启示：档案要能直接打印成册，服务毕业与就业推荐。</p>
+        </div>
+        <div class="mini">
+          <h4>上海贸易学校综评办法</h4>
+          <p>每学期评价一次，内容为品德发展与公民素养、修习课程与学业成绩、专业技能与职业素养、身心健康与艺术素养。</p>
+          <p class="small muted">启示：学期是评价的基本节奏，不做日排名。</p>
+        </div>
+      </div>
+
+      <h3>2.3 产品做法</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>产品 / 方案</th><th>值得借鉴的功能</th><th>不适合直接照搬</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>科大讯飞“五育评价 / 育星图”</td>
+              <td>五育指标与活动一体化、雷达与数字画像、区校班生四级成长报告、成长手册、勋章激励、语音点评</td>
+              <td>重运营的活动库、硬件兑换、游戏化排行榜；我校当前不具备运营与硬件条件</td>
+            </tr>
+            <tr>
+              <td>新开普 K12 学生综合素质评价</td>
+              <td>20 个指标维度写实记录、评价方案配置、审核公示、PDF 成长档案、多主体填报</td>
+              <td>K12 的指标与班级评比逻辑；中职需替换为技能证书、实习实训、生涯规划</td>
+            </tr>
+            <tr>
+              <td>行业方案（综评全链路业务建模）</td>
+              <td>设置→评价→汇总→公示→归档全闭环；成长时间轴；学期报告自动生成；申诉复核；全程留痕</td>
+              <td>摄像头行为识别、消费画像等重采集；涉及隐私与伦理，暂不引入</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2.4 提炼出的八条原则</h3>
+      <ol>
+        <li><b>写实记录优先：</b>先有事实与佐证，再谈等级；没有证据就显示“证据不足”。</li>
+        <li><b>五维不合成总分：</b>五个维度分开呈现，避免用一个人造总分掩盖结构性问题。</li>
+        <li><b>学期为节奏：</b>日常随手记，学期整理遴选，生成一份可审核、可公示、可导出的成长报告。</li>
+        <li><b>中职有主线：</b>职业认知、技能证书、实训实习、就业升学必须成为独立板块。</li>
+        <li><b>增值而非排名：</b>只和学生自己的上学期比，不公布班级名次。</li>
+        <li><b>多主体但可控：</b>任课教师、企业导师、学生本人可提交，班主任确认后才进入档案。</li>
+        <li><b>低负担录入：</b>三步随手记、事件模板、Excel 批量导入，避免期末集中突击。</li>
+        <li><b>隐私与边界：</b>心理明细不进档案；处分记录单独受控；家长电话、住址不入库展示。</li>
+      </ol>
+    </section>
+
+    <section class="doc" id="scheme">
+      <h2><span class="no">三</span>方案总览：一轴五维三阶</h2>
+      <p class="lead"><b>一轴</b>是成长时间轴，<b>五维</b>是德智体美劳，<b>三阶</b>是中职三年的三个发展阶段。每名学生每学期形成一份《成长纪实报告》，记录有证据、评价有依据、毕业可带走。</p>
+
+      <h3>3.1 一轴：成长时间轴</h3>
+      <p>从入学到毕业，按时间沉淀关键节点：入学适应、第一次技能考核、社团与志愿服务、技能竞赛、1+X 证书、跟岗实习、顶岗实习、升学或就业。时间轴不是流水账，只收“有证据、有代表性”的事件。</p>
+
+      <h3>3.2 五维：中职版五育</h3>
+      <div class="table-wrap dim-table">
+        <table>
+          <thead><tr><th>维度</th><th>内涵</th><th>典型记录</th><th>数据来源</th></tr></thead>
+          <tbody>
+            <tr><td>品德与公民素养</td><td>理想信念、行为规范、诚实守信、责任义务、职业道德</td><td>主题教育、志愿服务、好人好事、班级服务、处分（受控）</td><td>政教处事件、班主任随手记、团委活动</td></tr>
+            <tr><td>学业与专业技能</td><td>文化课、专业课、技能训练、技能竞赛、1+X 证书</td><td>课程成绩、技能考核、竞赛获奖、证书、作品</td><td>教务成绩、技能鉴定、班主任/任课教师录入</td></tr>
+            <tr><td>身心与健康</td><td>体质健康、运动习惯、心理素质、健康生活</td><td>体测、运动会、体育技能、心理课程参与</td><td>体育组、校医室、心理中心（仅参与状态）</td></tr>
+            <tr><td>审美与艺体</td><td>艺术课程、社团、文艺活动、审美表现</td><td>艺术课程、社团、文艺演出、作品</td><td>艺术教师、团委、班主任</td></tr>
+            <tr><td>劳动与职业素养</td><td>劳动习惯、职业认知、实训实习、职业精神、生涯规划</td><td>校园劳动、专业劳动、跟岗/顶岗实习、企业评价、职业规划</td><td>实训处、企业导师、班主任</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">“职业成长”不单列为第六个评分维度，而是贯穿五维的主线：技能证书归“学业与专业技能”，实习实训与劳动归“劳动与职业素养”，生涯规划在学期报告中单独成段。这样既符合政策口径，又体现中职特色。</p>
+
+      <h3>3.3 三阶：中职三年</h3>
+      <div class="axis">
+        <div class="stage">
+          <span class="tag">第一阶段</span>
+          <h4>适应期 · 第 1 学期</h4>
+          <ul>
+            <li>建立档案，完成入学信息</li>
+            <li>行为规范与学习习惯</li>
+            <li>专业认知、职业启蒙</li>
+            <li>至少 1 项兴趣或社团</li>
+          </ul>
+        </div>
+        <div class="stage">
+          <span class="tag">第二阶段</span>
+          <h4>发展期 · 第 2—4 学期</h4>
+          <ul>
+            <li>技能训练与技能竞赛</li>
+            <li>1+X 证书与职业资格</li>
+            <li>劳动教育、志愿服务</li>
+            <li>生涯目标逐步清晰</li>
+          </ul>
+        </div>
+        <div class="stage">
+          <span class="tag">第三阶段</span>
+          <h4>出师期 · 第 5—6 学期</h4>
+          <ul>
+            <li>跟岗 / 顶岗实习记录</li>
+            <li>企业导师评价</li>
+            <li>就业推荐或升学准备</li>
+            <li>毕业成长报告</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>3.4 评价方式</h3>
+      <div class="cards">
+        <div class="mini">
+          <h4>写实记录（主）</h4>
+          <p>每条记录包含：维度、事件、时间、事实描述、佐证材料、来源、确认状态。没有佐证的记录可保留，但标注“待补证”。</p>
+        </div>
+        <div class="mini">
+          <h4>等级评价（辅）</h4>
+          <p>每维按 A/B/C/D 呈现，依据“记录覆盖 + 证据质量 + 班主任确认”，规则公开可解释；证据不足显示“未评”，不默认合格。</p>
+        </div>
+        <div class="mini">
+          <h4>增值评价（激励）</h4>
+          <p>只和本人上学期比，显示“进步 / 稳定 / 需关注”；两个学期都有数据才对比，否则显示“暂无对比”。</p>
+        </div>
+        <div class="mini">
+          <h4>不做什么</h4>
+          <p>不合成总分、不做班级排名、不公布百分位、不把心理测评和处分折算成分数、不用 AI 自动下结论。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc" id="ui">
+      <h2><span class="no">四</span>页面与交互</h2>
+      <p class="lead">把“名册 + 弹窗”改成“班级成长驾驶舱 + 学生 360 档案”。班主任先看全班，再点开单个学生；所有记录都能回到时间轴与学期报告。</p>
+
+      <h3>4.1 信息架构</h3>
+      <div class="flow">
+        <span class="node">成长档案</span><span class="arrow">→</span>
+        <span class="node">班级视图</span><span class="arrow">→</span>
+        <span class="node">学生 360</span><span class="arrow">→</span>
+        <span class="node">随手记 / 佐证</span><span class="arrow">→</span>
+        <span class="node">学期报告</span><span class="arrow">→</span>
+        <span class="node">审核发布 / 导出</span>
+      </div>
+
+      <h3>4.2 方案预览（静态示意）</h3>
+      <div class="mock">
+        <div class="mock-side">
+          <div class="mt">2607 班 · 成长档案</div>
+          <div class="mock-search">搜索姓名 / 学号</div>
+          <div class="mock-stu on"><b>徐子涵</b><span>需关注</span></div>
+          <div class="mock-stu"><b>李子豪</b><span>待补证 2</span></div>
+          <div class="mock-stu"><b>王雨欣</b><span>正常</span></div>
+          <div class="mock-stu"><b>张浩然</b><span>实习中</span></div>
+          <div class="mock-stu"><b>陈思远</b><span>正常</span></div>
+          <div class="mock-stu"><b>刘嘉怡</b><span>正常</span></div>
+        </div>
+        <div class="mock-main">
+          <div class="mock-head">
+            <div class="mock-ava">徐</div>
+            <div><h4>徐子涵</h4><p>S001 · 电子商务 · 2607 班 · 发展期</p></div>
+            <div class="mock-tags"><span>证据 12 条</span><span>本学期</span></div>
+          </div>
+          <div class="mock-dims">
+            <div class="mock-dim"><div class="k"><span>品德</span><b>B+</b></div><div class="bar"><i style="width:76%"></i></div></div>
+            <div class="mock-dim"><div class="k"><span>学业技能</span><b>B</b></div><div class="bar"><i style="width:68%"></i></div></div>
+            <div class="mock-dim"><div class="k"><span>身心健康</span><b>A</b></div><div class="bar"><i style="width:88%"></i></div></div>
+            <div class="mock-dim"><div class="k"><span>审美艺体</span><b>B-</b></div><div class="bar"><i style="width:60%"></i></div></div>
+            <div class="mock-dim"><div class="k"><span>劳动职业</span><b>B</b></div><div class="bar"><i style="width:70%"></i></div></div>
+          </div>
+          <div class="mock-cols">
+            <div class="mock-box">
+              <div class="bt"><span>成长时间轴</span><em>本学期 12 条 · 点击筛选</em></div>
+              <div class="tl">
+                <div class="it"><b>校级技能竞赛 · 电子商务运营 二等奖</b><span>12-06 · 学业与专业技能 · 已确认</span></div>
+                <div class="it"><b>1+X 网店运营推广（初级）证书</b><span>11-22 · 技能证书 · 待补证</span></div>
+                <div class="it"><b>社区志愿服务 6 小时</b><span>11-10 · 品德与公民素养 · 已确认</span></div>
+                <div class="it"><b>实训周 · 客服岗位轮训</b><span>10-28 · 劳动与职业素养 · 已确认</span></div>
+              </div>
+            </div>
+            <div class="mock-box rep">
+              <div class="bt"><span>本学期成长报告</span><em>草稿</em></div>
+              <p>五维摘要：身心健康较突出；审美艺体证据偏少，建议补充社团或作品。</p>
+              <div class="line" style="width:92%"></div>
+              <div class="line" style="width:78%"></div>
+              <div class="line" style="width:64%"></div>
+              <p>教师评语：本学期技能训练进步明显，社区服务表现主动；建议下学期完成 1 项艺术类活动并补齐证书佐证。</p>
+              <span class="btn">生成报告</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-note">示意数据仅用于说明版式。实际页面沿用工作台政务风，五维条为等级与证据覆盖的综合呈现，不是百分制分数。</p>
+
+      <h3>4.3 三个关键交互</h3>
+      <div class="cards">
+        <div class="mini">
+          <h4>随手记（3 步）</h4>
+          <ol>
+            <li>选维度与事件模板（如“技能竞赛”“志愿服务”“实训表现”）。</li>
+            <li>补一句事实：做了什么、结果如何，可拍照或上传证书。</li>
+            <li>保存为“已确认”或“待补证”；任课教师 / 企业导师提交的默认“待班主任确认”。</li>
+          </ol>
+        </div>
+        <div class="mini">
+          <h4>班级视图</h4>
+          <ul>
+            <li>筛选：需关注、待补证、本学期无记录、实习中。</li>
+            <li>展示：五维覆盖情况、记录条数、最近一次事件。</li>
+            <li>批量：Excel 导入成长记录、批量提醒补证。</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h4>学期报告</h4>
+          <ul>
+            <li>一键生成草稿：五维摘要、时间轴精选、教师评语建议。</li>
+            <li>班主任编辑并确认，状态：草稿 → 待审核 → 已发布 → 已归档。</li>
+            <li>导出 PDF / Word，作为评优、实习推荐、毕业档案附件。</li>
+          </ul>
+        </div>
+        <div class="mini">
+          <h4>证据与状态</h4>
+          <ul>
+            <li>每条记录有来源、佐证、确认人、确认时间。</li>
+            <li>“待补证”集中提醒，不阻塞其他记录。</li>
+            <li>发布后的记录修改需留痕，保留历史版本。</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3>4.4 视觉与文案原则</h3>
+      <ul>
+        <li>不用红黄绿给学生贴“好坏”标签；等级用中性色阶，问题用“需关注 / 待补证”描述行为。</li>
+        <li>不出现“排名、百分位、击败了多少同学”等表述。</li>
+        <li>空态写“暂无记录，可从一次班会或一次实训开始”，不摆示例学生。</li>
+        <li>雷达图只在数据完整时出现；数据不足时用五条等级条，避免“假精确”。</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="index">
+      <h2><span class="no">五</span>中职版指标体系</h2>
+      <p class="lead">每个维度下设 3—5 个可记录观测点，共 20 个。观测点不是打分表，而是“记什么”的提示；等级由证据与班主任确认综合得出。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>维度</th><th>观测点</th><th>记录方式</th><th>建议证据</th></tr></thead>
+          <tbody>
+            <tr><td rowspan="4">品德与公民素养</td><td>行为规范与校纪校规</td><td>事件驱动 / 随手记</td><td>检查记录、班级日志</td></tr>
+            <tr><td>主题教育与党团活动</td><td>活动签到 / 班主任登记</td><td>活动照片、签到表</td></tr>
+            <tr><td>志愿服务与公益劳动</td><td>时长登记</td><td>服务证明、照片</td></tr>
+            <tr><td>诚信与责任表现</td><td>随手记</td><td>事实描述、教师确认</td></tr>
+
+            <tr><td rowspan="5">学业与专业技能</td><td>公共基础课学习</td><td>成绩导入</td><td>教务成绩</td></tr>
+            <tr><td>专业课程与实训成绩</td><td>成绩导入 / 实训登记</td><td>实训考核表</td></tr>
+            <tr><td>技能竞赛</td><td>获奖登记</td><td>获奖证书</td></tr>
+            <tr><td>1+X 与职业资格证书</td><td>证书登记</td><td>证书照片、编号</td></tr>
+            <tr><td>作品与项目</td><td>作品上传</td><td>作品照片、项目说明</td></tr>
+
+            <tr><td rowspan="4">身心与健康</td><td>体质健康测试</td><td>体测导入</td><td>体测报告</td></tr>
+            <tr><td>体育锻炼与运动会</td><td>活动登记</td><td>参赛记录、照片</td></tr>
+            <tr><td>心理课程与活动参与</td><td>参与状态</td><td>仅“参与 / 未参与”，不含测评明细</td></tr>
+            <tr><td>健康生活习惯</td><td>随手记</td><td>事实描述</td></tr>
+
+            <tr><td rowspan="3">审美与艺体</td><td>艺术课程学习</td><td>成绩 / 参与</td><td>课程记录</td></tr>
+            <tr><td>社团与文艺活动</td><td>活动登记</td><td>演出照片、节目单</td></tr>
+            <tr><td>艺术作品与特长</td><td>作品上传</td><td>作品照片、获奖证书</td></tr>
+
+            <tr><td rowspan="4">劳动与职业素养</td><td>校园劳动与专业劳动</td><td>劳动清单打卡</td><td>劳动照片、评价</td></tr>
+            <tr><td>跟岗 / 顶岗实习</td><td>实习记录</td><td>实习协议、周记、企业评价</td></tr>
+            <tr><td>职业认知与生涯规划</td><td>生涯档案</td><td>职业访谈、规划书</td></tr>
+            <tr><td>职业精神与团队协作</td><td>企业 / 教师评价</td><td>企业导师评语</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5.1 等级规则（建议）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>等级</th><th>判定依据</th><th>展示</th></tr></thead>
+          <tbody>
+            <tr><td>A</td><td>该维至少 4 条已确认记录，含 2 条以上标志性成果或高等级证据，且有明显进步</td><td>“A · 表现突出”</td></tr>
+            <tr><td>B</td><td>至少 3 条已确认记录，覆盖 2 个以上观测点，证据完整</td><td>“B · 达到要求”</td></tr>
+            <tr><td>C</td><td>有 1—2 条记录，或证据不完整</td><td>“C · 需要加强”</td></tr>
+            <tr><td>D</td><td>有明确负面事实且已确认（不含待确认事件）</td><td>“D · 需重点帮扶”</td></tr>
+            <tr><td>未评</td><td>该维记录少于 1 条，或全部待补证</td><td>“证据不足，暂不评价”</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">规则由政教处审定后生效；系统只按规则汇总，不自行定性。等级不合成总分，不与班级排名挂钩。</p>
+    </section>
+
+    <section class="doc" id="model">
+      <h2><span class="no">六</span>数据模型与接口</h2>
+
+      <h3>6.1 新增数据表</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>表</th><th>关键字段</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>growth_dimensions</td><td>dim_id、name、sub_items、version、status</td><td>五维与观测点配置，可版本化，历史记录保留旧版本</td></tr>
+            <tr><td>growth_items</td><td>id、class_id、student_id、dim_id、sub_item、title、fact、occurred_on、source、evidence、status、term、created_by、confirmed_by</td><td>成长记录主表；status：draft / pending / confirmed / returned</td></tr>
+            <tr><td>growth_certificates</td><td>id、student_id、name、level、issuer、cert_no、issued_on、evidence</td><td>1+X、职业资格、技能竞赛证书</td></tr>
+            <tr><td>growth_internships</td><td>id、student_id、company、post、period、weekly_json、mentor、enterprise_score、status</td><td>跟岗 / 顶岗实习与企业评价</td></tr>
+            <tr><td>growth_terms</td><td>id、class_id、student_id、term、snapshot_json、status、generated_at、published_at</td><td>学期报告快照；发布后冻结，修改需新版本</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">现有 <code>student_records</code> 不删除：迁移时将“特长 / 兴趣 / 奖惩 / 家访”映射到五维，保留原 id 与创建人，迁移结果可回滚。</p>
+
+      <h3>6.2 接口设计</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>方法</th><th>路径</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td>GET</td><td><code>/api/v1/growth360/dimensions</code></td><td>五维与观测点配置</td></tr>
+            <tr><td>GET</td><td><code>/api/v1/growth360/class/overview?class_id=</code></td><td>班级成长视图：覆盖、待补证、需关注</td></tr>
+            <tr><td>GET</td><td><code>/api/v1/growth360/{student_id}?term=</code></td><td>学生 360：五维、时间轴、证书、实习</td></tr>
+            <tr><td>POST</td><td><code>/api/v1/growth360/{student_id}/items</code></td><td>新增记录（随手记 / 批量）</td></tr>
+            <tr><td>POST</td><td><code>/api/v1/growth360/items/{item_id}/confirm</code></td><td>班主任确认 / 退回补证</td></tr>
+            <tr><td>GET</td><td><code>/api/v1/growth360/{student_id}/report?term=</code></td><td>学期报告草稿 / 已发布版本</td></tr>
+            <tr><td>POST</td><td><code>/api/v1/growth360/{student_id}/report/generate</code></td><td>生成报告草稿</td></tr>
+            <tr><td>POST</td><td><code>/api/v1/growth360/{student_id}/report/publish</code></td><td>审核发布（仅班主任）</td></tr>
+            <tr><td>GET</td><td><code>/api/v1/files/export/growth?class_id=&amp;term=</code></td><td>导出成长记录 / 报告</td></tr>
+            <tr><td>POST</td><td><code>/api/v1/files/import/growth</code></td><td>批量导入成长记录</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>6.3 与现有模块的衔接</h3>
+      <ul>
+        <li>出勤、德育事件、成绩、作业不需要重复录入：按学生与日期自动归集到五维的“事实条”，由班主任在学期整理时遴选。</li>
+        <li>成长档案只读引用 <code>dom_*</code> 与 <code>students</code>，不回写原始业务表，避免两套账。</li>
+        <li>家校留痕仍走 <code>todo_items</code>，不进入成长档案正文；家访可另记一条“家访”成长记录。</li>
+        <li>数据备份包新增“成长记录.xlsx”与“学期报告”目录。</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="rules">
+      <h2><span class="no">七</span>权限与红线</h2>
+
+      <h3>7.1 谁能看、谁能记</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>角色</th><th>查看</th><th>提交记录</th><th>确认 / 发布</th></tr></thead>
+          <tbody>
+            <tr><td>班主任</td><td>本班全部</td><td>可</td><td>可确认、可生成并发布报告</td></tr>
+            <tr><td>任课教师</td><td>所任班级学生（仅本课程相关维度）</td><td>可提交“学业与专业技能”记录</td><td>不可</td></tr>
+            <tr><td>企业导师</td><td>所带实习学生</td><td>可提交实习周记与企业评价</td><td>不可</td></tr>
+            <tr><td>学生本人</td><td>本人档案</td><td>可提交自评与佐证（二期）</td><td>不可</td></tr>
+            <tr><td>家长</td><td>本人子女（只读，二期）</td><td>不可</td><td>不可</td></tr>
+            <tr><td>政教 / 校领导</td><td>聚合统计；学生明细按现有规则不可见</td><td>可登记德育事件</td><td>处分记录受控</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>7.2 四条红线</h3>
+      <div class="cards">
+        <div class="mini">
+          <h4>心理明细永不入档</h4>
+          <p>只记录“参与 / 未参与”心理课程或活动；测评分数、预警标签、咨询记录不进入成长档案，任何角色不可见。</p>
+        </div>
+        <div class="mini">
+          <h4>处分记录单独受控</h4>
+          <p>只有已生效处分进入“纪律记录”，仅班主任与政教处可见，不计入五维分数，不在班级公开展示，毕业处理按学籍规定执行。</p>
+        </div>
+        <div class="mini">
+          <h4>不排名、不打总分</h4>
+          <p>五个维度分开呈现；不生成综合素质总分，不做班级/年级排名，不向学生展示百分位。</p>
+        </div>
+        <div class="mini">
+          <h4>发布即留痕</h4>
+          <p>报告发布后冻结；确需修改时生成新版本并记录修改人、时间、原因；导出文件带版本号与水印。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc" id="roadmap">
+      <h2><span class="no">八</span>分期落地</h2>
+      <p class="lead">先替换页面与记录模型，再补报告与证书实习，最后才引入学生、家长与企业端。每一期都能独立验收，不追求一次做完。</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>阶段</th><th>范围</th><th>交付</th><th>出口条件</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>P0 页面重构</b></td>
+              <td>班级成长视图 + 学生 360 + 随手记 + 时间轴</td>
+              <td>替换现有弹窗；五维等级条；记录状态与待补证</td>
+              <td>班主任能在 3 次点击内完成一条记录并看到时间轴更新</td>
+            </tr>
+            <tr>
+              <td><b>P1 报告与证据</b></td>
+              <td>学期报告生成、审核、发布、导出；证书与实习登记</td>
+              <td>报告状态机；PDF / Excel 导出；历史版本</td>
+              <td>任意学生可生成一份五维报告并导出，发布后不可直接改</td>
+            </tr>
+            <tr>
+              <td><b>P2 多主体参与</b></td>
+              <td>任课教师提交、企业导师评价、学生自评、家长只读</td>
+              <td>待确认队列；权限与隐私开关；企微入口</td>
+              <td>外部提交默认待确认，班主任确认后才入档</td>
+            </tr>
+            <tr>
+              <td><b>P3 自动归集与增值</b></td>
+              <td>考勤、德育、成绩、作业、体测自动归集；学期对比</td>
+              <td>事实条自动生成；增值视图；数据缺口标注</td>
+              <td>未接入数据明确“暂不可用”，不估算、不补造</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doc" id="accept">
+      <h2><span class="no">九</span>验收标准</h2>
+      <ul class="checklist">
+        <li>班级视图可按“需关注、待补证、本学期无记录、实习中”筛选<span class="who">班主任代表</span></li>
+        <li>学生 360 能同时看到五维等级、成长时间轴、证书与实习记录<span class="who">班主任代表</span></li>
+        <li>一条记录包含维度、事实、时间、来源、佐证与确认状态<span class="who">政教处</span></li>
+        <li>“随手记”三步完成，移动端可用<span class="who">班主任代表</span></li>
+        <li>任课教师 / 企业导师提交的记录进入待确认，不直接入档<span class="who">教务处</span></li>
+        <li>学期报告可生成、编辑、审核、发布、导出，发布后冻结<span class="who">政教处</span></li>
+        <li>五个维度不合成总分，页面不出现排名与百分位<span class="who">政教处</span></li>
+        <li>心理明细、家长电话、住址不出现在档案与导出文件<span class="who">信息中心</span></li>
+        <li>处分记录仅班主任与政教处可见，不计入五维<span class="who">政教处</span></li>
+        <li>非本班班主任访问学生成长接口返回 403<span class="who">信息中心</span></li>
+        <li>历史四类记录完整迁移，原创建人与时间不丢失<span class="who">信息中心</span></li>
+        <li>2601—2617 班均可建立档案，无数据的班显示空态而非示例数据<span class="who">政教处</span></li>
+      </ul>
+    </section>
+
+    <section class="doc" id="sources">
+      <h2><span class="no">参考</span>来源</h2>
+      <p class="small muted">以下资料用于提炼维度框架与产品功能，具体校本指标需由政教处按我校专业设置审定。</p>
+      <ol class="src">
+        <li>上海市教育委员会：《上海市中等职业学校学生综合素质评价实施办法》（沪教委规〔2021〕5号）。<br><a href="http://service.shanghai.gov.cn/XingZhengWenDangKuJyh/XZGFDetails.aspx?docid=REPORT_NDOC_007410" target="_blank" rel="noopener">http://service.shanghai.gov.cn/...docid=REPORT_NDOC_007410</a></li>
+        <li>山东省教育厅：《山东省中等职业学校学生综合素质评价实施方案》（鲁教职发〔2017〕1号）。<br><a href="http://edu.shandong.gov.cn/art/2018/11/3/art_12045_7733465.html" target="_blank" rel="noopener">http://edu.shandong.gov.cn/art/2018/11/3/art_12045_7733465.html</a></li>
+        <li>青岛市教育局：《关于开展职业学校学生综合素质评价工作的通知》（2016）。<br><a href="http://edu.qingdao.gov.cn/zfxxgkml/gwfg/202203/t20220311_4712807.shtml" target="_blank" rel="noopener">http://edu.qingdao.gov.cn/...t20220311_4712807.shtml</a></li>
+        <li>教育部：《中等职业学校德育大纲（2014 年修订）》。<br><a href="http://www.moe.gov.cn/srcsite/A07/moe_950/201501/t20150107_183069.html" target="_blank" rel="noopener">http://www.moe.gov.cn/...t20150107_183069.html</a></li>
+        <li>教育部：《大中小学劳动教育指导纲要（试行）》（2020）。<br><a href="https://www.gov.cn/zhengce/zhengceku/2020-07/15/content_5526949.htm" target="_blank" rel="noopener">https://www.gov.cn/...content_5526949.htm</a></li>
+        <li>淮北市树人中等专业学校：“C5+12”评价体系，杜集区人民政府，2025-05-26。<br><a href="https://www.hbdj.gov.cn/zwgk/grassroots/35/65083531.html" target="_blank" rel="noopener">https://www.hbdj.gov.cn/.../65083531.html</a></li>
+        <li>上海市中职德育网：逸夫职校《新鲜载体 给力成长——试用〈上海市中等职业学校学生成长手册〉的反馈》。<br><a href="https://zzdyw.shedu.net/main/Content.aspx?pid=12&amp;id=5461" target="_blank" rel="noopener">https://zzdyw.shedu.net/main/Content.aspx?pid=12&amp;id=5461</a></li>
+        <li>莱阳市职业中等专业学校：2024—2025 学年劳动教育工作发展报告（含学生成长档案目录）。<br><a href="https://www.yantai.gov.cn/art/2025/5/21/art_91382_3255947.html" target="_blank" rel="noopener">https://www.yantai.gov.cn/art/2025/5/21/art_91382_3255947.html</a></li>
+        <li>上海市贸易学校：《学生综合素质评价实施办法（试行）》。<br><a href="https://www.shsmyxx.com/webDisplay/webDisplay/ueditor/jsp/upload/file/20220807/1659858333422045035.pdf" target="_blank" rel="noopener">https://www.shsmyxx.com/...1659858333422045035.pdf</a></li>
+        <li>科大讯飞智慧教育：学生综合评价 / 五育评价产品介绍。<br><a href="https://edu.iflytek.com/solution/school/quality-oriented-educalion" target="_blank" rel="noopener">https://edu.iflytek.com/solution/school/quality-oriented-educalion</a></li>
+        <li>新开普：K12 学生综合素质评价系统。<br><a href="https://www.newcapec.com.cn/cpnew/6735.html" target="_blank" rel="noopener">https://www.newcapec.com.cn/cpnew/6735.html</a></li>
+        <li>行业方案文章：《综合素质评价业务建模：从过程性评价到成长档案全链路闭环》，CSDN，2026-10-30（仅作功能参照）。<br><a href="https://blog.csdn.net/weixin_67440240/article/details/169561559" target="_blank" rel="noopener">https://blog.csdn.net/weixin_67440240/article/details/169561559</a></li>
+      </ol>
+    </section>
+
+  </main>
+</div>
+
+<footer class="doc-foot">学生成长模块重构方案 v1.0 · 2026-11-20 · 京山市中等职业技术学校 政教处 / 信息中心</footer>
+</body>
+</html>

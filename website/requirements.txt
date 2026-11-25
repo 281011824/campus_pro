@@ -1,0 +1,21 @@
+# -*- coding: utf-8 -*-
+# Python>=3.11
+fastapi==0.129.0
+uvicorn[standard]==0.40.0
+jinja2
+orjson==3.11.7
+loguru==0.7.3
+toollib==2.1.6
+tzdata==2025.3
+python-dotenv==1.2.1
+PyYAML==6.0.3
+redis==5.2.1
+
+# 数据导入导出
+openpyxl==3.1.5
+python-multipart
+# 座位表 / 寝室表 PDF
+reportlab==5.1.0
+
+# 测试（TestClient）
+httpx

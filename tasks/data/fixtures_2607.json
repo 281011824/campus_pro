@@ -1,0 +1,873 @@
+{
+  "_meta": {
+    "note": "2607 班成长导航系统试点班 · 真实系统只读贴源聚合脱敏快照；真实姓名／学号／宿舍／家长电话不进样本",
+    "class": "2607",
+    "pilot": true,
+    "pulled_at": "2026-11-11",
+    "source_system": "京山中职（综合高中）成长导航系统",
+    "source_api": "/admin/campus/students · /admin/campus/dorm · /admin/campus/watch · /admin/campus/leaves",
+    "via": "成长导航数据服务只读派生区（秘书不直连智慧校园平台）",
+    "ready_date": "2026-11-11",
+    "ready_dates": [
+      "2026-11-11"
+    ],
+    "coverage_ready": [
+      "学籍",
+      "归寝",
+      "请假"
+    ],
+    "coverage_pending": [
+      "成绩",
+      "考勤",
+      "德育",
+      "心理"
+    ],
+    "derived_pending": true,
+    "derived_pending_note": "成长导航教师端派生区当前仅绑定 classId=1（2026级1班），2607 的四维平衡／六级目标／成长画像／优势标签未就绪，一律降级返回 available=false，不以示例值或旧值替代",
+    "reconcile_conflict": true,
+    "reconcile_detail": "归寝聚合 leave=0，但请假表 2607 有 2 条病假·已归校 → 口径未对齐；暂停请假数字、标注暂不可用、通知信息化处",
+    "field_whitelist": [
+      "student_id",
+      "name_masked",
+      "class_id",
+      "grade",
+      "dorm_status",
+      "leave_type",
+      "leave_start",
+      "leave_end"
+    ],
+    "absent_fields": [
+      "answers",
+      "scores",
+      "psych_detail",
+      "goal_text",
+      "parent_phone",
+      "parent_name",
+      "leave_reason",
+      "id_card",
+      "home_address",
+      "dorm",
+      "student_no",
+      "name"
+    ],
+    "no_full_profile": "当前仅学籍／归寝／请假三类，成绩／考勤／德育／心理未接，不得称「完整学生画像」"
+  },
+  "class": {
+    "class_id": "2607",
+    "name": "2026级 2607 班（成长导航系统试点班）",
+    "size": 66,
+    "boys": 18,
+    "girls": 48,
+    "boarding": 60,
+    "day": 6,
+    "grade": "2026级",
+    "enroll_status": "在读 66/66",
+    "major_distribution": {
+      "直播电商服务": 50,
+      "计算机应用(3+2)": 16
+    },
+    "attendance_rate": null,
+    "attendance_note": "暂不可用：考勤域未接入当前画像工具，不以归寝数据估算出勤率",
+    "moral_delta": null,
+    "moral_note": "暂不可用：德育域未接入",
+    "role_registered": "66/66"
+  },
+  "leave_count": 2,
+  "dorm_leave_count": 0,
+  "reconcile_note": "请假与归寝口径未对齐（请假表 2 条 vs 归寝 leave=0）：暂停该数字、标注暂不可用、通知信息化处，不以估算值或旧值替代",
+  "dorm": {
+    "ready_dates": [
+      "2026-11-11"
+    ],
+    "today_ready": true,
+    "today_date": "2026-11-11",
+    "anomaly_count": 6,
+    "late": [],
+    "unreturned_count": 6,
+    "unreturned": [
+      {
+        "student_id": "2607-01",
+        "name_masked": "×同学01"
+      },
+      {
+        "student_id": "2607-02",
+        "name_masked": "×同学02"
+      },
+      {
+        "student_id": "2607-03",
+        "name_masked": "×同学03"
+      },
+      {
+        "student_id": "2607-04",
+        "name_masked": "×同学04"
+      },
+      {
+        "student_id": "2607-05",
+        "name_masked": "×同学05"
+      },
+      {
+        "student_id": "2607-06",
+        "name_masked": "×同学06"
+      }
+    ],
+    "missing_info": [],
+    "consecutive_unreturned": {
+      "2607-01": 2,
+      "2607-02": 2,
+      "2607-03": 2,
+      "2607-04": 2,
+      "2607-05": 2,
+      "2607-06": 2
+    },
+    "gap_days": [],
+    "ready_note": "逐日核对 2026-11-05～11-12：平台对任意 date 均返回 2026-11-11 同一份聚合，故仅 2026-11-11 为数据就绪日；其余日期返回「未就绪」，不把未生成当未归、不补算",
+    "returned_count": 60,
+    "late_count": 0,
+    "missing_count": 0,
+    "leave_count_dorm": 0
+  },
+  "leaves": [
+    {
+      "student_id": "2607-61",
+      "name_masked": "×同学61",
+      "leave_type": "病假",
+      "leave_start": "",
+      "leave_end": "",
+      "status": "已归校"
+    },
+    {
+      "student_id": "2607-62",
+      "name_masked": "×同学62",
+      "leave_type": "病假",
+      "leave_start": "",
+      "leave_end": "",
+      "status": "已归校"
+    }
+  ],
+  "warning": {
+    "count": 6,
+    "items": [
+      {
+        "fact": "连续未归 6 人（只计数据就绪日 2026-11-11）",
+        "suggest": "需人工关注"
+      },
+      {
+        "fact": "超期未返校 0 人、月请假频繁 0 人",
+        "suggest": "无需处置"
+      }
+    ],
+    "text_rule": "只写「需人工关注」与事实，不写结论、不带请假事由"
+  },
+  "students": [
+    {
+      "student_id": "2607-01",
+      "name_masked": "×同学01",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-02",
+      "name_masked": "×同学02",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-03",
+      "name_masked": "×同学03",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-04",
+      "name_masked": "×同学04",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-05",
+      "name_masked": "×同学05",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-06",
+      "name_masked": "×同学06",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-07",
+      "name_masked": "×同学07",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-08",
+      "name_masked": "×同学08",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-09",
+      "name_masked": "×同学09",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-10",
+      "name_masked": "×同学10",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-11",
+      "name_masked": "×同学11",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-12",
+      "name_masked": "×同学12",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-13",
+      "name_masked": "×同学13",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-14",
+      "name_masked": "×同学14",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-15",
+      "name_masked": "×同学15",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-16",
+      "name_masked": "×同学16",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-17",
+      "name_masked": "×同学17",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-18",
+      "name_masked": "×同学18",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-19",
+      "name_masked": "×同学19",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-20",
+      "name_masked": "×同学20",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-21",
+      "name_masked": "×同学21",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-22",
+      "name_masked": "×同学22",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-23",
+      "name_masked": "×同学23",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-24",
+      "name_masked": "×同学24",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-25",
+      "name_masked": "×同学25",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-26",
+      "name_masked": "×同学26",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-27",
+      "name_masked": "×同学27",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-28",
+      "name_masked": "×同学28",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-29",
+      "name_masked": "×同学29",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-30",
+      "name_masked": "×同学30",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-31",
+      "name_masked": "×同学31",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-32",
+      "name_masked": "×同学32",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-33",
+      "name_masked": "×同学33",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-34",
+      "name_masked": "×同学34",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-35",
+      "name_masked": "×同学35",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-36",
+      "name_masked": "×同学36",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-37",
+      "name_masked": "×同学37",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-38",
+      "name_masked": "×同学38",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-39",
+      "name_masked": "×同学39",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-40",
+      "name_masked": "×同学40",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-41",
+      "name_masked": "×同学41",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-42",
+      "name_masked": "×同学42",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-43",
+      "name_masked": "×同学43",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-44",
+      "name_masked": "×同学44",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-45",
+      "name_masked": "×同学45",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-46",
+      "name_masked": "×同学46",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-47",
+      "name_masked": "×同学47",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-48",
+      "name_masked": "×同学48",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-49",
+      "name_masked": "×同学49",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-50",
+      "name_masked": "×同学50",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-51",
+      "name_masked": "×同学51",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-52",
+      "name_masked": "×同学52",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-53",
+      "name_masked": "×同学53",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-54",
+      "name_masked": "×同学54",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-55",
+      "name_masked": "×同学55",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-56",
+      "name_masked": "×同学56",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-57",
+      "name_masked": "×同学57",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-58",
+      "name_masked": "×同学58",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-59",
+      "name_masked": "×同学59",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-60",
+      "name_masked": "×同学60",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-61",
+      "name_masked": "×同学61",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-62",
+      "name_masked": "×同学62",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-63",
+      "name_masked": "×同学63",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-64",
+      "name_masked": "×同学64",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-65",
+      "name_masked": "×同学65",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "2607-66",
+      "name_masked": "×同学66",
+      "class_id": "2607",
+      "grade": "2026级",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    }
+  ],
+  "attention": [
+    {
+      "student_id": "2607-01",
+      "name_masked": "×同学01",
+      "mark": "连续未归关注",
+      "action": "建议核实归寝并联系生活老师",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "2607-02",
+      "name_masked": "×同学02",
+      "mark": "连续未归关注",
+      "action": "建议核实归寝并联系生活老师",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "2607-03",
+      "name_masked": "×同学03",
+      "mark": "连续未归关注",
+      "action": "建议核实归寝并联系生活老师",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "2607-04",
+      "name_masked": "×同学04",
+      "mark": "连续未归关注",
+      "action": "建议核实归寝并联系生活老师",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "2607-05",
+      "name_masked": "×同学05",
+      "mark": "连续未归关注",
+      "action": "建议核实归寝并联系生活老师",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "2607-06",
+      "name_masked": "×同学06",
+      "mark": "连续未归关注",
+      "action": "建议核实归寝并联系生活老师",
+      "status": "待跟进"
+    }
+  ],
+  "derived_profiles": {},
+  "balance": [],
+  "balance_unbalanced": null,
+  "goals": {},
+  "derived_tags": [],
+  "derived_advice": []
+}

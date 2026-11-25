@@ -1,0 +1,25 @@
+services:
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    # 仅供 backend 使用，不对外暴露端口
+    expose:
+      - "6379"
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: website:v1.0.0
+    restart: unless-stopped
+    environment:
+      APP_ENV: prod
+      HEAD_TEACHER_WORKBENCH_REDIS_URL: redis://redis:6379/0
+    volumes:
+      - ./logs:/backend/logs
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    command: "uvicorn app.main:app --host 0.0.0.0 --port 8000 --workers 2 --log-level warning"

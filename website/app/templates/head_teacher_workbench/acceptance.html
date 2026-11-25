@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>德育工作台 · 可运行部署样本 v0.16（协同教育推送 · 教师端 → 班主任端）</title>
+<link rel="stylesheet" href="/static/head_teacher_workbench/acceptance.css">
+</head>
+<body>
+
+<!-- ========== 我的角色（企微自动匹配结果 · 非阻断，不是进入系统的前置动作） ========== -->
+<div class="entry" id="entryOverlay">
+  <div class="entry-box">
+    <div class="entry-head">
+      <div>
+        <div class="entry-title">德育工作台 · 我的角色（企业微信自动匹配）</div>
+        <div class="entry-sub">登录后服务端按企业微信通讯录自动匹配全部职务、自动装载主职务工作台，无需手动选择；此处仅查看匹配结果或切换职务，端与端之间数据互不打通</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <select id="entryUser" title="切换企业微信登录账号（演示用）"></select>
+        <button class="btn ghost" id="btnCloseRoles">返回工作台</button>
+      </div>
+    </div>
+    <div class="entry-cards" id="entryCards"></div>
+    <div class="entry-note" id="entryRule"></div>
+    <div class="entry-note" id="entryManages"></div>
+    <div class="entry-foot" id="entryFoot">自动匹配只共建并激活主职务空间；其余角色仅就绪登记，不共建空间、不产生会话、不共享上下文。</div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="brand">德育工作台 <span class="ver">v0.16 · 协同教育推送 · 教师端 → 班主任端 · 2607 试点班</span></div>
+  <div class="me" id="me">正在按企业微信通讯录自动匹配角色并共建空间…</div>
+  <div class="spacebadge" id="spaceBadge" title="当前角色的共建空间">空间：—</div>
+  <button class="btn ghost" id="btnEntry">我的角色（自动匹配）</button>
+  <button class="btn ghost" id="btnPost">切换职务</button>
+</div>
+
+<div class="notice" id="notice">
+  德育工作台 v0.16 · <b>协同教育推送</b>（教师端把所代课程班级的平时考试／学习状态自动定向推送给班主任，
+  非隶属管理、只协同育人，不进六级链、不打通三端、不污染上下文） ·
+  <b>同类横向协同 · 上下文不污染</b>（同一类角色智能体可横向只读搜索聚合脱敏数字，
+  聚合结果不写回任何一方空间的共享上下文、不带入他人上下文） ·
+  共建空间 · 共享上下文（秘书智能体随角色跟随工作台共建一个空间，空间之间仍互不打通） ·
+  企微角色自动匹配加载：登录即解析一人多角色、自动装载主职务并共建主职务空间 ·
+  三端按管理对象区分：教师端管日常学习／班主任端管学生综合／行政端管老师与班主任 ·
+  一岗一智能体 · 六级行政链自动推送／上级催办 ·
+  已接入 2607 成长导航系统试点班（徐海潮 Tiao 三端三职务） ·
+  成长导航当前为校内试用态，已就绪画像仅学籍／归寝／请假三类
+</div>
+
+<div class="tabs">
+  <button data-v="portals">三端划分</button>
+  <button data-v="chat" class="on">秘书对话</button>
+  <button data-v="desk">德育工作台</button>
+  <button data-v="todo">待确认红点</button>
+  <button data-v="space">共建空间</button>
+  <button data-v="federation">横向协同</button>
+  <button data-v="coedu">协同教育</button>
+  <button data-v="pilot">2607 试点班</button>
+  <button data-v="flow">六级推送流</button>
+  <button data-v="ops">运行与验收</button>
+</div>
+
+<!-- ==================== 三端划分 ==================== -->
+<div class="view" id="viewPortals">
+  <div class="card">
+    <h3>三端划分（工作台／界面与数据边界；六级行政链是行政端内部层级，二者不得混用）</h3>
+    <div class="hint" id="portalEntryRule">加载中…</div>
+    <div class="hint" id="portalRule">加载中…</div>
+    <div class="grid3" id="portalCards"></div>
+  </div>
+  <div class="card">
+    <h3>跨端人员（企业微信通讯录 → 端 → post_id → 一岗一智能体）</h3>
+    <div class="tblwrap" id="portalPeople"></div>
+    <div class="hint">徐海潮（Tiao）与方成（coredump）均跨三端，张敏跨班主任端＋行政端；不同端的智能体与数据互不打通。</div>
+  </div>
+  <div class="card">
+    <h3>当前账号的三端 · 一键切换验证</h3>
+    <div class="stat" id="portalStat"></div>
+    <div id="portalSwitch"></div>
+    <div class="hint" id="portalIso"></div>
+  </div>
+  <div class="card">
+    <h3>三端与自动匹配口径记录（PC010—PC014）</h3>
+    <div class="tblwrap" id="portalConflicts"></div>
+  </div>
+</div>
+
+<!-- ==================== 秘书对话 ==================== -->
+<div class="view on" id="viewChat">
+  <div class="chat" id="chat"></div>
+  <div class="chips" id="chips"></div>
+  <div class="inputbar">
+    <input type="text" id="inp" placeholder="输入指令，如：生成本周周报 / 本班需关注有谁 / 记一笔德育 / 工具就绪度">
+    <button class="btn" id="btnSend">发送</button>
+    <button class="btn gray" id="btnConfirm">确认写入</button>
+    <button class="btn gray" id="btnCancel">取消</button>
+  </div>
+</div>
+
+<!-- ==================== 德育工作台 ==================== -->
+<div class="view" id="viewDesk">
+  <div class="dtabs" id="dtabs"></div>
+  <div id="deskBody"></div>
+</div>
+
+<!-- ==================== 本周待确认红点（D2 · 四个智能入口之四） ==================== -->
+<div class="view" id="viewTodo">
+  <div class="card">
+    <h3>本周待确认红点 · 集中待办（独立于「待确认写入」草稿）</h3>
+    <div class="hint">数据来源＝预警转介单、家长告知事项（人工登记）、上周未销号项；只读派生区，不含成绩／心理明细。
+      三类动作：转介（→L2 劝返台账）、告知（人工签发，秘书不代发）、销号（人审后留三元组审计）；
+      不含姓名、成绩、家长电话；销号后不再出现；空态显示「本周无待确认」，不摆示例数据。</div>
+    <div class="stat" id="todoStat"></div>
+    <div class="tblwrap" id="todoList"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>转介（→L2 劝返台账 · 只写事实不作定性）</h3>
+      <div class="row"><div class="k">本班需关注学生</div><div class="v"><select id="todoStudent"></select></div></div>
+      <div class="row"><div class="k">事由分类</div><div class="v">
+        <select id="todoCategory">
+          <option>归寝异常</option><option>缺勤关注</option><option>学业联系</option>
+          <option>行为观察</option><option>其他</option>
+        </select></div></div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" onclick="todoRefer()">生成转介单</button>
+        <button class="btn gray" onclick="todoNote()">登记家长告知事项（人工签发）</button>
+      </div>
+      <div class="hint" id="todoResult">转介单＝item_id／掩码学号／事由分类／时间戳；事实取自派生区已有标记，不新增判断；L2 回执三态（已接收／处置中／已销号）。</div>
+    </div>
+    <div class="card">
+      <h3>转介单 · L2 劝返台账回执（三态）</h3>
+      <div class="tblwrap" id="todoSlips"></div>
+      <div class="hint" id="todoSlipRule">一件事一条流、一条上报线；L1 与 L2 可关联但不继承字段、不继承上下文；台账本体落点（成长导航 or 政教处线下）按 D4 现场确认后定接口。</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>四色预警与劝返台账 · 六件套状态（D3 如实报告，规则不由系统代写）</h3>
+    <div class="mono" id="warningState">加载中…</div>
+    <div class="hint">首版 12 条规则／首月影子模式／月误报统计／学籍异动七类留痕／巩固率按月快照归政教处＋招就处按建设路线图 04 第三节补齐；
+      本端已就绪的只有事实链路 3 工具与转介单；影子期内不推送、不进考核。</div>
+  </div>
+</div>
+
+<!-- ==================== 共建空间（PC015） ==================== -->
+<div class="view" id="viewSpace">
+  <div class="card">
+    <h3>共建空间 · 秘书智能体随角色跟随工作台共享上下文</h3>
+    <div class="hint" id="spaceRule">加载中…</div>
+    <div class="hint" id="spaceNote">加载中…</div>
+    <div class="stat" id="spaceStat"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>空间成员（随角色不同而不同）</h3>
+      <div class="tblwrap" id="spaceMembers"></div>
+      <div class="hint">一个角色一个空间：秘书智能体（agent_id）＋ 该角色的工作台模块共同读写同一份共享上下文。</div>
+    </div>
+    <div class="card">
+      <h3>共享上下文（白名单结构化脱敏键）</h3>
+      <div class="tblwrap" id="spaceShared"></div>
+      <div class="hint" id="spaceSharedFields"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>共建验证：工作台切模块写 focus → 秘书对话立即读到</h3>
+    <div class="row"><div class="k">工作台模块</div><div class="v" style="display:flex;gap:8px;flex-wrap:wrap" id="spaceModuleBtns"></div></div>
+    <div class="row"><div class="k">秘书侧</div><div class="v" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn mini" onclick="send('共建空间')">问秘书：当前共建空间</button>
+      <button class="btn mini" onclick="send('生成本周周报')">生成周报（写共享上下文）</button>
+      <button class="btn mini gray" onclick="spaceWriteEvent()">工作台写一条结构化上下文</button>
+      <button class="btn mini gray" onclick="spaceTryForbidden()">验证越权字段被拒</button>
+    </div></div>
+    <div class="hint" id="spaceWriteResult">工作台与秘书写入均留痕；自由文本、身份字段与字段黑名单一律拒绝。</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>共建留痕（秘书智能体／工作台共同写入）</h3>
+      <div class="tblwrap" id="spaceEvents"></div>
+    </div>
+    <div class="card">
+      <h3>我的空间（一人多角色＝多个空间）</h3>
+      <div class="tblwrap" id="spaceList"></div>
+      <div class="hint" id="spaceIso">加载中…</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>空间口径记录（PC013—PC015）</h3>
+    <div class="tblwrap" id="spaceConflicts"></div>
+  </div>
+</div>
+
+<!-- ==================== 同类横向协同（PC016） ==================== -->
+<div class="view" id="viewFederation">
+  <div class="card">
+    <h3>同类横向协同 · 只读搜索聚合，自己的上下文不污染</h3>
+    <div class="hint" id="fedRule">加载中…</div>
+    <div class="hint" id="fedPoolNote">加载中…</div>
+    <div class="hint" id="fedNote">加载中…</div>
+    <div class="stat" id="fedStat"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>当前同类池（服务端按企业微信通讯录判定）</h3>
+      <div class="tblwrap" id="fedPeers"></div>
+      <div class="hint">同类池＝同端＋同层级＋同在链状态＋同团线归属＋同层级确认状态；跨端／跨层级／跨链／团线与行政线／待确认层级一律不同池。池内每个成员仍是一岗一智能体、一个角色一个空间。</div>
+    </div>
+    <div class="card">
+      <h3>全员同类池分布</h3>
+      <div class="tblwrap" id="fedPools"></div>
+      <div class="hint">教师端 L1（3 人）、班主任端 L1（3 人）、行政端 L2（5 人）等各自成池；池与池之间互不打通，池内只读聚合不改变任何成员的数据范围。</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>横向搜索聚合（只读、一次性、即取即弃）</h3>
+    <div class="row"><div class="k">聚合指标</div><div class="v" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select id="fedMetric"></select>
+      <input type="text" id="fedKeyword" placeholder="可选：按职务／姓名／userid 过滤（≤20 字）" style="width:260px">
+      <button class="btn" onclick="fedSearch()">横向搜索聚合</button>
+    </div></div>
+    <div class="row"><div class="k">快捷验证</div><div class="v" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn mini gray" onclick="spaceWriteEvent()">先写一条本空间上下文</button>
+      <button class="btn mini gray" onclick="fedSearch()">再聚合，比对前后是否变化</button>
+      <button class="btn mini gray" onclick="fedTryPollute()">尝试把聚合结果写回空间（应被拒）</button>
+    </div></div>
+    <div class="hint" id="fedSearchResult">聚合结果只作为一次响应返回；不写 spaces／space_events／chat_turns／sessions；服务端在聚合前后对 shared_json 做完全相等校验。</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>聚合结果（脱敏数字／状态，不含名单与学生明细）</h3>
+      <div class="tblwrap" id="fedRows"></div>
+    </div>
+    <div class="card">
+      <h3>不污染验证与池级汇总</h3>
+      <div class="stat" id="fedVerify"></div>
+      <div class="mono" id="fedAggregate">选择指标并点「横向搜索聚合」。</div>
+      <div class="hint" id="fedIso">加载中…</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>同类聚合留痕（只记池 id／指标／成员数，不记业务原文与对话原文）</h3>
+    <div class="tblwrap" id="fedQueries"></div>
+  </div>
+  <div class="card">
+    <h3>横向协同口径记录（PC014—PC016）</h3>
+    <div class="tblwrap" id="fedConflicts"></div>
+  </div>
+</div>
+
+<!-- ==================== 协同教育推送（PC017） ==================== -->
+<div class="view" id="viewCoedu">
+  <div class="card">
+    <h3>协同教育推送 · 教师端 → 所代课程班级班主任端（非隶属管理、只协同育人）</h3>
+    <div class="hint" id="coeduRule">加载中…</div>
+    <div class="hint" id="coeduRelation">加载中…</div>
+    <div class="hint" id="coeduLinkNote">加载中…</div>
+    <div class="hint" id="coeduNote">加载中…</div>
+    <div class="stat" id="coeduStat"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>我的任课绑定（教师 post_id → 所代课程班级＋科目）</h3>
+      <div class="tblwrap" id="coeduLinks"></div>
+      <div class="hint">任课班级／科目由企业微信通讯录＋教务处课表判定（PC010 待补录，样本内置演示绑定）；一个教师可教多班、一个班可有多位任课教师。收件人只认该班班主任端 L1 职务。</div>
+    </div>
+    <div class="card">
+      <h3>协同教育收件箱（班主任端只读）</h3>
+      <div class="tblwrap" id="coeduInbox"></div>
+      <div class="hint">行政端不直接管学生个体、不接收学生级协同推送；教师端不能反查班主任端德育数据。收件箱只读，不回写任何空间的共享上下文。</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>自动推送（服务端定向、不设人工选收件人）</h3>
+    <div class="row"><div class="k">推送指标</div><div class="v" style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select id="coeduMetric"></select>
+      <button class="btn" onclick="coeduPreview()">预览（不落库）</button>
+      <button class="btn" onclick="coeduPush()">自动推送到所代班级班主任</button>
+    </div></div>
+    <div class="row"><div class="k">快捷验证</div><div class="v" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn mini gray" onclick="spaceWriteEvent()">先写一条本空间上下文</button>
+      <button class="btn mini gray" onclick="coeduPush()">再推送，比对前后是否变化</button>
+      <button class="btn mini gray" onclick="coeduTryPollute()">尝试把推送结果写回空间（应被拒）</button>
+    </div></div>
+    <div class="hint" id="coeduResult">平时考试／学习状态由考试批次导入／学情状态更新事件自动触发；前端只提交 session_id 与指标，班级、科目、批次、收件人、身份字段一律由服务端反查。</div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>本次推送结果（班级级脱敏汇总，不含名单与分数明细）</h3>
+      <div class="tblwrap" id="coeduRows"></div>
+    </div>
+    <div class="card">
+      <h3>不污染验证与边界</h3>
+      <div class="stat" id="coeduVerify"></div>
+      <div class="mono" id="coeduAggregate">选择指标并点「自动推送」。</div>
+      <div class="hint" id="coeduIso">加载中…</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>协同教育推送留痕（收件人／班级／科目／指标，不记学生名单与对话原文）</h3>
+    <div class="tblwrap" id="coeduPushes"></div>
+  </div>
+  <div class="card">
+    <h3>协同教育口径记录（PC010／PC017）</h3>
+    <div class="tblwrap" id="coeduPending"></div>
+  </div>
+</div>
+
+<!-- ==================== 2607 试点班 ==================== -->
+<div class="view" id="viewPilot">
+  <div class="card">
+    <h3>成长导航系统试点班 · 真实数据拉取（脱敏汇总）</h3>
+    <div class="hint" id="pilotIntro">加载中…</div>
+    <div class="stat" id="pilotStat"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>归寝 · 数据就绪日口径</h3>
+      <div class="tblwrap" id="pilotDorm"></div>
+      <div class="hint" id="pilotReadyNote"></div>
+    </div>
+    <div class="card">
+      <h3>预警 / 请假 · 口径未对齐</h3>
+      <div class="tblwrap" id="pilotWarn"></div>
+      <div class="hint" id="pilotReconcile"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>试点班清单（2611 原型基准 ≠ 2607 成长导航试点班，不得混用）</h3>
+    <div class="tblwrap" id="pilotClasses"></div>
+    <div class="hint" id="pilotClassRule"></div>
+  </div>
+  <div class="card">
+    <h3>本次接入的口径记录（PC005 已确认／PC006—PC009 待确认）</h3>
+    <div class="tblwrap" id="pilotConflicts"></div>
+  </div>
+  <div class="card">
+    <h3>角色自动匹配验证（徐海潮 Tiao · 一人三角色，无需手动选择）</h3>
+    <div class="row"><div class="k">操作</div><div class="v" style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="autoEnter('Tiao')">以徐海潮自动匹配（3 个角色）</button>
+      <button class="btn gray" onclick="switchRoleAs('Tiao','p_xhc_teacher')">切到任课教师</button>
+      <button class="btn gray" onclick="switchRoleAs('Tiao','p_xhc_bzr_2607')">切到班主任（2607）</button>
+      <button class="btn gray" onclick="switchRoleAs('Tiao','p_xhc_tw')">切到团委副书记</button>
+    </div></div>
+    <div class="hint" id="pilotPostHint">三个角色由企业微信通讯录自动匹配并就绪，系统自动进入主职务；点击仅为切换职务，不是选择入口。团线单列：团委副书记（＝政教副主任 L3）按团内程序单列，不进六级行政推送链、不纳入考核与留痕。</div>
+    <div class="tblwrap" id="pilotPosts"></div>
+  </div>
+</div>
+
+<!-- ==================== 六级推送流 ==================== -->
+<div class="view" id="viewFlow">
+  <div class="card">
+    <h3>六级行政链 · 逐级自动推送（不设逐级人工放行卡点）</h3>
+    <div class="chain" id="chain"></div>
+    <div class="hint" id="flowRule"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>手动触发一次上行推送</h3>
+      <div class="row"><div class="k">选择层级</div><div class="v"><select id="pushLevel"></select></div></div>
+      <div style="margin-top:10px"><button class="btn" id="btnPush">生成报告并自动推送到上一级</button></div>
+      <div class="hint" id="pushResult"></div>
+    </div>
+    <div class="card">
+      <h3>上级催办闭环（逐级不越级）</h3>
+      <div class="row"><div class="k">直接下级</div><div class="v"><select id="dunTarget"></select></div></div>
+      <div class="row"><div class="k">催办内容</div><div class="v"><input type="text" id="dunText" style="width:100%" placeholder="例：请于今日17:00前反馈归寝异常处置结果"></div></div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn" id="btnDunEcho">生成催办回显</button>
+        <button class="btn gray" id="btnDunConfirm">确认下达</button>
+        <button class="btn gray" id="btnDunReply">模拟下级反馈</button>
+        <button class="btn gray" id="btnEscalate">超时升级</button>
+      </div>
+      <div class="hint" id="dunResult"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>催办台账</h3><div class="tblwrap" id="dunList"></div>
+  </div>
+  <div class="card">
+    <h3>企业微信应用消息（mock 模式发件箱）</h3><div class="tblwrap" id="outbox"></div>
+  </div>
+</div>
+
+<!-- ==================== 运行与验收 ==================== -->
+<div class="view" id="viewOps">
+  <div class="card">
+    <h3>运行状态与校内试用态九项上线前置</h3>
+    <div class="stat" id="healthStat"></div>
+    <div class="tblwrap" id="readinessTbl"></div>
+  </div>
+  <div class="card">
+    <h3>真实通讯录接入 · 口径记录（已确认／待确认，确认前不作正式层级依据）</h3>
+    <div class="tblwrap" id="conflictTbl"></div>
+    <div class="hint" id="conflictRule"></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <h3>成长导航对接就绪度（v0.10）</h3>
+      <div class="mono" id="growthReadiness">加载中…</div>
+    </div>
+    <div class="card">
+      <h3>智能体统一台账（一岗一智能体）</h3>
+      <div class="tblwrap" id="agentRegistry"></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>三元组审计日志（userid ＋ post_id ＋ agent_id）</h3>
+    <div class="tblwrap" id="auditTbl"></div>
+    <div class="hint">红线拦截只记分类与三元组，绝不记请求内容（安全／舆情零系统留痕）。</div>
+  </div>
+</div>
+
+<!-- ==================== 切换职务弹窗 ==================== -->
+<div class="modal" id="postModal">
+  <div class="box">
+    <h3>切换职务（企业微信角色已自动匹配并就绪）</h3>
+    <div class="hint" style="margin-bottom:10px">
+      角色已由企业微信通讯录自动匹配、主职务已自动装载，此处只调整当前职务。端是第一层导航、post_id 是第二层职务。前端只提交 userid、目标 post_id 与可选 portal（筛选意图）；
+      服务端校验归属后下发 portal／agent_id／level／data_scope，
+      并清空上一职务（端）的会话上下文、待确认写入与催办草稿；三端智能体数据互不打通。
+      切换职务即归档旧共建空间并清空其共享上下文，重建新角色空间，两个空间互不继承。
+    </div>
+    <div id="postList"></div>
+    <div style="margin-top:14px;text-align:right"><button class="btn gray" id="btnCloseModal">关闭</button></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+<script src="/static/head_teacher_workbench/acceptance.js"></script>
+</body>
+</html>

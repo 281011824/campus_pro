@@ -1,0 +1,501 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>班主任工作台 · 京山市中等职业技术学校</title>
+<link rel="stylesheet" href="/static/head_teacher_workbench/app.css?v=20261125modal9">
+<script src="/static/vendor/jquery/jquery.min.js"></script>
+<script src="/static/head_teacher_workbench/app.js?v=20261125modal7"></script>
+</head>
+<body>
+<div class="app">
+
+  <aside class="side">
+    <div class="brand">
+      <span class="seal">德</span>
+      <div class="brand-text">
+        <b>班主任工作台</b>
+        <small>京山市中等职业技术学校</small>
+      </div>
+    </div>
+    <nav class="nav" id="nav">
+      <button type="button" class="on" data-view="home">小秘书</button>
+      <button type="button" data-view="students">成长档案</button>
+      <button type="button" data-view="space">班级空间</button>
+      <button type="button" data-view="attendance">出勤统计</button>
+      <button type="button" data-view="learning">学情预警</button>
+      <button type="button" data-view="moral">德育量化</button>
+      <button type="button" data-view="affairs">班务减负</button>
+      <button type="button" data-view="family">家校协同</button>
+      <button type="button" data-view="data">数据备份</button>
+    </nav>
+    <div class="side-foot">
+      <div class="who">
+        <span class="avatar" id="avatar">班</span>
+        <div><b id="userName">加载中…</b><small id="userRole"></small></div>
+      </div>
+      <button type="button" class="logout" id="logout">退出登录</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">小秘书</h1>
+        <p id="pageSub">今日待办 · 班级态势 · 重点学生 · 科任反馈</p>
+      </div>
+      <div class="top-right">
+        <span class="class-chip" id="classChip">—</span>
+        <span class="today" id="today"></span>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- 小秘书（原「概览」升级） -->
+      <section class="view on" id="view-home">
+        <div class="sec-lead">
+          <div class="sec-lead-main">
+            <b>小秘书</b>
+            <span>把今日待办、班级态势、重点学生与科任反馈汇总到一屏；标记重点学生可提示科任教师关注。</span>
+          </div>
+          <div class="sec-lead-tags">
+            <span>待办提醒</span><span>班级态势</span><span>重点学生</span><span>科任反馈</span>
+          </div>
+        </div>
+
+        <div class="alert-row" id="homeAlerts"></div>
+
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h2>本周周报</h2><span class="badge" id="weeklyBadge">—</span></div>
+            <div class="card-body weekly" id="weeklyBody"><div class="loading">加载中…</div></div>
+            <div class="card-foot">
+              <span class="hint">确认后归档到成长档案</span>
+              <button type="button" class="btn primary" id="btnArchive" disabled>确认归档</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>重点学生标记</h2><span class="badge" id="focusBadge">—</span></div>
+            <div class="card-body flush" id="focusBody"><div class="loading">加载中…</div></div>
+            <div class="card-foot focus-add">
+              <select id="focusStudent" aria-label="选择学生"></select>
+              <select id="focusTag" aria-label="选择标签"></select>
+              <button type="button" class="btn primary" id="btnFocusAdd">标记</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h2>需关注学生</h2><span class="badge" id="watchBadge">—</span></div>
+            <div class="card-body flush" id="watchBody"><div class="loading">加载中…</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>科任反馈</h2><span class="badge" id="fbBadge">—</span></div>
+            <div class="card-body flush" id="fbBody"><div class="loading">加载中…</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head"><h2>本周待办</h2><span class="badge" id="todoBadge">—</span></div>
+          <div class="card-body flush" id="todoBody"><div class="loading">加载中…</div></div>
+        </div>
+      </section>
+
+      <!-- 成长档案 -->
+      <section class="view" id="view-students">
+        <div class="ga-top" id="gaKpis"></div>
+        <div class="card">
+          <div class="card-head">
+            <h2>班级成长档案</h2>
+            <div class="tools">
+              <input type="search" id="stuSearch" placeholder="搜索姓名或学号">
+              <button type="button" class="btn ghost" data-template="students">名册模板</button>
+              <button type="button" class="btn ghost" data-import="students">导入名册</button>
+              <button type="button" class="btn ghost" data-export="students">导出名册</button>
+              <button type="button" class="btn primary" data-growth-add>+ 随手记</button>
+            </div>
+          </div>
+          <div class="ga-filters" id="gaFilters"></div>
+          <div class="ga-layout">
+            <div class="ga-roster">
+              <div class="ga-roster-head"><span>班级名册</span><em id="gaRosterBadge">—</em></div>
+              <div id="studentsBody"><div class="loading">加载中…</div></div>
+            </div>
+            <div class="ga-detail" id="gaDetail">
+              <div class="empty">选择左侧学生查看五维档案与成长时间轴</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 班级空间 -->
+      <section class="view" id="view-space">
+        <div class="space-head">
+          <div class="space-tabs" id="spaceTabs">
+            <button type="button" class="space-tab on" data-space-tab="seat">座位表</button>
+            <button type="button" class="space-tab" data-space-tab="dorm">寝室表</button>
+          </div>
+          <div class="space-config">
+            <label><span id="spaceRowsLabel">行</span> <input type="number" id="spaceRows" min="1" max="20" value="9"></label>
+            <label id="spaceGroupsWrap">分组
+              <select id="spaceGroups">
+                <option value="2-2-2-2" selected>四组 · 每组 2 列</option>
+                <option value="2-4-2">三组 · 2 / 4 / 2 列</option>
+                <option value="3-3-3">三组 · 每组 3 列</option>
+                <option value="4-4">两组 · 每组 4 列</option>
+                <option value="3-3">两组 · 每组 3 列</option>
+                <option value="6">单组 · 6 列</option>
+                <option value="custom">自定义分组…</option>
+              </select>
+            </label>
+            <label id="spaceGroupsCustomWrap" hidden>列数
+              <input type="text" id="spaceGroupsCustom" maxlength="17" placeholder="如 2-4-2">
+            </label>
+            <label id="spaceColsWrap" hidden><span id="spaceColsLabel">列</span> <input type="number" id="spaceCols" min="1" max="12" value="6"></label>
+            <label id="spaceRoomStartWrap" hidden>起始房号 <input type="number" id="spaceRoomStart" min="1" max="9999" value="401"></label>
+            <label id="spaceRoomNameWrap" hidden>寝室号 <input type="text" id="spaceRoomName" maxlength="4" inputmode="numeric" placeholder="如 1401"></label>
+            <label id="spaceRoomGenderWrap" hidden>类型
+              <select id="spaceRoomGender">
+                <option value="男">男生寝室</option>
+                <option value="女">女生寝室</option>
+              </select>
+            </label>
+            <button type="button" class="btn ghost" id="spaceAddRoom" hidden>新增寝室</button>
+            <button type="button" class="btn ghost" id="spaceApply">应用行列</button>
+            <button type="button" class="btn ghost" id="spaceAuto">按学号重排</button>
+            <button type="button" class="btn ghost" id="spaceClear">清空位置</button>
+            <button type="button" class="btn primary" id="spaceExport">导出 PDF</button>
+            <button type="button" class="btn" id="spaceExportXlsx">导出 Excel</button>
+          </div>
+        </div>
+        <div class="space-stats" id="spaceStats"></div>
+        <div class="space-wrap">
+          <div class="space-board" id="spaceBoard"><div class="loading">加载中…</div></div>
+          <aside class="space-pool">
+            <div class="space-pool-head"><b>未分配学生</b><span id="spacePoolCount">—</span></div>
+            <div class="space-pool-list" id="spacePool" data-pool-drop></div>
+            <p class="space-tip">把学生卡片拖到座位或床位即可落位；拖到已有人卡片上会互换；拖回此处取消分配。左右两栏各自滚动，也可以先点学生，再点目标位置。</p>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 出勤统计 -->
+      <section class="view" id="view-attendance">
+        <div class="kpis kpis-3" id="attKpis"></div>
+        <div class="card">
+          <div class="card-head"><h2>本周出勤趋势</h2><span class="badge" id="attBadge">—</span></div>
+          <div class="card-body flush" id="attBody"><div class="loading">加载中…</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-head"><h2>今日未到</h2><span class="badge" id="attTodayBadge">—</span></div>
+            <div class="card-body flush" id="attToday"><div class="loading">加载中…</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>本周请假</h2><span class="badge" id="attLeaveBadge">—</span></div>
+            <div class="card-body flush" id="attLeave"><div class="loading">加载中…</div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 学情预警 -->
+      <section class="view" id="view-learning">
+        <div class="kpis kpis-2" id="learnKpis"></div>
+        <div id="learnLow"></div>
+        <div class="card">
+          <div class="card-head"><h2>需关注学生（全量）</h2><span class="badge" id="learnWatchBadge">—</span></div>
+          <div class="card-body flush" id="learnWatch"><div class="loading">加载中…</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head">
+            <h2>最近一次考试</h2>
+            <div class="tools">
+              <button type="button" class="btn ghost" data-template="scores">下载模板</button>
+              <button type="button" class="btn ghost" data-import="scores">导入成绩</button>
+              <button type="button" class="btn primary" data-export="scores">导出成绩</button>
+            </div>
+          </div>
+          <div class="card-body" id="scoresBody"><div class="loading">加载中…</div></div>
+        </div>
+      </section>
+
+      <!-- 德育量化 -->
+      <section class="view" id="view-moral">
+        <div class="moral-switch">
+          <div class="moral-tabs" role="tablist" aria-label="德育量化视图">
+            <button type="button" class="on" data-moral-view="class" role="tab" aria-selected="true">班级整体</button>
+            <button type="button" data-moral-view="students" role="tab" aria-selected="false">学生个人</button>
+          </div>
+          <div class="moral-period-wrap">
+            <div class="moral-period" id="moralPeriod">加载中…</div>
+            <div class="moral-period-controls">
+              <div class="moral-period-seg" role="group" aria-label="统计周期">
+                <button type="button" class="on" data-moral-period="month" aria-pressed="true">按月</button>
+                <button type="button" data-moral-period="term" aria-pressed="false">按学期</button>
+              </div>
+              <label class="moral-anchor" id="moralAnchorMonthWrap" for="moralAnchorMonth">
+                <span>月份</span>
+                <input type="month" id="moralAnchorMonth" aria-label="选择月份">
+              </label>
+              <label class="moral-anchor" id="moralAnchorTermWrap" for="moralAnchorTerm" hidden>
+                <span>学期</span>
+                <select id="moralAnchorTerm" aria-label="选择学期"></select>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div id="moralClassPanel">
+          <div class="moral-overview">
+            <div class="moral-overview-title">
+              <span>CLASS MORAL PULSE</span>
+              <h2 id="moralOverviewTitle">本周班级量化脉搏</h2>
+              <p>汇总全班已确认行为事件，看见每一天的进步与需要关注之处。</p>
+            </div>
+            <div class="moral-strip" id="moralStrip"></div>
+          </div>
+          <div class="card moral-chart-card">
+            <div class="card-head">
+              <h2>每日量化分布</h2>
+              <span class="badge" id="moralDailyBadge">全班 · 按天汇总</span>
+            </div>
+            <div class="card-body">
+              <div class="moral-chart-key"><span><i class="gain"></i>得分曲线</span><span><i class="loss"></i>扣分曲线</span><em>悬停任意一天查看当日明细</em></div>
+              <div class="moral-chart-scroll" id="moralDailyChart"><div class="loading">加载中…</div></div>
+            </div>
+          </div>
+          <div class="moral-analysis-grid">
+            <div class="card moral-analysis-card">
+              <div class="card-head"><h2>得分点分析</h2><span class="badge ok" id="moralGainBadge">—</span></div>
+              <div class="card-body" id="moralGainChart"><div class="loading">加载中…</div></div>
+            </div>
+            <div class="card moral-analysis-card">
+              <div class="card-head"><h2>扣分点分析</h2><span class="badge danger" id="moralLossBadge">—</span></div>
+              <div class="card-body" id="moralLossChart"><div class="loading">加载中…</div></div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>待确认事件</h2><span class="badge" id="moralPendingBadge">—</span></div>
+            <div class="card-body flush" id="moralPending"><div class="loading">加载中…</div></div>
+          </div>
+          <div class="card">
+            <div class="card-head"><h2>德育台账</h2><span class="badge" id="moralLogBadge">—</span></div>
+            <div class="card-body flush" id="moralLog"><div class="loading">加载中…</div></div>
+          </div>
+        </div>
+
+        <div id="moralStudentsPanel" hidden>
+          <div class="moral-roster-head">
+            <div><span>STUDENT MORAL CARDS</span><h2>学生个人量化</h2><p>所选周期德育分 = 基准 100 + 已确认加减分；颜色仅表示得分偏离程度，不代表排名。</p></div>
+            <label for="moralSort">卡片排序
+              <select id="moralSort">
+                <option value="id">按学号</option>
+                <option value="asc">得分从低到高</option>
+                <option value="desc">得分从高到低</option>
+              </select>
+            </label>
+          </div>
+          <div class="moral-card-grid" id="moralStudentCards"><div class="loading">加载中…</div></div>
+        </div>
+      </section>
+
+      <!-- 班务减负 -->
+      <section class="view" id="view-affairs">
+        <div class="card">
+          <div class="card-head"><h2>本周班务</h2><span class="badge" id="affairsBadge">—</span></div>
+          <div class="card-body flush" id="affairsBody"><div class="loading">加载中…</div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>转介回执</h2><span class="badge" id="slipBadge">—</span></div>
+          <div class="card-body flush" id="slipBody"><div class="loading">加载中…</div></div>
+        </div>
+      </section>
+
+      <!-- 家校协同 -->
+      <section class="view" id="view-family">
+        <div class="card">
+          <div class="card-head">
+            <h2>登记家校沟通</h2>
+            <span class="hint">登记留痕，不自动推送家长</span>
+          </div>
+          <div class="card-body">
+            <div class="tools">
+              <select id="famCategory">
+                <option>归寝异常</option><option>缺勤关注</option><option>学业联系</option>
+                <option>行为观察</option><option>家长告知</option><option>其他</option>
+              </select>
+              <button type="button" class="btn primary" id="famSubmit">登记留痕</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>沟通记录</h2><span class="badge" id="famBadge">—</span></div>
+          <div class="card-body flush" id="famBody"><div class="loading">加载中…</div></div>
+        </div>
+      </section>
+
+      <!-- 数据备份 -->
+      <section class="view" id="view-data">
+        <div class="card">
+          <div class="card-head"><h2>一键备份</h2><span class="badge">含数据库快照</span></div>
+          <div class="card-body">
+            <p class="muted" style="margin:0 0 10px">打包下载学生、成绩（有权限时含教师）Excel 与数据库快照，用于留档或迁移。</p>
+            <div class="tools"><button type="button" class="btn primary" data-backup>下载备份包</button></div>
+          </div>
+        </div>
+        <div class="data-grid">
+          <div class="card data-card">
+            <div class="card-head"><h2>学生信息</h2></div>
+            <div class="card-body">
+              <p class="muted">学号、姓名、性别（必填）、专业、年级、宿舍、住宿类型、家长信息、床位号、住址、状态；导入按学号覆盖。</p>
+              <div class="tools">
+                <button type="button" class="btn ghost" data-template="students">下载模板</button>
+                <button type="button" class="btn ghost" data-import="students">导入</button>
+                <button type="button" class="btn primary" data-export="students">导出</button>
+              </div>
+            </div>
+          </div>
+          <div class="card data-card" id="teacherCard">
+            <div class="card-head"><h2>教师信息</h2></div>
+            <div class="card-body">
+              <p class="muted">账号、姓名、部门、职务、类别、状态；导出不含密码。</p>
+              <div class="tools">
+                <button type="button" class="btn ghost" data-template="teachers">下载模板</button>
+                <button type="button" class="btn ghost" data-import="teachers">导入</button>
+                <button type="button" class="btn primary" data-export="teachers">导出</button>
+              </div>
+            </div>
+          </div>
+          <div class="card data-card">
+            <div class="card-head"><h2>成绩信息</h2></div>
+            <div class="card-body">
+              <p class="muted">学号、考试、等第、趋势；重复导入自动覆盖。</p>
+              <div class="tools">
+                <button type="button" class="btn ghost" data-template="scores">下载模板</button>
+                <button type="button" class="btn ghost" data-import="scores">导入</button>
+                <button type="button" class="btn primary" data-export="scores">导出</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>账号职务与班级映射</h2><span class="badge" id="mapBadge">—</span></div>
+          <div class="card-body">
+            <p class="muted" style="margin:0 0 10px">219 个教师账号按部门与职务生成职务映射；班主任按 2601—2617（2026 年 1—17 班）一人一班，其余标记「待确认」，可在 CSV 中校正。</p>
+            <div class="tools">
+              <button type="button" class="btn ghost" data-map-gen>重新生成</button>
+              <button type="button" class="btn primary" data-map-csv>下载映射 CSV</button>
+            </div>
+            <div id="mapBody" style="margin-top:12px"><div class="loading">加载中…</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>数据接入概况</h2><span class="badge" id="domainBadge">—</span></div>
+          <div class="card-body" id="domainBody"><div class="loading">加载中…</div></div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="modal" id="growthModal" hidden>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>随手记 · 成长记录</h3>
+      <button type="button" class="modal-x" id="gmClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="gm-stu" id="gmStudent">—</div>
+      <div class="gm-row"><label for="gmDim">成长维度</label><select id="gmDim"></select></div>
+      <div class="gm-row"><label for="gmSub">记录类型</label><select id="gmSub"></select></div>
+      <div class="gm-row"><label for="gmTitle">标题</label><input type="text" id="gmTitle" placeholder="如：校级技能竞赛 三等奖"></div>
+      <div class="gm-row"><label for="gmDate">发生日期</label><input type="date" id="gmDate"></div>
+      <div class="gm-row"><label for="gmFact">事实描述</label><textarea id="gmFact" rows="2" placeholder="做了什么、结果如何；只写事实，不写定性结论"></textarea></div>
+      <div class="gm-row"><label for="gmEvidence">佐证材料</label><input type="text" id="gmEvidence" placeholder="如：获奖证书、活动照片、签到表"></div>
+      <p class="gm-tip">记录保存后进入成长时间轴；心理明细、家长电话与住址不进入档案。</p>
+      <div class="gm-actions">
+        <button type="button" class="btn ghost" id="gmCancel">取消</button>
+        <button type="button" class="btn primary" id="gmSubmit">保存记录</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="reportModal" hidden>
+  <div class="modal-box gr-modal">
+    <div class="modal-head">
+      <h3 id="grTitle">学期成长报告</h3>
+      <button type="button" class="modal-x" id="grClose">×</button>
+    </div>
+    <div class="modal-body" id="grBody"><div class="loading">加载中…</div></div>
+  </div>
+</div>
+
+<div class="modal" id="certModal" hidden>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>登记 1+X / 职业资格证书</h3>
+      <button type="button" class="modal-x" id="gcClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="gm-stu" id="gcStudent">—</div>
+      <div class="gm-row"><label for="gcName">证书名称</label><input type="text" id="gcName" placeholder="如：网店运营推广职业技能等级证书"></div>
+      <div class="gm-row"><label for="gcLevel">等级</label><input type="text" id="gcLevel" placeholder="如：初级 / 中级 / 高级"></div>
+      <div class="gm-row"><label for="gcIssuer">发证机构</label><input type="text" id="gcIssuer" placeholder="按证书正文填写"></div>
+      <div class="gm-row"><label for="gcNo">证书编号</label><input type="text" id="gcNo" placeholder="选填；同一学生不可重复登记"></div>
+      <div class="gm-row"><label for="gcDate">发证日期</label><input type="date" id="gcDate"></div>
+      <div class="gm-row"><label for="gcEvidence">佐证材料</label><input type="text" id="gcEvidence" placeholder="如：证书照片、电子证书链接"></div>
+      <p class="gm-tip">保存后同步进入“学业与专业技能”时间轴；证书编号与佐证按事实填写。</p>
+      <div class="gm-actions">
+        <button type="button" class="btn ghost" id="gcCancel">取消</button>
+        <button type="button" class="btn primary" id="gcSubmit">保存证书</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="roomModal" hidden>
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>编辑寝室</h3>
+      <button type="button" class="modal-x" id="roomModalX">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="gm-row"><label>寝室号</label><div id="roomNoText" class="gm-static">—</div></div>
+      <div class="gm-row"><label>位置</label><div id="roomLocText" class="gm-static">—</div></div>
+      <div class="gm-row"><label for="roomEditGender">寝室类型</label>
+        <select id="roomEditGender">
+          <option value="男">男生寝室</option>
+          <option value="女">女生寝室</option>
+        </select>
+      </div>
+      <p class="gm-tip">寝室号建立后不可修改；寝室内已有学生时，不能改为异性寝室。</p>
+      <div class="gm-actions">
+        <button type="button" class="btn ghost" id="roomModalCancel">取消</button>
+        <button type="button" class="btn primary" id="roomEditSave">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="moralDetailModal" hidden>
+  <div class="modal-box moral-detail-modal">
+    <div class="modal-head">
+      <h3 id="moralDetailTitle">学生德育明细</h3>
+      <button type="button" class="modal-x" id="moralDetailX" aria-label="关闭">×</button>
+    </div>
+    <div class="modal-body" id="moralDetailBody"><div class="loading">加载中…</div></div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept=".xlsx" hidden>
+<div id="toast" class="toast"></div>
+<script src="/static/head_teacher_workbench/app.js?v=20261125modal7"></script>
+</body>
+</html>

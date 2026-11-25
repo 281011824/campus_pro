@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#123a6b">
+<title>成长分享 · 京山市中等职业技术学校</title>
+<style>
+  :root{
+    --bg:#eef2f8;--card:#fff;--ink:#16243a;--muted:#6b7a90;--line:#e2e8f2;
+    --brand:#1f5fbf;--brand-deep:#123a6b;--brand-soft:#eef3fb;
+    --pos:#1f9d63;--pos-bg:#e7f6ee;--warn:#a97b12;--warn-bg:#fbf3df;
+    --neg:#c94a4a;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;max-width:100%;overflow-x:hidden}
+  body{
+    background:linear-gradient(180deg,#e8eef8 0%,#eef2f8 240px);
+    color:var(--ink);min-height:100vh;
+    font:14px/1.6 "PingFang SC","Microsoft YaHei","Helvetica Neue",system-ui,sans-serif;
+    padding:0 14px calc(28px + env(safe-area-inset-bottom));
+  }
+  .wrap{max-width:480px;margin:0 auto}
+  .brand{
+    display:flex;align-items:center;gap:10px;
+    padding:calc(16px + env(safe-area-inset-top)) 0 12px;
+  }
+  .seal{
+    width:40px;height:40px;flex:0 0 40px;border-radius:9px;
+    background:linear-gradient(145deg,#2f6fce,#1a4f9e);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;font-weight:700;font-family:"STKaiti","KaiTi",serif;
+    box-shadow:0 4px 12px rgba(18,58,107,.22);
+  }
+  .brand b{display:block;font-size:15px;font-weight:600;letter-spacing:.02em}
+  .brand small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
+  .card{
+    background:var(--card);border-radius:14px;
+    box-shadow:0 6px 20px rgba(18,58,107,.07);
+    padding:16px;margin-bottom:12px;position:relative;overflow:hidden;
+  }
+  .notice{
+    background:var(--brand-soft);color:var(--brand-deep);
+    border-radius:10px;padding:9px 12px;font-size:12px;line-height:1.55;
+    margin-bottom:12px;
+  }
+  h1{font-size:20px;font-weight:600;line-height:1.4;margin:0 0 4px}
+  h2{font-size:15px;font-weight:600;margin:0 0 8px}
+  h3{font-size:13px;font-weight:600;margin:14px 0 6px;color:var(--brand-deep)}
+  p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.6}
+  .muted{color:var(--muted)}
+  .tiny{font-size:12px;color:var(--muted)}
+  .form-row{display:flex;gap:8px;margin-top:12px}
+  .field{
+    flex:1;min-width:0;width:100%;min-height:48px;
+    border:1px solid var(--line);border-radius:10px;
+    padding:10px 12px;background:#fff;color:var(--ink);outline:none;
+    font:inherit;
+  }
+  .field:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(31,95,191,.12)}
+  .field.code{
+    font-size:24px;font-weight:700;letter-spacing:.3em;text-align:center;
+    text-transform:uppercase;font-family:Consolas,Menlo,monospace;
+  }
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:48px;padding:0 20px;border-radius:10px;border:1px solid var(--brand);
+    background:var(--brand);color:#fff;font-size:15px;font-weight:600;
+    cursor:pointer;font-family:inherit;white-space:nowrap;
+  }
+  .btn:disabled{opacity:.55;cursor:not-allowed}
+  .btn.ghost{background:#fff;color:var(--brand-deep);border-color:#cddcf4}
+  .msg{margin-top:10px;font-size:12.5px;color:var(--neg);min-height:18px}
+  .msg.ok{color:var(--pos)}
+  .row{display:flex;flex-wrap:wrap;gap:6px}
+  .chip{
+    display:inline-flex;align-items:center;min-height:28px;padding:0 10px;
+    border-radius:999px;background:var(--brand-soft);color:var(--brand-deep);
+    font-size:12px;white-space:nowrap;
+  }
+  .chip.pos{background:var(--pos-bg);color:var(--pos)}
+  .chip.warn{background:var(--warn-bg);color:var(--warn)}
+  .dim{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12.5px}
+  .dim .name{flex:0 0 82px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .dim .bar{flex:1;height:7px;background:#eef2f8;border-radius:999px;overflow:hidden}
+  .dim .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--brand),#4d8be0);border-radius:999px}
+  .dim .val{flex:0 0 28px;text-align:right;font-weight:600;font-size:12px}
+  .item{padding:8px 0;border-top:1px dashed var(--line);font-size:13px}
+  .item:first-child{border-top:0}
+  .wm{
+    position:absolute;right:-6px;top:22px;transform:rotate(18deg);
+    font-size:11px;letter-spacing:.12em;color:rgba(31,95,191,.14);
+    pointer-events:none;white-space:nowrap;
+  }
+  .foot{
+    text-align:center;font-size:11px;color:var(--muted);line-height:1.7;
+    padding:4px 0 8px;
+  }
+  .hidden{display:none!important}
+  .empty{text-align:center;padding:22px 8px;color:var(--muted);font-size:13px}
+  .empty .eic{font-size:32px;line-height:1;margin-bottom:8px}
+  @media (max-width:360px){
+    body{padding-left:10px;padding-right:10px}
+    .card{padding:13px}
+    .field.code{font-size:21px;letter-spacing:.22em}
+    .btn{padding:0 14px;font-size:14px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="brand">
+    <div class="seal">京</div>
+    <div><b>京山中职 · 成长导航</b><small>成长分享查看</small></div>
+  </header>
+
+  <main>
+    <section class="card" id="gate">
+      <h1>查看成长分享</h1>
+      <p>请输入学生提供给你的 8 位分享码。免登录，只显示对方授权的白名单内容。</p>
+      <div class="form-row">
+        <input class="field code" id="code" maxlength="8" inputmode="text"
+               autocomplete="off" spellcheck="false" placeholder="分享码" aria-label="8 位分享码">
+      </div>
+      <div class="form-row">
+        <button type="button" class="btn" id="btn-view" style="width:100%">查 看</button>
+      </div>
+      <div class="msg" id="msg" role="status"></div>
+    </section>
+
+    <section class="card hidden" id="result">
+      <div class="wm" id="wm"></div>
+      <div class="notice">该页面由学生本人授权分享，仅展示白名单内容。</div>
+      <h2 id="result-title"></h2>
+      <div id="result-body"></div>
+      <p class="tiny" id="result-foot" style="margin-top:12px"></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    京山市中等职业技术学校 · 学生成长门户<br>
+    分享内容由学生本人授权，可随时撤销；本页只读。
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  var $ = function (id) { return document.getElementById(id); };
+  var input = $('code');
+  var btn = $('btn-view');
+  var msg = $('msg');
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function setMsg(text, ok) {
+    msg.textContent = text || '';
+    msg.className = 'msg' + (ok ? ' ok' : '');
+  }
+  function parseBody(raw) {
+    if (!raw) { return null; }
+    try { return JSON.parse(raw); } catch (e) { return null; }
+  }
+  function request(url, options) {
+    return fetch(url, options).then(function (res) {
+      return res.text().then(function (raw) {
+        var body = parseBody(raw);
+        if (body && typeof body.code === 'number') {
+          if (body.code !== 0) {
+            return Promise.reject({ message: body.message || body.error || '请求失败' });
+          }
+          return body.data;
+        }
+        if (!res.ok) {
+          return Promise.reject({ message: '请求失败（' + res.status + '）' });
+        }
+        return body;
+      });
+    }, function () {
+      return Promise.reject({ message: '网络异常，请检查连接后重试' });
+    });
+  }
+
+  function labelOf(key) {
+    var s = String(key == null ? '' : key);
+    return s.indexOf(':') >= 0 ? s.split(':').slice(1).join(':') : s;
+  }
+
+  function tagHTML(t) {
+    if (!t) { return ''; }
+    if (typeof t === 'string') { return '<span class="chip pos">' + esc(t) + '</span>'; }
+    var name = labelOf(t.dim || t.name || t.key);
+    var dev = t.type === 'develop' || t.type === 'weak';
+    return '<span class="chip ' + (dev ? 'warn' : 'pos') + '">' +
+      (dev ? '待发展 · ' : '优势 · ') + esc(name) + '</span>';
+  }
+
+  function renderContent(d) {
+    d = d || {};
+    // 后端载荷：{nickname, class_name, profile:{radar,tags,advice,term}, timeline:[...]}
+    var content = d.content || d.profile || d;
+    var tags = Array.isArray(content.tags) ? content.tags :
+      (Array.isArray(d.tags) ? d.tags : []);
+    var radar = content.radar || content.dimensions || d.radar || null;
+    var advice = content.advice || d.advice || [];
+    var goals = content.goals || d.goals || [];
+    var timeline = Array.isArray(d.timeline) ? d.timeline : [];
+    var ranges = d.range_names || d.rangeNames || content.range_names || [];
+    var plain = content.plain || d.plain || [];
+    if (!Array.isArray(advice)) { advice = advice ? [advice] : []; }
+    if (!Array.isArray(goals)) { goals = goals ? [goals] : []; }
+    if (!Array.isArray(ranges)) { ranges = ranges ? [String(ranges)] : []; }
+    if (!Array.isArray(plain)) { plain = plain ? [String(plain)] : []; }
+
+    var who = d.nickname || d.student_masked || d.studentMasked || content.student_masked || '学生';
+    var title = who + (d.class_name ? ' · ' + d.class_name : '') +
+      (ranges.length ? ' · ' + ranges.join('＋') : '');
+    $('result-title').textContent = title;
+    $('wm').textContent = d.watermark || '';
+
+    var html = '';
+    if (!tags.length && !radar && !advice.length && !goals.length && !plain.length && !timeline.length) {
+      html += '<div class="empty"><div class="eic">📄</div>该分享暂无可见内容</div>';
+    }
+    if (plain.length) {
+      html += '<h3>白话版</h3>' + plain.map(function (s) {
+        return '<p class="tiny" style="margin-bottom:4px">' + esc(s) + '</p>';
+      }).join('');
+    }
+    if (tags.length) {
+      html += '<h3>成长标签</h3><div class="row">' + tags.map(tagHTML).join('') + '</div>';
+    }
+    if (radar) {
+      var keys = Object.keys(radar);
+      html += '<h3>维度概览</h3>' + keys.map(function (k) {
+        var v = Math.max(0, Math.min(100, Number(radar[k]) || 0));
+        return '<div class="dim"><span class="name">' + esc(labelOf(k)) + '</span>' +
+          '<div class="bar"><i style="width:' + v + '%"></i></div>' +
+          '<span class="val">' + v + '</span></div>';
+      }).join('');
+    }
+    if (advice.length) {
+      html += '<h3>发展建议</h3>' + advice.slice(0, 6).map(function (a) {
+        var text = typeof a === 'string' ? a : (a.text || a.content || '');
+        return '<div class="item">' + esc(text) + '</div>';
+      }).join('');
+    }
+    if (goals.length) {
+      html += '<h3>本学期目标</h3>' + goals.slice(0, 6).map(function (g) {
+        if (typeof g === 'string') { return '<div class="item">' + esc(g) + '</div>'; }
+        var text = g.target || g.text || g.title || '';
+        var progress = g.progress != null ? '（' + esc(g.progress) + '%）' : '';
+        return '<div class="item">' + esc(text) + progress + '</div>';
+      }).join('');
+    }
+    if (timeline.length) {
+      html += '<h3>成长时间轴</h3>' + timeline.slice(0, 8).map(function (t) {
+        var date = String(t.date || '').slice(5);
+        return '<div class="item"><span class="tiny">' + esc(date) + '</span>　' + esc(t.title || '') + '</div>';
+      }).join('');
+    }
+
+    $('result-body').innerHTML = html;
+    $('result-foot').textContent = d.generated_at ?
+      '生成于 ' + String(d.generated_at).replace('T', ' ').slice(0, 16) + ' · 本页只读' : '本页只读';
+    $('result').classList.remove('hidden');
+    $('gate').classList.add('hidden');
+    setMsg('');
+  }
+
+  function verify() {
+    var code = String(input.value || '').trim().toUpperCase();
+    if (!/^[A-Z0-9]{8}$/.test(code)) {
+      setMsg('请输入 8 位分享码');
+      return;
+    }
+    btn.disabled = true;
+    setMsg('正在验证…', true);
+    request('/api/v1/share/verify', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ code: code })
+    }).then(function (d) {
+      d = d || {};
+      if (d.status && d.status !== 'active') {
+        var text = d.status === 'revoked' ? '该分享已被学生撤销' : '该分享已过期';
+        throw { message: text };
+      }
+      var token = d.token;
+      if (!token) { throw { message: '分享码无效或已失效' }; }
+      return request('/api/v1/share/' + encodeURIComponent(token) + '/content', {
+        credentials: 'same-origin',
+        headers: { 'Accept': 'application/json' }
+      });
+    }).then(function (content) {
+      btn.disabled = false;
+      renderContent(content);
+    }).catch(function (err) {
+      btn.disabled = false;
+      setMsg((err && err.message) || '查看失败，请稍后重试');
+    });
+  }
+
+  btn.addEventListener('click', verify);
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { verify(); }
+  });
+
+  // 二维码/链接预填：?code=XXXXXXXX
+  var q = String((location.search.match(/[?&]code=([^&]+)/) || [])[1] || '');
+  if (q) {
+    try { input.value = decodeURIComponent(q).toUpperCase().slice(0, 8); } catch (e) { input.value = q.slice(0, 8); }
+    verify();
+  } else {
+    input.focus();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,737 @@
+{
+  "_meta": {
+    "note": "脱敏示例数据（2611班 50 人），与《德育工作台_试点原型.html》一致；禁止用于真实学生",
+    "class": "2611",
+    "generated": "2026-11-11",
+    "field_whitelist": [
+      "student_id",
+      "name_masked",
+      "class_id",
+      "grade",
+      "dorm_status",
+      "leave_type",
+      "leave_start",
+      "leave_end"
+    ],
+    "absent_fields": [
+      "answers",
+      "scores",
+      "psych_detail",
+      "goal_text",
+      "parent_phone",
+      "parent_name",
+      "leave_reason",
+      "id_card",
+      "home_address"
+    ]
+  },
+  "class": {
+    "class_id": "2611",
+    "name": "高一年级 2611 班",
+    "size": 50,
+    "boys": 28,
+    "girls": 22,
+    "boarding": 34,
+    "day": 16,
+    "attendance_rate": "96.2%",
+    "moral_delta": "+18 / -4",
+    "role_registered": "50/50"
+  },
+  "leave_count": 1,
+  "dorm_leave_count": 0,
+  "dorm": {
+    "ready_dates": [
+      "2026-11-01",
+      "2026-11-02",
+      "2026-11-03",
+      "2026-11-04",
+      "2026-11-05",
+      "2026-11-06",
+      "2026-11-07",
+      "2026-11-08",
+      "2026-11-09",
+      "2026-11-10"
+    ],
+    "today_ready": false,
+    "today_date": "2026-11-11",
+    "anomaly_count": 2,
+    "unreturned": [
+      {
+        "student_id": "S003",
+        "name_masked": "李××"
+      },
+      {
+        "student_id": "S017",
+        "name_masked": "何××"
+      }
+    ],
+    "late": [
+      {
+        "student_id": "S021",
+        "name_masked": "郑××"
+      }
+    ],
+    "missing_info": [
+      {
+        "student_id": "S033",
+        "name_masked": "萧××"
+      }
+    ],
+    "consecutive_unreturned": {
+      "S003": 2
+    },
+    "gap_days": [
+      "2026-11-06"
+    ]
+  },
+  "leaves": [
+    {
+      "student_id": "S009",
+      "name_masked": "周××",
+      "leave_type": "事假",
+      "leave_start": "2026-11-09 08:00",
+      "leave_end": "2026-11-09 17:30"
+    }
+  ],
+  "warning": {
+    "count": 2,
+    "items": [
+      {
+        "fact": "连续 2 天未归 1 人（只计数据就绪日）",
+        "suggest": "需人工关注"
+      },
+      {
+        "fact": "缺信息名单 1 人",
+        "suggest": "需人工关注"
+      }
+    ]
+  },
+  "students": [
+    {
+      "student_id": "S001",
+      "name_masked": "张××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S002",
+      "name_masked": "王××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S003",
+      "name_masked": "李××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S004",
+      "name_masked": "赵××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S005",
+      "name_masked": "陈××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S006",
+      "name_masked": "刘××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S007",
+      "name_masked": "杨××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S008",
+      "name_masked": "黄××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S009",
+      "name_masked": "周××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "事假",
+      "leave_start": "2026-11-09 08:00",
+      "leave_end": "2026-11-09 17:30"
+    },
+    {
+      "student_id": "S010",
+      "name_masked": "吴××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S011",
+      "name_masked": "徐××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S012",
+      "name_masked": "孙××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S013",
+      "name_masked": "马××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S014",
+      "name_masked": "朱××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S015",
+      "name_masked": "胡××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S016",
+      "name_masked": "郭××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S017",
+      "name_masked": "何××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "未归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S018",
+      "name_masked": "高××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S019",
+      "name_masked": "林××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S020",
+      "name_masked": "罗××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S021",
+      "name_masked": "郑××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "晚归",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S022",
+      "name_masked": "梁××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S023",
+      "name_masked": "谢××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S024",
+      "name_masked": "宋××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S025",
+      "name_masked": "唐××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S026",
+      "name_masked": "许××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S027",
+      "name_masked": "邓××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S028",
+      "name_masked": "冯××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S029",
+      "name_masked": "韩××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S030",
+      "name_masked": "曹××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S031",
+      "name_masked": "曾××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S032",
+      "name_masked": "彭××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S033",
+      "name_masked": "萧××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S034",
+      "name_masked": "蔡××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S035",
+      "name_masked": "潘××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S036",
+      "name_masked": "田××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S037",
+      "name_masked": "董××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S038",
+      "name_masked": "袁××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S039",
+      "name_masked": "于××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S040",
+      "name_masked": "余××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S041",
+      "name_masked": "叶××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S042",
+      "name_masked": "蒋××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S043",
+      "name_masked": "杜××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S044",
+      "name_masked": "苏××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S045",
+      "name_masked": "魏××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S046",
+      "name_masked": "程××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S047",
+      "name_masked": "吕××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S048",
+      "name_masked": "丁××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S049",
+      "name_masked": "沈××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    },
+    {
+      "student_id": "S050",
+      "name_masked": "任××",
+      "class_id": "2611",
+      "grade": "高一",
+      "dorm_status": "正常",
+      "leave_type": "无",
+      "leave_start": "",
+      "leave_end": ""
+    }
+  ],
+  "attention": [
+    {
+      "student_id": "S003",
+      "name_masked": "李××",
+      "mark": "连续未归关注",
+      "action": "建议核实归寝并联系生活老师",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "S007",
+      "name_masked": "杨××",
+      "mark": "暂不可用",
+      "action": "该位今年不启用，请到工作台查看",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "S012",
+      "name_masked": "孙××",
+      "mark": "四维平衡：交友维关注标记",
+      "action": "建议班主任谈心核实，不带原因",
+      "status": "观察"
+    },
+    {
+      "student_id": "S017",
+      "name_masked": "何××",
+      "mark": "归寝异常",
+      "action": "建议核实数据就绪日后再判断",
+      "status": "待跟进"
+    },
+    {
+      "student_id": "S021",
+      "name_masked": "郑××",
+      "mark": "晚归",
+      "action": "建议谈心提醒",
+      "status": "观察"
+    },
+    {
+      "student_id": "S035",
+      "name_masked": "潘××",
+      "mark": "缺勤3天",
+      "action": "建议家校沟通核实",
+      "status": "待跟进"
+    }
+  ],
+  "derived_profiles": {
+    "S003": {
+      "growthScore": 76,
+      "balance": {
+        "V": true,
+        "A": false,
+        "R": true,
+        "K": true
+      },
+      "psychReferred": false,
+      "mark": "归寝需关注",
+      "action": "建议核实数据就绪日",
+      "share": "未授权分享",
+      "src": "派生区 · 归寝／请假贴源层"
+    },
+    "S007": {
+      "growthScore": 82,
+      "balance": {
+        "V": true,
+        "A": true,
+        "R": true,
+        "K": true
+      },
+      "psychReferred": false,
+      "mark": "四维平衡：学习维需关注",
+      "action": "建议约谈核实数学补练执行情况",
+      "share": "未授权分享",
+      "src": "派生区 · 57号失衡看板＋29号关注名单"
+    },
+    "S012": {
+      "growthScore": 79,
+      "balance": {
+        "V": true,
+        "A": false,
+        "R": true,
+        "K": true
+      },
+      "psychReferred": false,
+      "mark": "四维平衡：交友维关注标记",
+      "action": "建议班主任谈心核实，不带原因",
+      "share": "已授权 A／B（有效期至学期末）",
+      "src": "派生区 · 29号关注名单；心理内容不过河"
+    }
+  },
+  "balance": [
+    {
+      "k": "学习",
+      "v": "暂不可用",
+      "s": "需关注"
+    },
+    {
+      "k": "交友",
+      "v": "互助小组 4组／需谈心关注 1人",
+      "s": "正常"
+    },
+    {
+      "k": "兴趣",
+      "v": "技能竞赛获奖 1人／社团参与 9人",
+      "s": "正常"
+    },
+    {
+      "k": "健康",
+      "v": "归寝异常 2次／缺勤3天 1人",
+      "s": "需关注"
+    }
+  ],
+  "balance_unbalanced": 2,
+  "goals": {
+    "六级目标": "三年／年／学期／月／周／日",
+    "本周打卡": "38/50 人已打卡",
+    "待跟进": 12,
+    "隐形优势": "本学期已推送 6 条正向建议"
+  },
+  "derived_tags": [
+    "动手实践优势",
+    "协作型",
+    "技能竞赛潜质"
+  ],
+  "derived_advice": [
+    "建议参加校技能节机电组",
+    "建议担任互助小组组长（学生本人确认后生效）"
+  ]
+}

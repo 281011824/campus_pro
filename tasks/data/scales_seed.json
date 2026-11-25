@@ -1,0 +1,1558 @@
+{
+  "source": "D:\\workspace\\JS_DY\\src\\班主任工作台与智能体_归档包_v1.0-trae\\growth-nav-测试包-20261110\\runtime\\growth_nav.db",
+  "exported_at": "2026-11-25T04:43:51+08:00",
+  "scales": [
+    {
+      "code": "interest",
+      "version": "v1",
+      "title": "职业兴趣（校本自编·RIASEC 框架·非标准化测评）",
+      "item_count": 30,
+      "minutes": 15,
+      "dimension_json": {
+        "R": "现实型",
+        "I": "研究型",
+        "A": "艺术型",
+        "S": "社会型",
+        "E": "企业型",
+        "C": "事务型"
+      },
+      "status": 1,
+      "items": [
+        {
+          "item_no": 1,
+          "stem": "我喜欢修理、组装物件",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "R",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 2,
+          "stem": "户外或车间的工作让我向往",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "R",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 3,
+          "stem": "我愿意操作机器设备把东西做出来",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "R",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 4,
+          "stem": "看到东西坏了我想动手修好",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "R",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 5,
+          "stem": "我偏好看得见摸得着的劳动成果",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "R",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 6,
+          "stem": "我喜欢分析问题背后的原因",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "I",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 7,
+          "stem": "遇到不懂的原理我会查资料弄明白",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "I",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 8,
+          "stem": "做实验、验证猜想让我有兴致",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "I",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 9,
+          "stem": "我喜欢按逻辑一步步推演",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "I",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 10,
+          "stem": "我愿意钻研较难的知识问题",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "I",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 11,
+          "stem": "我喜欢绘画、设计或音乐类活动",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "A",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 12,
+          "stem": "我常有自己的创意点子",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "A",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 13,
+          "stem": "布置环境、做海报这类事我乐意干",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "A",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 14,
+          "stem": "我看重作品的美感与独特",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "A",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 15,
+          "stem": "我愿意尝试新的表达方式",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "A",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 16,
+          "stem": "同学有困难我愿意帮忙",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "S",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 17,
+          "stem": "我能耐心听别人倾诉",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "S",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 18,
+          "stem": "组织大家一起做事我有热情",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "S",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 19,
+          "stem": "我关心别人的感受",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "S",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 20,
+          "stem": "调解同学间矛盾我比较有办法",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "S",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 21,
+          "stem": "我愿意站出来组织、带队",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "E",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 22,
+          "stem": "说服别人接受想法让我有成就感",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "E",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 23,
+          "stem": "我对当班干部、管事情有兴趣",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "E",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 24,
+          "stem": "遇到分歧我敢表达主张",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "E",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 25,
+          "stem": "我喜欢有挑战和竞争的任务",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "E",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 26,
+          "stem": "整理资料、核对数据我不嫌烦",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "C",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 27,
+          "stem": "我做事喜欢按清楚的流程走",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "C",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 28,
+          "stem": "表格、台账类工作我能做仔细",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "C",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 29,
+          "stem": "我把东西归类的习惯很好",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "C",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 30,
+          "stem": "按规则把事办妥让我安心",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "C",
+          "reverse": 0,
+          "option_dims": null
+        }
+      ]
+    },
+    {
+      "code": "basic",
+      "version": "v2",
+      "title": "学习风格（基于 VARK 框架·校本中文简版·非官方版本）",
+      "item_count": 16,
+      "minutes": 8,
+      "dimension_json": {
+        "V": "视觉",
+        "A": "听觉",
+        "R": "读写",
+        "K": "动手"
+      },
+      "status": 1,
+      "items": [
+        {
+          "item_no": 1,
+          "stem": "学习用一个新 App，你会先：",
+          "options": [
+            "看界面截图和功能图例",
+            "请同学讲给你听",
+            "阅读帮助文档",
+            "直接点开各个按钮试"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 2,
+          "stem": "准备一个不太熟的主题发言，你会：",
+          "options": [
+            "把要点画成图或大纲",
+            "先找人聊出思路",
+            "查资料通读文章",
+            "做个演示边做边想"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 3,
+          "stem": "你最喜欢的课堂是：",
+          "options": [
+            "图表和视频用得多的",
+            "有讲解讨论答疑的",
+            "发讲义让自己读的",
+            "带大家动手实操的"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 4,
+          "stem": "学会一个新技能（修图/接线），你会：",
+          "options": [
+            "看操作演示截图",
+            "听人一步步口述",
+            "读操作手册",
+            "上手模仿着做"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 5,
+          "stem": "想搞懂一台设备怎么工作，你会：",
+          "options": [
+            "看结构示意图",
+            "请懂的人讲原理",
+            "读说明书原理部分",
+            "拆开看看"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 6,
+          "stem": "小组汇报你愿意负责：",
+          "options": [
+            "做图表和版面",
+            "现场讲解答问",
+            "写讲稿和报告",
+            "现场演示操作"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 7,
+          "stem": "复习备考你习惯：",
+          "options": [
+            "画思维导图表格",
+            "和同学互相提问",
+            "反复读笔记教材",
+            "做题动手过一遍"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 8,
+          "stem": "记一条路线或流程，你会：",
+          "options": [
+            "在脑中过一遍图",
+            "口头复述给自己听",
+            "把步骤写下来",
+            "亲自走一遍"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 9,
+          "stem": "挑选一件工具/设备，你主要：",
+          "options": [
+            "看图片和参数对比表",
+            "听介绍和别人讨论",
+            "读评测文章",
+            "亲手试用"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 10,
+          "stem": "学做一道新菜，你会：",
+          "options": [
+            "看配图或视频画面",
+            "听人讲要领",
+            "通读菜谱文字",
+            "边做边调整"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 11,
+          "stem": "遇到不会的题，你会先：",
+          "options": [
+            "看答案里的图解步骤",
+            "请人讲给我听",
+            "啃答案文字解析",
+            "代入数字试一遍"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 12,
+          "stem": "了解一个地方（实习工厂等），你会：",
+          "options": [
+            "看图片和视频",
+            "听去过的人讲",
+            "读介绍文章",
+            "去现场转一圈"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 13,
+          "stem": "向别人解释一个想法，你会：",
+          "options": [
+            "画图给对方看",
+            "口头讲清楚",
+            "写一段文字发过去",
+            "做个示例给对方看"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 14,
+          "stem": "布置房间或工位，你会：",
+          "options": [
+            "先画好布局图",
+            "和人讨论怎么摆",
+            "列一张清单再动手",
+            "边挪边看效果"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 15,
+          "stem": "学一首新歌，你会：",
+          "options": [
+            "看歌词和乐谱",
+            "听原唱跟唱",
+            "细读歌词理解含义",
+            "用乐器弹或打节拍"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        },
+        {
+          "item_no": 16,
+          "stem": "选择学一项新运动，你会：",
+          "options": [
+            "看动作分解图",
+            "听教练口头讲解",
+            "读规则和技术要领",
+            "直接上场试"
+          ],
+          "dimension": "",
+          "reverse": 0,
+          "option_dims": [
+            "V",
+            "A",
+            "R",
+            "K"
+          ]
+        }
+      ]
+    },
+    {
+      "code": "bfi10",
+      "version": "v1",
+      "title": "性格特征（BFI-10 简版·Rammstedt & John 2007·非诊断工具）",
+      "item_count": 10,
+      "minutes": 5,
+      "dimension_json": {
+        "ext": "外向",
+        "agg": "宜人",
+        "con": "尽责",
+        "neu": "情绪稳定",
+        "ope": "开放"
+      },
+      "status": 1,
+      "items": [
+        {
+          "item_no": 1,
+          "stem": "我是个健谈外向的人",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "ext",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 2,
+          "stem": "我容易挑剔、找别人的毛病",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "agg",
+          "reverse": 1,
+          "option_dims": null
+        },
+        {
+          "item_no": 3,
+          "stem": "我做事认真彻底，有始有终",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "con",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 4,
+          "stem": "我常常情绪低落、闷闷不乐",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "neu",
+          "reverse": 1,
+          "option_dims": null
+        },
+        {
+          "item_no": 5,
+          "stem": "我常有新点子，喜欢有创造性的做法",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "ope",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 6,
+          "stem": "我比较安静内敛，不太主动说话",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "ext",
+          "reverse": 1,
+          "option_dims": null
+        },
+        {
+          "item_no": 7,
+          "stem": "我乐于助人，相信别人是好意的",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "agg",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 8,
+          "stem": "我有时马虎大意、丢三落四",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "con",
+          "reverse": 1,
+          "option_dims": null
+        },
+        {
+          "item_no": 9,
+          "stem": "我遇事放松，能较好应对压力",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "neu",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 10,
+          "stem": "我对很多领域的东西都好奇，愿意了解",
+          "options": [
+            "非常不同意",
+            "比较不同意",
+            "不确定",
+            "比较同意",
+            "非常同意"
+          ],
+          "dimension": "ope",
+          "reverse": 0,
+          "option_dims": null
+        }
+      ]
+    },
+    {
+      "code": "gses",
+      "version": "v1",
+      "title": "学习自驱力（GSES 自我效能感）",
+      "item_count": 10,
+      "minutes": 5,
+      "dimension_json": {
+        "eff": "自我效能"
+      },
+      "status": 1,
+      "items": [
+        {
+          "item_no": 1,
+          "stem": "如果我尽力去做的话，我总是能够解决难题",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 2,
+          "stem": "即使别人反对我，我仍有办法取得我所要的",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 3,
+          "stem": "对我来说，坚持理想和达成目标是轻而易举的",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 4,
+          "stem": "我自信能有效地应付任何突如其来的事情",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 5,
+          "stem": "以我的才智，我定能应付意料之外的局面",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 6,
+          "stem": "如果我付出必要的努力，我一定能解决大多数难题",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 7,
+          "stem": "我能冷静地面对困难，因为我信赖自己处理问题的能力",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 8,
+          "stem": "面对一个难题时，我通常能找到几种解决方法",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 9,
+          "stem": "有麻烦的时候，我通常能想到一些应付的方法",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 10,
+          "stem": "无论什么事在我身上发生，我都能够应付自如",
+          "options": [
+            "完全不正确",
+            "有点正确",
+            "多数正确",
+            "完全正确"
+          ],
+          "dimension": "eff",
+          "reverse": 0,
+          "option_dims": null
+        }
+      ]
+    },
+    {
+      "code": "multi-intel",
+      "version": "v2",
+      "title": "多元智能（校本自编情境题·非标准化测评）",
+      "item_count": 40,
+      "minutes": 18,
+      "dimension_json": {
+        "ling": "语言",
+        "logic": "逻辑数理",
+        "space": "视觉空间",
+        "body": "身体动觉",
+        "music": "音乐",
+        "inter": "人际",
+        "self": "自我认识",
+        "nature": "自然观察"
+      },
+      "status": 1,
+      "items": [
+        {
+          "item_no": 1,
+          "stem": "实训报告我能写得条理清楚",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "ling",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 2,
+          "stem": "给同学讲步骤时我能讲得明白",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "ling",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 3,
+          "stem": "我写的文案或台词容易被选中",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "ling",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 4,
+          "stem": "班会发言我能临时组织好语言",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "ling",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 5,
+          "stem": "读说明我能很快抓住关键意思",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "ling",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 6,
+          "stem": "排故障我能按逻辑一步步排除",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "logic",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 7,
+          "stem": "我能看出数据表里的异常",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "logic",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 8,
+          "stem": "算料算账我基本不出错",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "logic",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 9,
+          "stem": "别人讲乱的步骤我能理顺",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "logic",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 10,
+          "stem": "我喜欢找规律来记东西",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "logic",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 11,
+          "stem": "看图纸我能在脑子里立起来",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "space",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 12,
+          "stem": "我画的结构示意一眼能看懂",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "space",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 13,
+          "stem": "摆摊布展我对位置很敏感",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "space",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 14,
+          "stem": "我能记住设备面板的布局",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "space",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 15,
+          "stem": "配色造型我有自己的感觉",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "space",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 16,
+          "stem": "示范一遍的动作我很快像样",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "body",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 17,
+          "stem": "长时间站立操作我不觉得累",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "body",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 18,
+          "stem": "精细活（焊接/缝纫/雕刻）我上手快",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "body",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 19,
+          "stem": "学车学器械我协调性好",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "body",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 20,
+          "stem": "我习惯边动边想问题",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "body",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 21,
+          "stem": "调音听音我能分辨出差别",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "music",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 22,
+          "stem": "我节奏感好，打拍子准",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "music",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 23,
+          "stem": "听过的旋律我能哼出来",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "music",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 24,
+          "stem": "视频配乐我能挑得合适",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "music",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 25,
+          "stem": "机器或人声的异常我耳朵尖",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "music",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 26,
+          "stem": "小组有摩擦常是我去调和",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "inter",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 27,
+          "stem": "我能看出同学今天状态不对",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "inter",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 28,
+          "stem": "新集体里我很快有伙伴",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "inter",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 29,
+          "stem": "别人愿意找我商量事情",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "inter",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 30,
+          "stem": "我能照顾到现场每个人的感受",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "inter",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 31,
+          "stem": "我清楚自己适合哪类工作",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "self",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 32,
+          "stem": "计划被打乱我能很快调整",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "self",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 33,
+          "stem": "挨批评我能就事论事不崩溃",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "self",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 34,
+          "stem": "我定期回顾自己有没有进步",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "self",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 35,
+          "stem": "选方向我有自己的主见",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "self",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 36,
+          "stem": "养护动植物我有耐心观察",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "nature",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 37,
+          "stem": "户外我能注意到别人忽略的细节",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "nature",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 38,
+          "stem": "病虫害或变质我能早发现",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "nature",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 39,
+          "stem": "我喜欢记录自然的变化",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "nature",
+          "reverse": 0,
+          "option_dims": null
+        },
+        {
+          "item_no": 40,
+          "stem": "天气季节变化我比较敏感",
+          "options": [
+            "很不符合",
+            "不太符合",
+            "比较符合",
+            "非常符合"
+          ],
+          "dimension": "nature",
+          "reverse": 0,
+          "option_dims": null
+        }
+      ]
+    }
+  ]
+}

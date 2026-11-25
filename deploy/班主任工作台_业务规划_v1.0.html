@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>班主任工作台 · 业务规划 v1.0</title>
+<style>
+  :root{
+    --red:#4a0c0c; --red2:#6d1515; --red3:#8c2323;
+    --gold:#c8a45c; --gold2:#a9863f;
+    --cream:#faf7f2; --paper:#fffdf9;
+    --ink:#2b2118; --muted:#7a6a58; --line:#e6dccb;
+    --ok:#2e6b4f; --okbg:#eaf3ee;
+    --warn:#8a6a1f; --warnbg:#fbf3e0;
+    --na:#6b6257; --nabg:#f1ece4;
+    --risk:#8c2f2f; --riskbg:#f8eaea;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--cream);color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC",system-ui,sans-serif;
+    line-height:1.78;font-size:15px;
+  }
+  a{color:var(--red2);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  .hero{
+    background:
+      radial-gradient(circle at 88% 8%, rgba(200,164,92,.20), transparent 42%),
+      linear-gradient(135deg,#3d0909 0%, #4a0c0c 45%, #611212 100%);
+    color:#f7efe2;padding:46px 28px 38px;position:relative;overflow:hidden;
+  }
+  .hero::after{
+    content:"";position:absolute;right:-70px;top:-70px;width:300px;height:300px;
+    border:1px solid rgba(200,164,92,.28);border-radius:50%;
+    box-shadow:0 0 0 36px rgba(200,164,92,.05),0 0 0 72px rgba(200,164,92,.035);
+  }
+  .hero-inner{max-width:1180px;margin:0 auto;position:relative;z-index:1}
+  .hero .school{font-size:13px;letter-spacing:.18em;color:#d9c39a}
+  .hero h1{font-size:34px;line-height:1.3;margin:10px 0 8px;letter-spacing:.04em}
+  .hero .sub{font-size:15px;color:#e8dcc8;max-width:820px}
+  .hero .meta{margin-top:22px;display:flex;flex-wrap:wrap;gap:10px}
+  .chip{
+    font-size:12.5px;padding:5px 12px;border-radius:999px;
+    border:1px solid rgba(200,164,92,.45);color:#f0e4cd;background:rgba(200,164,92,.08);
+  }
+  .chip.solid{background:var(--gold);color:#3b2405;border-color:var(--gold);font-weight:700}
+
+  .stats{
+    max-width:1180px;margin:-26px auto 0;padding:0 28px;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:14px;position:relative;z-index:2;
+  }
+  .stat{
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:16px 18px;box-shadow:0 8px 22px rgba(74,12,12,.07);
+  }
+  .stat b{display:block;font-size:24px;color:var(--red);line-height:1.2;letter-spacing:.02em}
+  .stat span{font-size:12.5px;color:var(--muted)}
+
+  .layout{
+    max-width:1180px;margin:34px auto 0;padding:0 28px 90px;
+    display:grid;grid-template-columns:228px minmax(0,1fr);gap:34px;align-items:start;
+  }
+  aside.toc{
+    position:sticky;top:22px;background:var(--paper);border:1px solid var(--line);
+    border-radius:10px;padding:16px 14px;font-size:13px;
+  }
+  aside.toc .t{font-weight:700;color:var(--red);margin:0 0 10px 6px;letter-spacing:.08em}
+  aside.toc ol{list-style:none;margin:0;padding:0;counter-reset:sec}
+  aside.toc li{margin:1px 0}
+  aside.toc a{
+    display:block;padding:6px 8px;border-radius:6px;color:#514639;line-height:1.5;
+  }
+  aside.toc a:hover{background:#f3ece1;text-decoration:none;color:var(--red)}
+  aside.toc .sub a{padding-left:20px;font-size:12.5px;color:#6f6153}
+
+  main{min-width:0}
+  section.doc{
+    background:var(--paper);border:1px solid var(--line);border-radius:10px;
+    padding:28px 32px;margin-bottom:22px;
+  }
+  section.doc > h2{
+    margin:0 0 6px;font-size:22px;color:var(--red);letter-spacing:.03em;
+    padding-bottom:10px;border-bottom:2px solid var(--gold);
+  }
+  section.doc > h2 .no{color:var(--gold2);margin-right:8px}
+  h3{font-size:16.5px;margin:22px 0 8px;color:#3d2a1e}
+  h4{font-size:14px;margin:0 0 6px;color:var(--red2);letter-spacing:.04em}
+  p{margin:8px 0}
+  .muted{color:var(--muted)}
+  .small{font-size:12.5px}
+  .lead{font-size:14.5px;color:#4b3d30}
+  ul,ol{margin:6px 0 6px 20px;padding:0}
+  li{margin:3px 0}
+
+  .pill{
+    display:inline-block;font-size:11.5px;font-weight:700;padding:2px 9px;
+    border-radius:999px;white-space:nowrap;vertical-align:2px;
+  }
+  .pill.ok{background:var(--okbg);color:var(--ok);border:1px solid #cfe4d7}
+  .pill.warn{background:var(--warnbg);color:var(--warn);border:1px solid #eddfb7}
+  .pill.na{background:var(--nabg);color:var(--na);border:1px solid #e2dbd0}
+  .pill.risk{background:var(--riskbg);color:var(--risk);border:1px solid #ecd2d2}
+
+  .table-wrap{overflow-x:auto;margin:10px 0 4px;border:1px solid var(--line);border-radius:8px}
+  table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+  th{
+    background:var(--red);color:#f7efe2;font-weight:600;text-align:left;
+    padding:9px 10px;white-space:nowrap;letter-spacing:.03em;
+  }
+  td{padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+  tbody tr:nth-child(even){background:#fcf9f4}
+  td.center,th.center{text-align:center}
+  .yes{color:var(--ok);font-weight:700}
+  .no{color:#b0a698}
+  .part{color:var(--warn);font-weight:700}
+
+  .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0}
+  .mini{background:#fcf9f4;border:1px solid var(--line);border-radius:8px;padding:13px 15px}
+  .mini h4{margin-bottom:4px}
+  .mini p,.mini ul{font-size:13px;margin:4px 0}
+  .mini ul{margin-left:18px}
+
+  .module{border:1px solid var(--line);border-radius:10px;padding:20px 22px;margin:14px 0;background:#fffefb}
+  .module-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px}
+  .module-head .mno{
+    font-family:Consolas,Monaco,monospace;font-size:12px;font-weight:700;color:#fff;
+    background:var(--red);border-radius:5px;padding:2px 7px;
+  }
+  .module-head h3{margin:0;font-size:17px;color:var(--red)}
+  .module .goal{font-size:13.5px;color:#4b3d30;margin:6px 0 12px}
+  .rules{
+    margin-top:12px;background:#fbf6ec;border-left:3px solid var(--gold);
+    padding:10px 14px;border-radius:0 6px 6px 0;font-size:13px;
+  }
+  .rules b{color:var(--red2)}
+  .gap{margin-top:8px;font-size:12.5px;color:var(--muted)}
+  .gap b{color:var(--warn)}
+
+  .stepper{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:12px 0}
+  .step{background:#fcf9f4;border:1px solid var(--line);border-radius:8px;padding:14px}
+  .step .n{
+    width:26px;height:26px;border-radius:50%;background:var(--red);color:#f7efe2;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;margin-bottom:8px;
+  }
+  .step h4{margin:0 0 4px}
+  .step ol{font-size:12.5px;margin-left:17px}
+
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:12px 0;font-size:12.5px}
+  .flow .node{background:#fbf6ec;border:1px solid #e8d9bd;border-radius:6px;padding:6px 11px;color:#5a4020}
+  .flow .arrow{color:var(--gold2);font-weight:700}
+
+  .callout{
+    background:#fbf6ec;border:1px solid #ecdfc4;border-radius:8px;
+    padding:13px 16px;margin:12px 0;font-size:13.5px;color:#57452f;
+  }
+  .callout b{color:var(--red2)}
+
+  .checklist{list-style:none;margin:8px 0;padding:0}
+  .checklist li{
+    position:relative;padding:7px 0 7px 30px;border-bottom:1px dashed var(--line);font-size:13.5px;
+  }
+  .checklist li:last-child{border-bottom:none}
+  .checklist li::before{
+    content:"";position:absolute;left:2px;top:12px;width:13px;height:13px;
+    border:1.5px solid var(--gold2);border-radius:3px;background:#fff;
+  }
+  .checklist .who{float:right;color:var(--muted);font-size:12px}
+
+  footer.doc-foot{max-width:1180px;margin:0 auto;padding:0 28px 50px;color:var(--muted);font-size:12px;text-align:center}
+
+  @media (max-width:960px){
+    .layout{grid-template-columns:1fr;padding:0 18px 60px}
+    aside.toc{position:static;order:-1}
+    .stats{grid-template-columns:1fr 1fr;padding:0 18px}
+    .cards,.stepper{grid-template-columns:1fr}
+    .hero{padding:34px 18px 30px}
+    .hero h1{font-size:26px}
+    section.doc{padding:22px 18px}
+  }
+  @media print{
+    body{background:#fff;font-size:12px}
+    .hero{background:#4a0c0c !important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+    aside.toc{display:none}
+    .layout{display:block;max-width:none;padding:0}
+    section.doc{break-inside:avoid;border:1px solid #ddd;box-shadow:none}
+    .module{break-inside:avoid}
+    th{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="school">京山市中等职业技术学校 · 政教处</div>
+    <h1>班主任工作台业务规划</h1>
+    <p class="sub">面向 2026 级 2601—2617 班，覆盖概览、成长档案、出勤统计、学情预警、德育量化、班务减负、家校协同、数据备份八个业务模块，明确权限边界、数据口径与实施路径。</p>
+    <div class="meta">
+      <span class="chip solid">版本 v1.0</span>
+      <span class="chip">2026-11-20</span>
+      <span class="chip">适用范围：2601—2617 班</span>
+      <span class="chip">状态：试运行</span>
+    </div>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><b>17</b><span>教学班（2601—2617，一人一班）</span></div>
+  <div class="stat"><b>8</b><span>业务模块全部上线</span></div>
+  <div class="stat"><b>219</b><span>教师账号，228 条职务绑定</span></div>
+  <div class="stat"><b>13 / 14</b><span>数据域可展示，心理域物理隔离</span></div>
+</div>
+
+<div class="layout">
+  <aside class="toc">
+    <p class="t">目 录</p>
+    <ol>
+      <li><a href="#position">一、定位与边界</a></li>
+      <li><a href="#roles">二、角色权限与班级范围</a></li>
+      <li><a href="#arch">三、总体架构与数据底座</a></li>
+      <li><a href="#modules">四、八大业务模块</a></li>
+      <li class="sub"><a href="#m1">4.1 概览</a></li>
+      <li class="sub"><a href="#m2">4.2 成长档案</a></li>
+      <li class="sub"><a href="#m3">4.3 出勤统计</a></li>
+      <li class="sub"><a href="#m4">4.4 学情预警</a></li>
+      <li class="sub"><a href="#m5">4.5 德育量化</a></li>
+      <li class="sub"><a href="#m6">4.6 班务减负</a></li>
+      <li class="sub"><a href="#m7">4.7 家校协同</a></li>
+      <li class="sub"><a href="#m8">4.8 数据备份</a></li>
+      <li><a href="#data">五、数据管理专项</a></li>
+      <li><a href="#flows">六、关键业务流程</a></li>
+      <li><a href="#nfr">七、非功能与安全</a></li>
+      <li><a href="#roadmap">八、实施路线</a></li>
+      <li><a href="#acceptance">九、验收清单</a></li>
+      <li><a href="#risks">十、风险与依赖</a></li>
+      <li><a href="#appendix">附录：接口与术语</a></li>
+    </ol>
+  </aside>
+
+  <main>
+
+    <section class="doc" id="position">
+      <h2><span class="no">一</span>定位与边界</h2>
+      <p class="lead"><b>一句话定位：</b>班主任每天打开一个页面，就能看清本班情况、处理本班事务、留下工作痕迹；数据只读汇聚，录入尽量少，结论必须由人确认。</p>
+
+      <h3>1.1 要解决的问题</h3>
+      <ul>
+        <li>信息分散在学籍、考勤、教务、寝管、政教、企业微信等多个系统，班主任每天重复登录、反复核对。</li>
+        <li>学生情况靠记忆和纸质记录，期末写评语、做家访、迎检时缺少连续证据。</li>
+        <li>德育事件“谁登记、谁确认、计多少分”口径不一，容易出现先定性后找证据。</li>
+        <li>上级要报表、家长要反馈，班主任被动填表，事务性负担重。</li>
+      </ul>
+
+      <h3>1.2 三条产品原则</h3>
+      <div class="cards">
+        <div class="mini">
+          <h4>只读优先，少录入</h4>
+          <p>能自动接入的数据不要求班主任二次录入；必须人工登记的，只记分类、时间与事实，不写长篇材料。</p>
+        </div>
+        <div class="mini">
+          <h4>事实与定性分离</h4>
+          <p>系统只呈现“发生了什么”，是否构成违纪、如何处分由政教处按程序裁定，工作台不代替作出结论。</p>
+        </div>
+        <div class="mini">
+          <h4>未就绪不估算</h4>
+          <p>数据源未接入、当日未生成、口径未对齐时，明确显示“暂不可用”，不用旧值、估算值或示例数据顶替。</p>
+        </div>
+        <div class="mini">
+          <h4>不推家长，不代写</h4>
+          <p>对外发布必须人工签发；家长联系方式与请假事由不进入留痕表；智能体只做提醒与草稿，不替班主任表态。</p>
+        </div>
+      </div>
+
+      <h3>1.3 明确不做</h3>
+      <ul>
+        <li>不替代学籍系统、教务系统、心理测评系统，不另建一套“全量学生画像”。</li>
+        <li>不做学生成绩排名，不推算原始分，不依据单次成绩生成德育结论。</li>
+        <li>不自动向家长推送消息，不自动生成处分建议，不代班主任填写评语。</li>
+        <li>不展示心理测评明细；心理数据独立库、独立密钥，教师端不可见。</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="roles">
+      <h2><span class="no">二</span>角色权限与班级范围</h2>
+
+      <h3>2.1 班级编码规则</h3>
+      <p>班级编号统一为四位：<b>2601—2617</b>，前两位表示 2026 级，后两位表示 1—17 班。一个班主任只对应一个班，不跨班、不兼班。徐海潮固定为 <b>2607</b> 班（成长导航试点班）。</p>
+
+      <h3>2.2 角色与数据范围</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>角色</th><th>身份来源</th><th>数据范围</th><th>在本工作台可见内容</th></tr></thead>
+          <tbody>
+            <tr><td><b>班主任</b></td><td>账号映射中的班主任职务（L1）</td><td>仅本班</td><td>八个模块全部；本班学生名册、档案、成绩、出勤、德育、待办、家校留痕与备份</td></tr>
+            <tr><td><b>政教干事 / 副主任 / 主任</b></td><td>政教处职务（L2—L4）</td><td>条线或年级聚合</td><td>德育事件登记、转介回执、统计口径；<b>不展示学生明细</b>（按现有守卫）</td></tr>
+            <tr><td><b>校领导</b></td><td>校领导职务（L5—L6）</td><td>学校统计</td><td>教师账号维护、数据域状态；学生名册与成绩接口返回 403</td></tr>
+            <tr><td><b>任课教师</b></td><td>任课教师职务（教师端）</td><td>所任课程</td><td>本工作台不展示学生明细；仅保留统一入口的教师卡</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>2.3 权限矩阵（本工作台页面）</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>模块 / 能力</th><th class="center">班主任（本班）</th><th class="center">政教 / 校领导</th><th class="center">任课教师</th></tr></thead>
+          <tbody>
+            <tr><td>概览与本周周报</td><td class="center yes">可看 / 可归档</td><td class="center part">统计视图</td><td class="center no">不可见</td></tr>
+            <tr><td>学生名册与成长档案</td><td class="center yes">本班可看</td><td class="center no">不可见明细</td><td class="center no">不可见</td></tr>
+            <tr><td>出勤、学情、成绩</td><td class="center yes">本班可看</td><td class="center part">聚合统计</td><td class="center no">不可见</td></tr>
+            <tr><td>德育事件确认与台账</td><td class="center yes">本班可确认</td><td class="center part">可登记事件</td><td class="center no">不可见</td></tr>
+            <tr><td>班务待办与转介</td><td class="center yes">本班可办</td><td class="center part">回执三态</td><td class="center no">不可见</td></tr>
+            <tr><td>家校沟通留痕</td><td class="center yes">本班可登记</td><td class="center no">不展示细节</td><td class="center no">不可见</td></tr>
+            <tr><td>学生 / 成绩 Excel 导入导出</td><td class="center yes">本班</td><td class="center no">403</td><td class="center no">403</td></tr>
+            <tr><td>教师账号 Excel 导入导出</td><td class="center part">仅中层以上</td><td class="center yes">校领导 / 中层</td><td class="center no">403</td></tr>
+            <tr><td>一键备份（含数据库快照）</td><td class="center yes">本班</td><td class="center no">403</td><td class="center no">403</td></tr>
+            <tr><td>账号职务班级映射生成 / 修正</td><td class="center part">仅中层以上</td><td class="center yes">可操作</td><td class="center no">不可操作</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">“可看”指接口按登录会话校验班级归属；“聚合统计”指不含姓名的统计口径。非班主任访问学生接口统一返回 403，页面同步隐藏学生相关导航。</p>
+
+      <h3>2.4 校验落地方式</h3>
+      <ul>
+        <li>身份解析：登录会话优先，本地登录账号映射到企业微信 userid；职务与班级由服务端判定，前端不得传 level、agent_id、data_scope。</li>
+        <li>班级归属：读取账号映射与通讯录职务，取 <code>portal=headteacher</code> 的班级集合；请求的 <code>class_id</code> 不在集合内即拒绝。</li>
+        <li>覆盖范围：学生名册、成绩摘要、德育台账、出勤周报、学情概览、成长档案与新增记录、学生 / 成绩导入导出、一键备份、家校留痕。</li>
+        <li>前端配合：非班主任隐藏成长档案、出勤、学情、德育、班务、家校导航；概览不加载学生数据，显示“仅本班班主任可查看本班学生信息”。</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="arch">
+      <h2><span class="no">三</span>总体架构与数据底座</h2>
+
+      <h3>3.1 运行架构</h3>
+      <div class="flow">
+        <span class="node">浏览器 / 企业微信</span><span class="arrow">→</span>
+        <span class="node">主云 Nginx<br>19002 网关</span><span class="arrow">→</span>
+        <span class="node">台式机 uvicorn<br>10.66.0.4:5004</span><span class="arrow">→</span>
+        <span class="node">FastAPI 单体</span><span class="arrow">→</span>
+        <span class="node">SQLite（WAL）<br>+ 任务包</span>
+      </div>
+      <ul>
+        <li>网站与业务任务包单体化：<code>website</code> 直接导入 <code>tasks/head_teacher_workbench</code> 业务模块，不再依赖 Redis 转发。</li>
+        <li>部署路径 <code>/opt/school_pro</code>，systemd 托管，主云 Nginx 反向代理；不影响主云 19001 学生系统。</li>
+        <li>企业微信只作触达层；交互层为工作台页面。当前企业微信为 mock 模式，真实消息通道待配置。</li>
+      </ul>
+
+      <h3>3.2 核心数据表</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>分组</th><th>表</th><th>用途</th></tr></thead>
+          <tbody>
+            <tr><td>学生</td><td>students、student_records</td><td>班级名册；特长 / 兴趣 / 奖惩 / 家访记录</td></tr>
+            <tr><td>数据域</td><td>dom_attendance、dom_leave、dom_dorm、dom_behavior、dom_meal、dom_library、dom_clinic、dom_activity、dom_participation、dom_homework、dom_scores</td><td>考勤、请假、归寝、行为事件、就餐、借阅、就诊、活动、课堂参与、作业、成绩</td></tr>
+            <tr><td>组织账号</td><td>school_accounts、org_posts、account_bindings</td><td>219 个教师账号；通讯录职务；账号到职务与班级的映射</td></tr>
+            <tr><td>班务</td><td>todo_items、referral_slips、duns、weekly_reports</td><td>本周待确认、转介单与三态回执、催办、周报归档</td></tr>
+            <tr><td>审计与留痕</td><td>audit_logs、redline_events、push_flow、wecom_outbox</td><td>三元组审计、敏感拦截计数、推送流、企微发件箱</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>3.3 十四类数据域</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>域</th><th>名称</th><th>来源</th><th>方式</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td class="center">1</td><td>学籍与家庭基本信息</td><td>学籍系统 / 入学登记</td><td>导入</td><td><span class="pill ok">已有</span></td></tr>
+            <tr><td class="center">2</td><td>考勤到课</td><td>智慧班牌 / 考勤终端</td><td>自动</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">3</td><td>课堂参与</td><td>课堂互动系统</td><td>自动</td><td><span class="pill warn">试点已有</span></td></tr>
+            <tr><td class="center">4</td><td>学业成绩与波动</td><td>教务 / 考务</td><td>周期导入</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">5</td><td>作业完成与订正</td><td>AI 批改</td><td>自动</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">6</td><td>就餐消费</td><td>食堂卡</td><td>自动</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">7</td><td>图书借阅</td><td>图书馆系统</td><td>自动</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">8</td><td>晚寝与宿舍内务</td><td>寝管点验平板</td><td>顺手记</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">9</td><td>请假与出入校</td><td>电子请假单 / 门卫</td><td>自动</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">10</td><td>校医就诊</td><td>校医室电子台账</td><td>顺手记</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">11</td><td>行为事件（正负两面）</td><td>政教处事件登记</td><td>事件驱动</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">12</td><td>活动与岗位参与</td><td>活动二维码签到</td><td>顺手记</td><td><span class="pill ok">已接入</span></td></tr>
+            <tr><td class="center">13</td><td>心理测查</td><td>MHT / 普查量表</td><td>课内完成</td><td><span class="pill risk">隔离（教师端不可见）</span></td></tr>
+            <tr><td class="center">14</td><td>家校沟通</td><td>企业微信</td><td>自动</td><td><span class="pill ok">已接入（留痕）</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">当前工作台内置 2607 班演示数据用于联调；2601—2606、2608—2617 班需完成名册与成绩导入后才能呈现真实指标。</p>
+    </section>
+
+    <section class="doc" id="modules">
+      <h2><span class="no">四</span>八大业务模块</h2>
+      <p class="lead">模块按班主任一天、一周、一学期的真实动作排序：先看全局，再落到学生个体，最后处理事务与留痕。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>模块</th><th>解决的问题</th><th>主要数据源</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td>4.1 概览</td><td>一屏掌握本班本周状态</td><td>周报、需关注清单、待办、出勤汇总</td><td><span class="pill ok">已上线</span></td></tr>
+            <tr><td>4.2 成长档案</td><td>学生个体证据连续留存</td><td>名册、成长记录、出勤、德育事件</td><td><span class="pill ok">已上线</span></td></tr>
+            <tr><td>4.3 出勤统计</td><td>到课、请假、未到一目了然</td><td>考勤、请假</td><td><span class="pill ok">已上线</span></td></tr>
+            <tr><td>4.4 学情预警</td><td>作业与成绩异动早发现</td><td>作业、成绩</td><td><span class="pill ok">已上线</span></td></tr>
+            <tr><td>4.5 德育量化</td><td>事件先确认、后计分</td><td>行为事件台账</td><td><span class="pill ok">已上线</span></td></tr>
+            <tr><td>4.6 班务减负</td><td>待办集中、转介有回执</td><td>待确认红点、转介单</td><td><span class="pill warn">已上线，规则待审定</span></td></tr>
+            <tr><td>4.7 家校协同</td><td>沟通留痕、不越权触达</td><td>人工登记</td><td><span class="pill ok">已上线（留痕）</span></td></tr>
+            <tr><td>4.8 数据备份</td><td>Excel 维护与一键留档</td><td>名册、成绩、教师、映射</td><td><span class="pill ok">已上线</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="module" id="m1">
+        <div class="module-head"><span class="mno">4.1</span><h3>概览</h3><span class="pill ok">已上线</span></div>
+        <p class="goal">班主任每天打开工作台的第一屏：用五个数字判断今天要不要重点盯人，用周报和待办决定先做什么。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>五项指标：本周出勤率、需关注人数、德育积分、归寝异常、本周请假。</li>
+              <li>本周周报：系统生成草稿，班主任确认后归档，归档后不再修改。</li>
+              <li>需关注学生 Top 8：展示关注点、状态与建议动作，可一键转介。</li>
+              <li>本周待办 Top 6：按时间倒序，处理完成即销号。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>/api/v1/report/weekly</code>、<code>/report/archive</code></li>
+              <li><code>/api/v1/report/watchlist</code></li>
+              <li><code>/api/v1/todo/list</code>、<code>/growth/numbers</code></li>
+              <li>数据来自考勤、归寝、请假、德育、作业与成绩的周汇总。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>周报未经人工确认不得归档；指标缺失时显示“暂不可用”，不补数、不估算；待办与周报不含家长电话、心理明细；空态显示“本周暂无”，不摆示例数据。</div>
+        <p class="gap"><b>现状：</b>2607 班指标完整；其余班级待导入名册、成绩与出勤数据后自动呈现。</p>
+      </div>
+
+      <div class="module" id="m2">
+        <div class="module-head"><span class="mno">4.2</span><h3>成长档案</h3><span class="pill ok">已上线</span></div>
+        <p class="goal">以学生为单位，把出勤、德育、奖惩、家访、特长与兴趣连续记录，减少期末集中补材料。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>本班名册：按姓名或学号搜索，展示学号、姓名、性别、状态。</li>
+              <li>个体档案：基本信息、近 7 日出勤汇总、近期德育事件、成长记录。</li>
+              <li>新增记录：特长、兴趣、奖惩、家访四类，可填日期与说明。</li>
+              <li>名册 Excel：下载模板、导入、导出，按学号覆盖。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>/api/v1/students</code>、<code>/students/{id}/profile</code></li>
+              <li><code>POST /students/{id}/records</code></li>
+              <li><code>/files/template|export|import/students</code></li>
+              <li>表：students、student_records、dom_attendance、dom_behavior</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>仅本班班主任可查看与编辑；监护人电话只作存档，不对外推送、不进入导出以外的场景；记录只写事实与时间，不写主观定性；跨班访问一律返回 403。</div>
+        <p class="gap"><b>现状：</b>2607 班有 66 名学生与 150 条成长记录；其他班需先导入名册。</p>
+      </div>
+
+      <div class="module" id="m3">
+        <div class="module-head"><span class="mno">4.3</span><h3>出勤统计</h3><span class="pill ok">已上线</span></div>
+        <p class="goal">把“今天谁没到、这周请了哪些假、出勤率是多少”从翻记录变成一屏可读。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>本周出勤率与逐日出勤趋势。</li>
+              <li>今日未到名单（含状态：缺勤、迟到、请假）。</li>
+              <li>本周请假记录：学生、起止日期、请假类型。</li>
+              <li>按日、按学生聚合，支持与成长档案联动查看。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>/api/v1/attendance/week</code></li>
+              <li>表：dom_attendance（班级 + 日期 + 学生 + 节次唯一）、dom_leave</li>
+              <li>来源：智慧班牌、考勤终端、电子请假单。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>当日数据未生成时显示“未就绪”，不把“未生成”当作“未到”；请假与归寝口径不一致时暂停该数字并提示对账；不以估算值或昨日值替代；缺口日明确标注。</div>
+        <p class="gap"><b>现状：</b>按月/周演示数据已跑通；真实考勤与请假接口待现场联调。</p>
+      </div>
+
+      <div class="module" id="m4">
+        <div class="module-head"><span class="mno">4.4</span><h3>学情预警</h3><span class="pill ok">已上线</span></div>
+        <p class="goal">用作业提交与考试等第两条线索，尽早发现需要谈一谈的学生，但不替代教学判断。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>作业提交率与低提交名单（提交率低于 70%）。</li>
+              <li>最近一次考试等第分布、趋势（上升 / 持平 / 下降）。</li>
+              <li>需关注学生全量清单，支持转介到班务待办。</li>
+              <li>成绩 Excel：模板、导入、导出，按考试与学生覆盖。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>/api/v1/learning/overview</code>、<code>/scores/summary</code></li>
+              <li><code>/files/template|export|import/scores</code></li>
+              <li>表：dom_homework、dom_scores</li>
+              <li>来源：AI 批改、教务 / 考务周期导入。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>采用等第制，不排名、不换算原始分、不公开学生分数；成绩只作线索，不直接生成德育或处分结论；需关注清单必须能追溯到具体事实（缺交、等第下降等）。</div>
+        <p class="gap"><b>现状：</b>2607 班有 66 条成绩演示数据；真实作业与成绩接口待接入。</p>
+      </div>
+
+      <div class="module" id="m5">
+        <div class="module-head"><span class="mno">4.5</span><h3>德育量化</h3><span class="pill ok">已上线</span></div>
+        <p class="goal">把“政教处登记、班主任确认、计入德育分”拆成清晰的三步，避免先定性后补证据。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>待确认事件：政教处登记后进入待确认，班主任逐条确认或作废。</li>
+              <li>确认后才计分；作废保留记录，不删除。</li>
+              <li>德育台账：近期事件、正负极性、分类、分值、状态。</li>
+              <li>本周德育积分与班级汇总。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>/api/v1/moral/summary</code>、<code>/moral/records</code></li>
+              <li><code>POST /moral/event</code>（登记）、<code>POST /moral/confirm</code>（确认 / 作废）</li>
+              <li>表：dom_behavior（pending / confirmed / void）</li>
+              <li>来源：政教处事件登记、活动与岗位参与。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>只写事实，不写定性结论；未经班主任确认不计分；作废必须留痕（确认人、时间）；德育分不作为处分依据；敏感事由、心理内容不入库、不展示。</div>
+        <p class="gap"><b>现状：</b>待确认、确认、作废、台账与积分统计已跑通；真实事件来源以政教处登记为准。</p>
+      </div>
+
+      <div class="module" id="m6">
+        <div class="module-head"><span class="mno">4.6</span><h3>班务减负</h3><span class="pill ok">已上线</span><span class="pill warn">规则待审定</span></div>
+        <p class="goal">把散落在群消息、口头通知、检查反馈里的事情收进一个待办清单，办完即销号，转介有回执。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>本周待确认：本周新增 + 上周未销号，按时间倒序。</li>
+              <li>三类来源：预警转介、家长告知事项、上周遗留。</li>
+              <li>转介单：从需关注清单生成，附事实与建议动作。</li>
+              <li>L2 回执三态：已接收、处置中、已销号。</li>
+              <li>销号：人审后留痕，销号后不再出现在列表。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>/api/v1/todo/list|refer|note|close</code></li>
+              <li><code>/todo/referrals</code>、<code>/todo/receipt</code></li>
+              <li><code>/api/v1/warning/state</code></li>
+              <li>表：todo_items、referral_slips、duns</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>集中待办独立于“待确认写入”草稿；转介只写事实、不作定性；L1 与 L2 可关联但不继承字段、不回流学生明细；逐级不越级；销号留 userid + post_id + agent_id 三元组审计。</div>
+        <p class="gap"><b>现状：</b>待办、转介、三态回执已跑通。<b>缺口：</b>四色预警 12 条规则经审定数为 0/12，影子模式未启动；劝返台账落点待政教处与招就处现场确认。</p>
+      </div>
+
+      <div class="module" id="m7">
+        <div class="module-head"><span class="mno">4.7</span><h3>家校协同</h3><span class="pill ok">已上线（留痕）</span></div>
+        <p class="goal">把“什么时候因为什么事联系过家长”留成记录，同时严格约束触达方式与信息范围。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>六类沟通登记：归寝异常、缺勤关注、学业联系、行为观察、家长告知、其他。</li>
+              <li>沟通记录列表：分类、时间、登记人、状态。</li>
+              <li>登记后进入本周待办，可归档销号。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>POST /api/v1/files/family/note</code></li>
+              <li><code>/api/v1/todo/list</code>（含 notify 类待办）</li>
+              <li>表：todo_items（kind=notify）</li>
+              <li>来源：班主任人工登记，企业微信触达层。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>不自动向家长推送；不保存家长电话、住址、请假事由细节；对外发布必须人工签发，智能体不代发；一次沟通一条留痕，不合并、不补写；仅本班班主任可登记。</div>
+        <p class="gap"><b>现状：</b>留痕与待办联动已跑通。<b>缺口：</b>企业微信真实消息通道未启用（当前 mock）；短信兜底未开通；家长端知情与授权流程待合规评估。</p>
+      </div>
+
+      <div class="module" id="m8">
+        <div class="module-head"><span class="mno">4.8</span><h3>数据备份</h3><span class="pill ok">已上线</span></div>
+        <p class="goal">让班主任自己能把本班数据带走、留档、迁移，不依赖管理员临时导表。</p>
+        <div class="cards">
+          <div class="mini">
+            <h4>核心功能</h4>
+            <ul>
+              <li>一键备份 zip：学生名册、成绩数据、教师账号（有权限时）、数据库快照、说明。</li>
+              <li>三类 Excel：学生信息、教师信息、成绩信息，均可下载模板、导入、导出。</li>
+              <li>账号职务班级映射：查看统计、重新生成、下载 CSV。</li>
+              <li>数据域状态：14 类数据域的接入情况一屏展示。</li>
+            </ul>
+          </div>
+          <div class="mini">
+            <h4>数据与接口</h4>
+            <ul>
+              <li><code>/api/v1/files/backup/zip</code></li>
+              <li><code>/files/template|export|import/{kind}</code></li>
+              <li><code>/api/v1/org/bindings</code>、<code>/org/bindings/generate|update|.csv</code></li>
+              <li><code>/api/v1/domains/status</code></li>
+            </ul>
+          </div>
+        </div>
+        <div class="rules"><b>规则与红线：</b>学生与成绩导入导出仅本班班主任；教师账号仅校领导、中层干部；备份包含敏感数据，须按保密要求存放，不得上传公网盘；数据库快照用于故障恢复，不作为日常交换格式。</div>
+        <p class="gap"><b>现状：</b>备份包实测可用；映射已按 2601—2617 生成 17 名班主任。</p>
+      </div>
+    </section>
+
+    <section class="doc" id="data">
+      <h2><span class="no">五</span>数据管理专项</h2>
+
+      <h3>5.1 三类 Excel 模板与字段</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>类型</th><th>字段</th><th>唯一键 / 覆盖规则</th><th>权限</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>学生信息</td>
+              <td>学号、姓名、性别、监护人电话、状态</td>
+              <td>学号 + 班级；同学号覆盖姓名、性别、电话、状态</td>
+              <td>本班班主任</td>
+            </tr>
+            <tr>
+              <td>教师信息</td>
+              <td>登录账号、姓名、部门、职务、类别、状态、企业微信 userid、初始密码</td>
+              <td>登录账号；新增必须填初始密码，更新留空则保留原密码</td>
+              <td>校领导 / 中层干部</td>
+            </tr>
+            <tr>
+              <td>成绩信息</td>
+              <td>学号、考试、等第、趋势</td>
+              <td>学号 + 考试 + 班级；同键覆盖等第与趋势</td>
+              <td>本班班主任</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5.2 导入规则</h3>
+      <ol>
+        <li>模板首行为表头，按列名识别；缺少必填列直接拒绝并返回原因。</li>
+        <li>空行、缺必填字段的行计入“跳过”，不中断整批。</li>
+        <li>导入完成返回新增、更新、跳过、总数四项统计，便于核对。</li>
+        <li>导入写入审计日志；学生与成绩导入仅对本班生效，跨班一律 403。</li>
+        <li>导入前建议先导出当前数据留底；一键备份含数据库快照，可用于回退。</li>
+      </ol>
+
+      <h3>5.3 备份包内容</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>文件</th><th>内容</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td>学生名册.xlsx</td><td>本班学生</td><td>可直接编辑后重新导入</td></tr>
+            <tr><td>成绩数据.xlsx</td><td>本班全部考试</td><td>按学号与考试覆盖</td></tr>
+            <tr><td>教师账号.xlsx</td><td>全校教师账号（不含密码）</td><td>仅校领导 / 中层干部可见</td></tr>
+            <tr><td>数据库快照.db</td><td>SQLite 在线备份</td><td>用于故障恢复，不作日常交换</td></tr>
+            <tr><td>说明.txt</td><td>备份班级、日期与使用说明</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5.4 账号与班级映射</h3>
+      <ul>
+        <li>账号来源：教师账号表，共 <b>219 个</b>；映射记录 <b>228 条</b>，其中班主任端 17 条、教师端 144 条、行政端 67 条。</li>
+        <li>生成规则：优先教师类班主任，取 17 人一人一班；徐海潮固定 2607；其余按账号顺序分配到 2601—2617 的剩余班级。</li>
+        <li>复核状态：规则生成的记录统一标“待确认”；政教处可在 CSV 中校正，再通过映射更新接口回写并置为“已确认”。</li>
+        <li>独立绑定表：映射存于 account_bindings，不写入通讯录职务表，避免每次同步被“离岗回收”清空。</li>
+      </ul>
+      <div class="callout"><b>数据管理提醒：</b>映射是权限的根。班主任换班、离职或新增班级时，必须先更新映射，再核对本班学生数据可见性；不要直接在数据库改班级字段。</div>
+
+      <h3>5.5 数据质量与口径</h3>
+      <ul>
+        <li><b>未就绪不估算：</b>归寝、考勤只认“数据就绪日”；未生成返回“未就绪”，不把未生成当未归。</li>
+        <li><b>口径对账：</b>请假与归寝数量不一致时暂停该数字，标注“暂不可用”，通知信息化处核查，不以估算值替代。</li>
+        <li><b>最小字段：</b>前端只允许学号、掩码姓名、班级、年级、归寝状态等白名单字段；家长姓名、电话、学生电话、请假事由、心理明细进入黑名单。</li>
+        <li><b>心理隔离：</b>心理数据独立库、独立密钥，教师端永不展示明细，仅保留“已测 / 未测”等管理状态。</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="flows">
+      <h2><span class="no">六</span>关键业务流程</h2>
+
+      <h3>6.1 每日闭环</h3>
+      <div class="flow">
+        <span class="node">登录</span><span class="arrow">→</span>
+        <span class="node">概览看指标</span><span class="arrow">→</span>
+        <span class="node">出勤核对未到</span><span class="arrow">→</span>
+        <span class="node">处理待办 / 转介</span><span class="arrow">→</span>
+        <span class="node">家校沟通留痕</span><span class="arrow">→</span>
+        <span class="node">销号</span>
+      </div>
+      <p class="small muted">建议每天上午课前看一次出勤与待办，下午放学前处理未销号项；需要家长知情的，先人工沟通，再在本班登记一条留痕。</p>
+
+      <h3>6.2 每周闭环</h3>
+      <div class="flow">
+        <span class="node">周报草稿</span><span class="arrow">→</span>
+        <span class="node">班主任确认</span><span class="arrow">→</span>
+        <span class="node">归档</span><span class="arrow">→</span>
+        <span class="node">上周未销号结转</span><span class="arrow">→</span>
+        <span class="node">转介回执核对</span>
+      </div>
+      <ul>
+        <li>周报由系统按周一 06:50 定时生成草稿（受调度开关控制），未经确认不归档。</li>
+        <li>上周未销号事项自动进入本周待确认，避免“提了没人管”。</li>
+        <li>转介单由 L2 回执三态闭环：已接收、处置中、已销号；销号后不再出现。</li>
+      </ul>
+
+      <h3>6.3 每学期闭环</h3>
+      <div class="stepper">
+        <div class="step">
+          <div class="n">1</div>
+          <h4>名册与账号</h4>
+          <ol>
+            <li>导入本班学生名册</li>
+            <li>核对班主任与班级映射</li>
+            <li>核对教师账号与状态</li>
+          </ol>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <h4>过程数据</h4>
+          <ol>
+            <li>按考试导入成绩</li>
+            <li>确认德育事件并计分</li>
+            <li>持续登记成长记录</li>
+          </ol>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <h4>留档与复盘</h4>
+          <ol>
+            <li>一键备份本班数据</li>
+            <li>归档周报与台账</li>
+            <li>核对缺项并补齐</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc" id="nfr">
+      <h2><span class="no">七</span>非功能与安全</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>维度</th><th>要求</th><th>当前实现</th></tr></thead>
+          <tbody>
+            <tr><td>身份与权限</td><td>服务端判定职务、层级与数据范围；前端不可提权</td><td><span class="pill ok">已实现</span> 会话 + 班级归属校验，学生接口 403 守卫</td></tr>
+            <tr><td>审计</td><td>关键操作留 userid + post_id + agent_id 三元组</td><td><span class="pill ok">已实现</span> 导入导出、记录新增、转介、销号、映射变更均写审计</td></tr>
+            <tr><td>隐私</td><td>家长电话、住址、请假事由、心理明细不入展示与留痕</td><td><span class="pill ok">已实现</span> 字段白名单 / 黑名单、心理域隔离</td></tr>
+            <tr><td>传输与部署</td><td>主云网关统一入口，内网回源，HTTPS 上线前完成</td><td><span class="pill warn">部分实现</span> 网关与回源已通，HTTPS 与等保测评待完成</td></tr>
+            <tr><td>可用性</td><td>单机故障可恢复，备份可落地</td><td><span class="pill ok">已实现</span> SQLite WAL + 一键备份含在线快照</td></tr>
+            <tr><td>性能</td><td>班级规模 60—70 人，页面秒开</td><td><span class="pill ok">满足</span> 双 worker，单班查询走索引</td></tr>
+            <tr><td>上线前置</td><td>真实短信、生产环境、HTTPS、等保、账号复核、NTP、只读账号、清 mock、任务连续观察</td><td><span class="pill risk">0 / 9</span> 试运行态，未达生产上线条件</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="callout"><b>边界说明：</b>当前为校内试运行态，企业微信为 mock 模式、成长导航为 fixture 模式。正式对外提供服务前，须完成上表九项前置，并以真实数据复测，不以演示数据代替验收。</div>
+    </section>
+
+    <section class="doc" id="roadmap">
+      <h2><span class="no">八</span>实施路线</h2>
+      <p class="lead">按“能先用起来、再逐步接真数据”的顺序推进，每个阶段都有明确出口条件，不以日期倒逼上线。</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>阶段</th><th>目标</th><th>主要工作</th><th>出口条件</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><b>阶段一 · 基础运行</b><br><span class="pill ok">已完成</span></td>
+              <td>八个模块可用，权限与备份闭环</td>
+              <td>模块开发、政务风改版、17 班映射、Excel 三类模板、一键备份、权限守卫</td>
+              <td>班主任可完成“看概览—查档案—处理待办—导出备份”全流程</td>
+            </tr>
+            <tr>
+              <td><b>阶段二 · 班级数据补齐</b><br><span class="pill warn">当前</span></td>
+              <td>17 个班都能看到自己的真实数据</td>
+              <td>2601—2617 名册导入；成绩按考试导入；映射逐条复核；教师账号核对</td>
+              <td>17 个班概览指标均非“暂不可用”；跨班访问全部 403</td>
+            </tr>
+            <tr>
+              <td><b>阶段三 · 真实数据接入</b></td>
+              <td>考勤、归寝、请假、成绩、作业、德育六类打通</td>
+              <td>接口联调、日对账、缺口日标注、停用演示数据、异常告警</td>
+              <td>连续观察数据一致；未就绪时正确显示“暂不可用”</td>
+            </tr>
+            <tr>
+              <td><b>阶段四 · 协同与智能</b></td>
+              <td>预警、转介、周报形成闭环</td>
+              <td>四色预警 12 条规则审定与影子期；转介回执闭环；企微触达与短信兜底；校领导统计视图</td>
+              <td>误报率报告可读；回执闭环率可统计；周报按时生成并人审归档</td>
+            </tr>
+            <tr>
+              <td><b>阶段五 · 家校延伸</b></td>
+              <td>在合规前提下提供家长侧反馈</td>
+              <td>人工签发模板、家长知情确认、权限与留痕方案、合规评估</td>
+              <td>合规审批通过并完成小范围试点</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doc" id="acceptance">
+      <h2><span class="no">九</span>验收清单</h2>
+      <ul class="checklist">
+        <li>班级编号为 2601—2617，一名班主任对应一个班<span class="who">政教处 · 信息中心</span></li>
+        <li>班主任查看本班学生返回 200，查看其他班返回 403<span class="who">信息中心</span></li>
+        <li>非班主任访问学生名册、成绩、档案、备份均返回 403<span class="who">信息中心</span></li>
+        <li>非班主任页面不显示成长档案、出勤、学情、德育、班务、家校导航<span class="who">班主任代表</span></li>
+        <li>学生、成绩、教师三类 Excel 模板可下载、可导入、可导出，返回新增 / 更新 / 跳过统计<span class="who">班主任代表</span></li>
+        <li>一键备份 zip 含学生名册、成绩、数据库快照与说明；有权限时含教师账号<span class="who">信息中心</span></li>
+        <li>周报可生成草稿、人工确认后归档，归档后不可修改<span class="who">政教处</span></li>
+        <li>德育事件确认后计分，作废保留记录且不计分<span class="who">政教处</span></li>
+        <li>转介单可产生 L2 回执三态，销号后不再出现在待确认列表<span class="who">政教处</span></li>
+        <li>家校登记不保存家长电话与事由细节，不自动推送家长<span class="who">政教处 · 合规</span></li>
+        <li>导入、导出、记录新增、转介、销号、映射变更均可在审计中追溯<span class="who">信息中心</span></li>
+        <li>2601—2617 班均能打开概览，指标要么有数、要么明确显示“暂不可用”<span class="who">政教处</span></li>
+      </ul>
+    </section>
+
+    <section class="doc" id="risks">
+      <h2><span class="no">十</span>风险与依赖</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>风险 / 依赖</th><th>影响</th><th>应对</th></tr></thead>
+          <tbody>
+            <tr><td>真实数据源未全部接入</td><td>概览与出勤、学情指标只能显示演示值或“暂不可用”</td><td>按阶段三逐域联调，未就绪时如实标注，不估算</td></tr>
+            <tr><td>除 2607 外班级暂无数据</td><td>16 个班打开后指标为空</td><td>阶段二先完成名册与成绩导入，再补过程数据</td></tr>
+            <tr><td>账号与班级映射待复核</td><td>班主任可能看到错误班级或看不到本班</td><td>以 CSV 逐条复核，映射更新接口回写并置“已确认”</td></tr>
+            <tr><td>四色预警规则未审定</td><td>预警清单口径不稳定，易产生误报</td><td>由政教处与招就处审定 12 条规则，先影子期再启用</td></tr>
+            <tr><td>企业微信与短信未真实开通</td><td>家校触达仍靠线下，留痕与触达分离</td><td>先保证留痕准确，再按合规流程开通消息通道</td></tr>
+            <tr><td>单机 SQLite 并发有限</td><td>全校同时使用时响应变慢</td><td>先服务班主任日常使用；规模扩大后迁移数据库，接口不变</td></tr>
+            <tr><td>等保与上线九项前置未完成</td><td>不具备正式生产上线条件</td><td>试运行范围可控；生产前完成 HTTPS、账号复核、NTP、清 mock 等</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doc" id="appendix">
+      <h2><span class="no">附录</span>接口与术语</h2>
+
+      <h3>A. 模块与接口对照</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>模块</th><th>主要接口</th></tr></thead>
+          <tbody>
+            <tr><td>概览</td><td><code>GET /report/weekly</code>、<code>POST /report/archive</code>、<code>GET /report/watchlist</code>、<code>GET /todo/list</code>、<code>GET /growth/numbers</code></td></tr>
+            <tr><td>成长档案</td><td><code>GET /students</code>、<code>GET /students/{id}/profile</code>、<code>POST /students/{id}/records</code></td></tr>
+            <tr><td>出勤统计</td><td><code>GET /attendance/week</code></td></tr>
+            <tr><td>学情预警</td><td><code>GET /learning/overview</code>、<code>GET /scores/summary</code></td></tr>
+            <tr><td>德育量化</td><td><code>GET /moral/summary</code>、<code>GET /moral/records</code>、<code>POST /moral/event</code>、<code>POST /moral/confirm</code></td></tr>
+            <tr><td>班务减负</td><td><code>GET /todo/list</code>、<code>POST /todo/refer</code>、<code>POST /todo/note</code>、<code>POST /todo/close</code>、<code>GET /todo/referrals</code>、<code>POST /todo/receipt</code></td></tr>
+            <tr><td>家校协同</td><td><code>POST /files/family/note</code></td></tr>
+            <tr><td>数据备份</td><td><code>GET /files/backup/zip</code>、<code>/files/template|export|import/{kind}</code>、<code>/org/bindings*</code>、<code>GET /domains/status</code></td></tr>
+            <tr><td>身份</td><td><code>GET /me</code>、<code>POST /portal/auto</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>B. 术语</h3>
+      <ul>
+        <li><b>三端：</b>班主任端、教师端、行政端，是导航层；具体权限由职务（post_id）与层级（L1—L6）决定。</li>
+        <li><b>派生区：</b>由原始数据聚合出的只读结论区，只给标记与建议，不展示原始作答、分数与心理明细。</li>
+        <li><b>待确认红点：</b>本周需要班主任确认或销号的事项集合，独立于两段式写入草稿。</li>
+        <li><b>两段式写入：</b>先形成草稿，人工确认后才落业务库，避免智能体直接改数据。</li>
+        <li><b>三元组审计：</b>userid + post_id + agent_id 三项同时留痕，保证“谁、以什么职务、通过哪个智能体”可追溯。</li>
+        <li><b>影子模式：</b>预警规则先只记录不推送、不进考核，用一段时间核对误报后再正式启用。</li>
+      </ul>
+
+      <h3>C. 文档依据</h3>
+      <p class="small muted">本规划与当前代码一致，主要依据：<code>website/app/api/v1/files.py</code>（业务接口与权限守卫）、<code>website/app/api/v1/head_teacher_workbench.py</code>（协议路由与登录别名）、<code>tasks/head_teacher_workbench/app/roster.py</code>（名册与 Excel）、<code>datadomains.py</code>（十四数据域）、<code>redpoint.py</code>（待确认与转介）、<code>bindings.py</code>（219 账号映射）、<code>access.py</code>（本班校验）、<code>website/app/static/head_teacher_workbench/app.js</code>（页面交互与身份隐藏）。</p>
+    </section>
+
+  </main>
+</div>
+
+<footer class="doc-foot">班主任工作台业务规划 v1.0 · 2026-11-20 · 京山市中等职业技术学校 政教处 / 信息中心</footer>
+</body>
+</html>

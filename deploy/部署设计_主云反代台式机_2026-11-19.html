@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>服务部署设计：主云反代 → WireGuard → 校园台式机（2026-11-19）</title>
+<style>
+  :root{
+    --ink:#172536;--sub:#55657a;--muted:#7b8798;--line:#dbe2ea;--bg:#f3f5f8;--card:#fff;
+    --navy:#163a5f;--blue:#245c8c;--blue-soft:#eaf1f8;--green:#237250;--green-soft:#eaf5ef;
+    --amber:#8a5b12;--amber-soft:#fff5e3;--red:#a43d35;--red-soft:#fbedeb;--code:#eef2f6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 "Microsoft YaHei","PingFang SC",-apple-system,"Segoe UI",sans-serif}
+  code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.88em;background:var(--code);border-radius:4px;padding:2px 5px;overflow-wrap:anywhere}
+  pre{margin:10px 0;padding:14px 16px;background:#14263a;color:#edf4fb;border-radius:8px;overflow:auto;font-size:12.5px;line-height:1.6}
+  pre code{background:transparent;color:inherit;padding:0}
+  header{background:linear-gradient(135deg,#132d49,#1c4d76);color:#fff;border-bottom:4px solid #8fb4d2}
+  .hi{max-width:1180px;margin:0 auto;padding:38px 26px 32px}
+  .kicker{font-size:12px;letter-spacing:1.6px;color:#b9d1e5;margin-bottom:10px}
+  h1{font-size:27px;line-height:1.4;margin:0 0 12px}
+  .lede{max-width:960px;color:#e2ecf4;margin:0;font-size:15.5px}
+  .meta{margin-top:18px;padding-top:13px;border-top:1px solid rgba(255,255,255,.2);font-size:12.5px;color:#bfd2e2;display:flex;gap:8px 22px;flex-wrap:wrap}
+  main{max-width:1180px;margin:22px auto 56px;padding:0 22px}
+  section{background:var(--card);border:1px solid var(--line);border-radius:11px;padding:25px 27px;margin-bottom:18px;box-shadow:0 2px 10px rgba(23,37,54,.04)}
+  .no{font-size:11px;letter-spacing:1.2px;font-weight:700;color:var(--blue);margin-bottom:5px}
+  h2{font-size:20px;margin:0 0 6px;color:#173b5d}
+  .sub{font-size:13px;color:var(--sub);margin:0 0 16px}
+  h3{font-size:15.5px;margin:22px 0 9px;color:#1d4e78;padding-left:9px;border-left:3px solid #5c8db3}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0;padding-left:21px}li{margin:4px 0}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:7px;margin:10px 0}
+  table{width:100%;border-collapse:collapse;font-size:12.8px}
+  th,td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line);border-right:1px solid var(--line)}
+  th:last-child,td:last-child{border-right:0}tr:last-child td{border-bottom:0}
+  th{background:#edf2f7;color:#2b435b;font-weight:650;white-space:nowrap}
+  td.k{font-weight:650;color:#29445f;white-space:nowrap;background:#f7f9fb}
+  .tag{display:inline-block;padding:1px 7px;border-radius:4px;font-size:10.5px;font-weight:650;white-space:nowrap}
+  .ok{background:var(--green-soft);color:var(--green)}.warn{background:var(--amber-soft);color:var(--amber)}.risk{background:var(--red-soft);color:var(--red)}.info{background:var(--blue-soft);color:var(--blue)}
+  .callout{margin:13px 0;padding:12px 15px;border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:6px;background:#f7fafc;font-size:13.3px}
+  .callout.ok{border-left-color:var(--green);background:var(--green-soft)}
+  .callout.warn{border-left-color:var(--amber);background:var(--amber-soft)}
+  .callout.risk{border-left-color:var(--red);background:var(--red-soft)}
+  figure{margin:14px 0;padding:16px;background:#f8fafc;border:1px solid var(--line);border-radius:9px}
+  figcaption{text-align:center;font-size:12px;color:var(--sub);margin-top:10px}
+  svg{display:block;margin:0 auto;max-width:100%;height:auto}
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+  .box{border:1px solid var(--line);border-radius:8px;padding:12px 14px;background:#fbfcfe;min-width:0}
+  .box h4{margin:0 0 6px;font-size:13.5px;color:#244b6c}
+  .box p,.box li{font-size:12.6px;color:#41526a}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:4px 18px 0}
+  @media (max-width:860px){.grid2{grid-template-columns:minmax(0,1fr)}main{padding:0 14px}section{padding:20px 17px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="hi">
+    <div class="kicker">部署设计 · 基础设施</div>
+    <h1>主云反向代理 → WireGuard → 校园台式机</h1>
+    <p class="lede">台式机不出校园网，主云对外提供 HTTPS 入口；Web 服务与后台 worker 全部落在台式机，两者之间只经 Redis 通信。</p>
+    <div class="meta">
+      <span>2026-11-19</span>
+      <span>主云 124.221.26.96 / 10.66.0.1</span>
+      <span>台式机 172.16.6.104 / 10.66.0.4</span>
+      <span>WireGuard 已修复并双向验证</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section>
+  <div class="no">01</div>
+  <h2>本次已完成的组网修复</h2>
+  <p class="sub">以下均为实测结果，不是推断。</p>
+  <div class="table-wrap">
+    <table>
+      <tr><th>检查项</th><th>结果</th><th>证据</th></tr>
+      <tr><td class="k">台式机地址</td><td>10.66.0.4/24（原 10.0.0.4/24）</td><td><code>ip -brief addr show wg0</code></td></tr>
+      <tr><td class="k">台式机 → 主云</td><td><span class="tag ok">通</span> 3/3，24.7 ms</td><td><code>ping 10.66.0.1</code></td></tr>
+      <tr><td class="k">主云 → 台式机</td><td><span class="tag ok">通</span> 3/3，24.75 ms，22 端口可达</td><td><code>ping 10.66.0.4</code>、TCP 22 探测</td></tr>
+      <tr><td class="k">握手</td><td><span class="tag ok">已建立</span>，双方均有流量计数</td><td><code>wg show</code></td></tr>
+      <tr><td class="k">主云 peer 列表</td><td>10.66.0.2、10.66.0.30 保留，新增 10.66.0.4</td><td><code>wg show</code></td></tr>
+      <tr><td class="k">配置持久化</td><td>两侧写入 wg0.conf，<code>wg-quick strip</code> 解析通过；台式机 <code>wg-quick@wg0</code> 已 enabled</td><td>备份文件 <code>wg0.conf.trae-bak-20261119</code></td></tr>
+    </table>
+  </div>
+  <div class="callout ok">
+    台式机 peer 只改了两行：<code>Address</code> 与 <code>AllowedIPs</code>。私钥、主云公钥、<code>PersistentKeepalive = 25</code> 全部原样保留，未重置身份。
+  </div>
+</section>
+
+<section>
+  <div class="no">02</div>
+  <h2>目标架构</h2>
+  <p class="sub">公网只看到主云的 443；台式机的 8000 端口只监听 WireGuard 地址。</p>
+  <figure>
+    <svg viewBox="0 0 1000 470" role="img" aria-label="部署架构图">
+      <defs>
+        <marker id="a" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#6b8298"/>
+        </marker>
+        <style>
+          .n{fill:#fff;stroke:#bfcddd;stroke-width:1.2}
+          .t{font:13px "Microsoft YaHei",sans-serif;fill:#1c4c74;font-weight:600}
+          .s{font:11.5px "Microsoft YaHei",sans-serif;fill:#55657a}
+          .e{stroke:#6b8298;stroke-width:1.6;fill:none;marker-end:url(#a)}
+          .lbl{font:11px Consolas,monospace;fill:#33475c}
+          .zone{fill:#f8fafc;stroke:#cfdae6;stroke-dasharray:5 4;stroke-width:1.2}
+          .zt{font:11.5px "Microsoft YaHei",sans-serif;fill:#7b8798}
+        </style>
+      </defs>
+
+      <rect class="zone" x="8" y="46" width="238" height="392" rx="10"/>
+      <text class="zt" x="20" y="66">互联网 / 校园用户</text>
+
+      <rect class="zone" x="270" y="46" width="290" height="392" rx="10"/>
+      <text class="zt" x="282" y="66">主云 124.221.26.96 · 10.66.0.1</text>
+
+      <rect class="zone" x="584" y="46" width="408" height="392" rx="10"/>
+      <text class="zt" x="596" y="66">校园台式机 172.16.6.104 · 10.66.0.4</text>
+
+      <rect class="n" x="30" y="120" width="190" height="66" rx="8"/>
+      <text class="t" x="46" y="148">浏览器 / 企微</text>
+      <text class="s" x="46" y="169">https://htw.example.com</text>
+
+      <rect class="n" x="296" y="112" width="238" height="82" rx="8" fill="#eef4fa"/>
+      <text class="t" x="312" y="138">Nginx 1.24</text>
+      <text class="s" x="312" y="158">443 TLS 终止</text>
+      <text class="s" x="312" y="177">proxy_pass → 10.66.0.4:8000</text>
+
+      <rect class="n" x="296" y="252" width="238" height="70" rx="8"/>
+      <text class="t" x="312" y="278">wg0</text>
+      <text class="s" x="312" y="299">51820/udp · 转发已开启</text>
+
+      <rect class="n" x="620" y="96" width="340" height="96" rx="8" fill="#eef7f2"/>
+      <text class="t" x="638" y="122">htw-website (uvicorn)</text>
+      <text class="s" x="638" y="142">监听 10.66.0.4:8000</text>
+      <text class="s" x="638" y="161">仅注册工作台 72 条精确路由</text>
+      <text class="s" x="638" y="180">无业务规则，只做协议适配</text>
+
+      <rect class="n" x="620" y="216" width="150" height="86" rx="8" fill="#fff7e9"/>
+      <text class="t" x="636" y="242">htw-redis</text>
+      <text class="s" x="636" y="262">127.0.0.1:6380</text>
+      <text class="s" x="636" y="281">队列 + 响应 key</text>
+
+      <rect class="n" x="796" y="216" width="164" height="86" rx="8" fill="#eef7f2"/>
+      <text class="t" x="812" y="242">htw-worker</text>
+      <text class="s" x="812" y="262">单实例消费</text>
+      <text class="s" x="812" y="281">SQLite + 调度</text>
+
+      <rect class="n" x="620" y="330" width="340" height="80" rx="8" fill="#f3f4f6" stroke-dasharray="4 3"/>
+      <text class="t" x="638" y="356">/var/lib/htw/dywork.db</text>
+      <text class="s" x="638" y="376">SQLite 单写者；仅 worker 写入</text>
+      <text class="s" x="638" y="395">/var/log/htw 存放两侧日志</text>
+
+      <path class="e" d="M220,152 L292,152"/>
+      <text class="lbl" x="222" y="143">HTTPS</text>
+      <path class="e" d="M416,194 L416,248"/>
+      <text class="lbl" x="424" y="226">wg0 封装</text>
+      <path class="e" d="M534,290 L616,150"/>
+      <text class="lbl" x="540" y="212">8000/tcp 解密后</text>
+      <path class="e" d="M774,192 L754,212"/>
+      <text class="lbl" x="700" y="208">RPUSH</text>
+      <path class="e" d="M878,216 L878,192"/>
+      <text class="lbl" x="884" y="208">BLPOP</text>
+      <path class="e" d="M760,302 L760,328"/>
+      <text class="lbl" x="700" y="320">读写</text>
+    </svg>
+    <figcaption>公网 → 主云 Nginx → WireGuard 隧道 → 台式机 website → Redis → worker → SQLite</figcaption>
+  </figure>
+
+  <div class="grid2">
+    <div class="box">
+      <h4>为什么 web 只监听 10.66.0.4</h4>
+      <p>若监听 <code>0.0.0.0</code>，校园网内任何机器都能直连 8000，绕过主云的 HTTPS 与访问控制。绑定隧道地址后，<code>172.16.6.104:8000</code> 不可达，入口只剩主云一条。</p>
+    </div>
+    <div class="box">
+      <h4>为什么 Redis 也只在台式机</h4>
+      <p>请求与响应都在本机闭环，避免跨公网 Redis 带来的延迟和单点耦合；6380 独立实例不与系统 6379 的 <code>requirepass</code> 配置纠缠。</p>
+    </div>
+  </div>
+
+  <h3>端口与信任边界</h3>
+  <div class="table-wrap">
+    <table>
+      <tr><th>端口</th><th>所在机器</th><th>监听地址</th><th>可达范围</th></tr>
+      <tr><td class="k">443 / 80</td><td>主云</td><td>0.0.0.0</td><td><span class="tag risk">公网</span> 唯一对外入口</td></tr>
+      <tr><td class="k">8000</td><td>台式机</td><td>10.66.0.4</td><td><span class="tag ok">仅 WireGuard</span></td></tr>
+      <tr><td class="k">6380</td><td>台式机</td><td>127.0.0.1</td><td><span class="tag ok">仅本机</span></td></tr>
+      <tr><td class="k">6379</td><td>台式机</td><td>127.0.0.1</td><td>已有实例（带鉴权），本次不复用</td></tr>
+      <tr><td class="k">51820/udp</td><td>主云</td><td>0.0.0.0</td><td>公网可达，仅 WireGuard 协议</td></tr>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="no">03</div>
+  <h2>台式机落地</h2>
+  <p class="sub">Ubuntu 22.04.5，4 核 / 24 GB / 根分区剩余约 40 GB；当前 Python 3.10.12，无 Nginx。</p>
+
+  <div class="callout warn">
+    <b>前置版本要求：</b><code>website/requirements.txt</code> 标注 <code>Python&gt;=3.11</code>。台式机系统 Python 是 3.10.12，直接安装会失败，需先补 3.11 或 3.12 运行时。
+  </div>
+
+  <h3>目录与账号</h3>
+  <pre><code>sudo useradd --system --create-home --home-dir /opt/htw --shell /usr/sbin/nologin htw
+sudo mkdir -p /opt/htw/app /var/lib/htw /var/log/htw /etc/htw
+sudo chown -R htw:htw /var/lib/htw /var/log/htw /opt/htw</code></pre>
+
+  <h3>Python 3.12 与依赖</h3>
+  <pre><code>sudo apt-get update
+sudo apt-get install -y software-properties-common
+sudo add-apt-repository -y ppa:deadsnakes/ppa
+sudo apt-get install -y python3.12 python3.12-venv
+sudo -u htw /usr/bin/python3.12 -m venv /opt/htw/.venv
+sudo -u htw /opt/htw/.venv/bin/pip install -U pip
+sudo -u htw /opt/htw/.venv/bin/pip install -r /opt/htw/app/website/requirements.txt</code></pre>
+
+  <h3>代码同步</h3>
+  <pre><code># 从本机推到台式机（经主云、存储两跳）
+rsync -a --delete \
+  --exclude '.git' --exclude '__pycache__' --exclude 'runtime' \
+  -e "ssh -J root@124.221.26.96,xr@10.66.0.2" \
+  ./ fc@172.16.6.104:/opt/htw/app/</code></pre>
+
+  <h3>三个 systemd 单元</h3>
+  <p>文件已放在 <code>deploy/systemd/</code>：<code>htw-redis.service</code>、<code>htw-worker.service</code>、<code>htw-website.service</code>。</p>
+  <pre><code>sudo cp deploy/systemd/htw-*.service /etc/systemd/system/
+sudo cp deploy/htw.env.example /etc/htw/htw.env
+sudo chown root:htw /etc/htw/htw.env &amp;&amp; sudo chmod 640 /etc/htw/htw.env
+sudo systemctl daemon-reload
+sudo systemctl enable --now htw-redis.service
+sudo systemctl enable --now htw-worker.service
+sudo systemctl enable --now htw-website.service</code></pre>
+
+  <div class="callout">
+    启动顺序必须是 redis → worker → website。<code>htw-website.service</code> 里用 <code>Requires=htw-redis.service</code> 和 <code>After=</code> 固定了依赖，避免 web 先于队列就绪。
+  </div>
+
+  <h3>数据库初始化</h3>
+  <p>worker 首次启动会在 <code>/var/lib/htw/</code> 建库并初始化通讯录；不需要额外迁移命令。</p>
+</section>
+
+<section>
+  <div class="no">04</div>
+  <h2>主云 Nginx</h2>
+  <p class="sub">完整配置见 <code>deploy/nginx/htw.conf</code>，以下是生效要点。</p>
+  <pre><code>upstream htw_desktop {
+    server 10.66.0.4:8000 max_fails=3 fail_timeout=10s;
+    keepalive 16;
+}
+
+location / {
+    proxy_pass http://htw_desktop;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+    proxy_set_header Host              $host;
+    proxy_set_header X-Real-IP         $remote_addr;
+    proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Auth-User       $http_x_auth_user;
+
+    proxy_connect_timeout 3s;
+    proxy_read_timeout    15s;
+    proxy_buffering       off;
+}</code></pre>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>配置</th><th>取值</th><th>原因</th></tr>
+      <tr><td class="k">proxy_read_timeout</td><td>15s</td><td>web 端等 worker 的上限是 5s，15s 留足重试与抖动余量</td></tr>
+      <tr><td class="k">proxy_buffering off</td><td>关闭</td><td>企微回调返回 text/plain 或 text/xml，避免缓冲改变响应时序</td></tr>
+      <tr><td class="k">Connection ""</td><td>置空</td><td>配合 upstream keepalive，否则连接复用失效</td></tr>
+      <tr><td class="k">X-Auth-User</td><td>透传</td><td>网关不伪造身份，见第 6 节风险</td></tr>
+      <tr><td class="k">client_max_body_size</td><td>8m</td><td>常规业务请求远小于此，仅防异常大包</td></tr>
+    </table>
+  </div>
+
+  <h3>启用与证书</h3>
+  <pre><code>sudo cp deploy/nginx/htw.conf /etc/nginx/sites-available/htw.conf
+sudo ln -sf /etc/nginx/sites-available/htw.conf /etc/nginx/sites-enabled/htw.conf
+sudo nginx -t &amp;&amp; sudo systemctl reload nginx
+
+# 主云当前没有 certbot，需要先安装
+sudo apt-get install -y certbot python3-certbot-nginx
+sudo certbot --nginx -d htw.example.com</code></pre>
+  <div class="callout warn">
+    主云现在只监听 80，未监听 443；云厂商安全组需放行 443/TCP，否则证书签发与访问都会失败。DNS 的 A 记录要指向 124.221.26.96。
+  </div>
+</section>
+
+<section>
+  <div class="no">05</div>
+  <h2>上线验证与回滚</h2>
+  <h3>验证顺序</h3>
+  <ol>
+    <li>台式机本机：<code>curl -sS http://10.66.0.4:8000/api/v1/health</code> 返回 <code>"status":"running"</code>。</li>
+    <li>主云隧道侧：<code>curl -sS http://10.66.0.4:8000/api/v1/health</code> 同结果，证明 WireGuard 转发正常。</li>
+    <li>主云公网侧：<code>curl -sS https://htw.example.com/api/v1/health</code>，并检查证书链。</li>
+    <li>页面：浏览器打开 <code>/api/head_teacher_workbench</code>，静态资源 200。</li>
+    <li>故障语义：停掉 worker 后业务接口应返回 504，而不是超时挂死；Redis 停掉应返回 503。</li>
+  </ol>
+
+  <h3>回滚</h3>
+  <pre><code>sudo systemctl stop htw-website htw-worker htw-redis
+sudo rm -f /etc/nginx/sites-enabled/htw.conf
+sudo systemctl reload nginx
+# WireGuard 如需回退：恢复 /etc/wireguard/wg0.conf.trae-bak-20261119 后 restart wg-quick@wg0</code></pre>
+</section>
+
+<section>
+  <div class="no">06</div>
+  <h2>风险与待决事项</h2>
+
+  <div class="callout risk">
+    <b>身份头可伪造（上线前必须处理）。</b> 当前业务身份由请求头 <code>X-Auth-User</code> 决定，Nginx 只做透传。一旦公网可达，任何客户端都能自带该头冒充他人。正式开放前需在网关补一层真实身份注入（企微 OAuth 换取身份后由 Nginx 覆盖该头，或 <code>auth_request</code> 校验会话），并禁止外部同名头透传。
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>事项</th><th>现状</th><th>建议</th></tr>
+      <tr>
+        <td class="k">website 脚手架依赖 MySQL</td>
+        <td>启动即初始化 <code>db_async_session</code>，需要 MySQL 可达</td>
+        <td>方案 A：台式机装 MySQL 8，零代码改动；方案 B：为工作台单独加环境变量跳过该初始化（改动约 5 行）。若近期不用量化业务，B 更省资源。</td>
+      </tr>
+      <tr>
+        <td class="k">Python 版本</td>
+        <td>系统 3.10.12，依赖要求 ≥3.11</td>
+        <td>deadsnakes 装 3.12，或在 <code>/opt/htw</code> 下用独立运行时</td>
+      </tr>
+      <tr>
+        <td class="k">台式机到存储 10.66.0.2</td>
+        <td><span class="tag warn">ping 不通</span>（主云转发链未放行该方向）</td>
+        <td>不影响本次 Web 链路；如后续需要台式机访问存储，再在主云开放转发与防火墙</td>
+      </tr>
+      <tr>
+        <td class="k">主云单点</td>
+        <td>公网入口只有一台主云</td>
+        <td>可接受；Nginx 侧已配 <code>max_fails</code>，台式机重启时短暂 502</td>
+      </tr>
+      <tr>
+        <td class="k">校园网出口策略</td>
+        <td>台式机为 NAT 后主动外连，靠 25s keepalive 维持</td>
+        <td>若校园网封 UDP 长连接，握手会周期性断开，需观察 <code>wg show</code> 的 latest handshake</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<footer>本文件由实际 SSH 探测结果生成；部署命令未在服务器上执行，仅完成 WireGuard 修复与验证。</footer>
+</main>
+</body>
+</html>

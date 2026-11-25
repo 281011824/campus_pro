@@ -1,0 +1,937 @@
+/* ============================================================
+   班主任工作台 · 登录页
+   设计取向：政务庄重感 —— 中国红 + 香槟金 + 宣纸白
+   字体：标题用衬线（宋体系），正文用系统无衬线
+   ============================================================ */
+
+:root {
+  --gov-red: #8E1B1B;
+  --gov-red-deep: #5C0F0F;
+  --gov-red-dark: #4A0C0C;
+  --gov-gold: #C8A45D;
+  --gov-gold-light: #E3C88B;
+  --gov-ink: #1F2328;
+  --gov-ink-soft: #4A4F56;
+  --gov-muted: #7A7F86;
+  --gov-paper: #F7F4EE;
+  --gov-line: #E3DDD0;
+  --gov-serif: "Noto Serif SC", "Source Han Serif SC", "Songti SC", SimSun, serif;
+  --gov-sans: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+html, body { height: 100%; }
+
+body.gov-login {
+  margin: 0;
+  font-family: var(--gov-sans);
+  color: var(--gov-ink);
+  background: var(--gov-paper);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+/* ---------- 整体骨架 ---------- */
+
+.login-shell {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  /* 底图：晨曦校园剪影，由左右两块半透明面板控制明暗 */
+  background-color: #4A0C0C;
+  background-image: url("/static/login/bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ---------- 左侧品牌区 ---------- */
+
+.login-brand {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 64px clamp(40px, 6vw, 96px);
+  color: #FBF7EE;
+  background:
+    radial-gradient(95% 76% at 10% 4%, rgba(58, 8, 8, 0.34), transparent 62%),
+    radial-gradient(80% 60% at 100% 100%, rgba(0, 0, 0, 0.36), transparent 60%),
+    linear-gradient(160deg, rgba(146, 28, 28, 0.54) 0%, rgba(116, 21, 21, 0.52) 42%, rgba(84, 13, 13, 0.66) 72%, rgba(58, 9, 9, 0.78) 100%);
+}
+
+/* 细密回纹肌理，避免大面积纯色 */
+.login-brand::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 16px),
+    repeating-linear-gradient(-45deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 16px);
+  pointer-events: none;
+}
+
+/* 底部金色收边 */
+.login-brand::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--gov-gold) 30%, var(--gov-gold-light) 50%, var(--gov-gold) 70%, transparent);
+  opacity: 0.85;
+}
+
+.brand-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+  animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.brand-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+/* 校名：中文主行 + 英文副行，衬线字重 + 金色竖线，形成“校牌”观感 */
+.brand-school {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  padding-left: 16px;
+  border-left: 1px solid rgba(227, 200, 139, 0.28);
+}
+
+.school-name {
+  font-family: var(--gov-serif);
+  font-size: clamp(17px, 1.42vw, 20px);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.09em;
+  color: #FBF7EE;
+  white-space: nowrap;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.18);
+}
+
+.school-en {
+  font-size: 9px;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: rgba(227, 200, 139, 0.7);
+}
+
+.brand-mark {
+  width: 62px;
+  height: 62px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: 1px solid rgba(227, 200, 139, 0.75);
+  box-shadow:
+    0 0 0 5px rgba(227, 200, 139, 0.12),
+    inset 0 0 22px rgba(227, 200, 139, 0.16);
+  color: var(--gov-gold-light);
+  font-family: var(--gov-serif);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.brand-seal {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  padding: 4px 10px 4px 12px;
+  border: 1px solid rgba(227, 200, 139, 0.45);
+  border-radius: 2px;
+  color: rgba(251, 247, 238, 0.82);
+  white-space: nowrap;
+}
+
+.brand-title {
+  margin: 0;
+  font-family: var(--gov-serif);
+  font-size: clamp(32px, 3.4vw, 46px);
+  font-weight: 600;
+  line-height: 1.24;
+  letter-spacing: 0.16em;
+  text-shadow:
+    0 2px 18px rgba(0, 0, 0, 0.35),
+    0 0 46px rgba(200, 164, 93, 0.16);
+}
+
+.brand-sub {
+  margin: 16px 0 0;
+  font-size: 14px;
+  letter-spacing: 0.34em;
+  color: rgba(251, 247, 238, 0.72);
+}
+
+.brand-rule {
+  display: block;
+  width: 58px;
+  height: 3px;
+  margin: 30px 0 28px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gov-gold-light), rgba(200, 164, 93, 0.15));
+}
+
+.brand-points {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 18px;
+  max-width: 440px;
+}
+
+.brand-points li {
+  position: relative;
+  padding-left: 16px;
+}
+
+.brand-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 2px;
+  height: 15px;
+  background: linear-gradient(180deg, var(--gov-gold-light), rgba(200, 164, 93, 0.25));
+}
+
+.point-key {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #FBF7EE;
+}
+
+.point-desc {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: rgba(251, 247, 238, 0.62);
+}
+
+.brand-foot {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 56px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(227, 200, 139, 0.22);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: rgba(251, 247, 238, 0.5);
+}
+
+.brand-foot .brand-seal {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  padding: 3px 8px 3px 10px;
+}
+
+/* ---------- 右侧登录区 ---------- */
+
+.login-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px clamp(24px, 5vw, 64px);
+  background-color: rgba(249, 247, 242, 0.93);
+  background-image:
+    linear-gradient(rgba(31, 35, 40, 0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(31, 35, 40, 0.028) 1px, transparent 1px);
+  background-size: 30px 30px;
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
+  backdrop-filter: blur(14px) saturate(1.05);
+}
+
+/* 卡片下方的柔和光晕，压住网格 */
+.login-panel::before {
+  content: "";
+  position: absolute;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0) 68%);
+  pointer-events: none;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 420px;
+  padding: 42px 38px 36px;
+  background: #FFFFFF;
+  border: 1px solid var(--gov-line);
+  border-radius: 4px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.95) inset,
+    0 0 0 1px rgba(200, 164, 93, 0.12),
+    0 44px 96px -48px rgba(60, 10, 10, 0.55),
+    0 12px 28px -16px rgba(31, 35, 40, 0.22);
+  animation: rise 0.6s 0.08s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* 顶部红金饰条 */
+.login-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(90deg, var(--gov-red), var(--gov-gold) 62%, var(--gov-red));
+}
+
+/* 证书式内框 */
+.login-card::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border: 1px solid rgba(200, 164, 93, 0.22);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.card-head {
+  margin-bottom: 26px;
+}
+
+.card-eyebrow {
+  margin: 0 0 10px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: #A98F5C;
+}
+
+.card-title {
+  margin: 0;
+  font-family: var(--gov-serif);
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--gov-ink);
+}
+
+.card-desc {
+  margin: 10px 0 0;
+  font-size: 13px;
+  color: var(--gov-muted);
+  letter-spacing: 0.02em;
+}
+
+/* ---------- 表单 ---------- */
+
+.form-label {
+  margin-bottom: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--gov-ink-soft);
+}
+
+.gov-input.form-control {
+  height: auto;
+  padding: 11px 14px;
+  font-size: 15px;
+  color: var(--gov-ink);
+  background-color: #FDFCFA;
+  border: 1px solid #D9D3C6;
+  border-radius: 3px;
+  box-shadow: none;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.gov-input.form-control::placeholder {
+  color: #A9ADB3;
+  letter-spacing: 0.02em;
+}
+
+.gov-input.form-control:hover {
+  border-color: #C9C1B0;
+}
+
+.gov-input.form-control:focus {
+  background-color: #FFFFFF;
+  border-color: var(--gov-red);
+  box-shadow: 0 0 0 3px rgba(142, 27, 27, 0.1);
+}
+
+.pwd-wrap {
+  position: relative;
+}
+
+.pwd-wrap .gov-input {
+  padding-right: 62px;
+}
+
+.pwd-toggle {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  transform: translateY(-50%);
+  padding: 6px 10px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--gov-red);
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.pwd-toggle:hover {
+  background: rgba(142, 27, 27, 0.07);
+}
+
+.form-check-label {
+  font-size: 13px;
+  color: var(--gov-ink-soft);
+  cursor: pointer;
+}
+
+.form-check-input {
+  border-color: #C9C1B0;
+  cursor: pointer;
+}
+
+.form-check-input:checked {
+  background-color: var(--gov-red);
+  border-color: var(--gov-red);
+}
+
+.form-check-input:focus {
+  border-color: var(--gov-red);
+  box-shadow: 0 0 0 3px rgba(142, 27, 27, 0.1);
+}
+
+.hint {
+  font-size: 12px;
+  color: var(--gov-muted);
+}
+
+/* 错误提示：默认不占位 */
+.form-alert {
+  display: none;
+  margin-bottom: 14px;
+  padding: 9px 12px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #8E1B1B;
+  background: #FCF1F1;
+  border: 1px solid #F0CBCB;
+  border-left: 3px solid var(--gov-red);
+  border-radius: 3px;
+}
+
+.form-alert.is-visible {
+  display: block;
+}
+
+/* 主按钮 */
+.gov-btn {
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  color: #FFF9F0;
+  background: linear-gradient(180deg, #A62727 0%, #8E1B1B 52%, #741313 100%);
+  border: 1px solid #6B1010;
+  border-radius: 3px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.16) inset,
+    0 10px 24px -14px rgba(116, 19, 19, 0.95);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+}
+
+.gov-btn:hover,
+.gov-btn:focus-visible {
+  color: #FFF9F0;
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 22px -12px rgba(124, 20, 20, 0.85);
+}
+
+.gov-btn:active {
+  transform: translateY(0);
+  filter: brightness(0.97);
+}
+
+.gov-btn:disabled,
+.gov-btn.disabled {
+  opacity: 0.68;
+  cursor: progress;
+  transform: none;
+  box-shadow: none;
+}
+
+/* 分隔线 */
+.card-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 18px;
+  color: #A9ADB3;
+  font-size: 12px;
+  letter-spacing: 0.2em;
+}
+
+.card-divider::before,
+.card-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gov-line), transparent);
+}
+
+/* 企微登录 */
+.wecom-btn {
+  display: block;
+  padding: 11px 16px;
+  font-size: 14px;
+  letter-spacing: 0.12em;
+  text-align: center;
+  text-decoration: none;
+  color: #0E7A3C;
+  background: #FBFDFB;
+  border: 1px solid rgba(7, 193, 96, 0.45);
+  border-radius: 3px;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.wecom-btn:hover {
+  color: #0A6630;
+  background: rgba(7, 193, 96, 0.06);
+  border-color: rgba(7, 193, 96, 0.75);
+}
+
+.wecom-btn.is-disabled {
+  color: #9AA0A6;
+  background: #FAF8F4;
+  border: 1px dashed #D9D3C6;
+  cursor: not-allowed;
+}
+
+.wecom-btn.is-disabled:hover {
+  color: #9AA0A6;
+  background: #FAF8F4;
+  border-color: #D9D3C6;
+}
+
+.card-note {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--gov-muted);
+  text-align: center;
+}
+
+.login-foot {
+  position: relative;
+  z-index: 1;
+  margin-top: 26px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: #8B9097;
+  text-align: center;
+}
+
+/* ---------- 键盘可访问性 ---------- */
+
+a:focus-visible,
+button:focus-visible,
+.pwd-toggle:focus-visible {
+  outline: 2px solid var(--gov-gold);
+  outline-offset: 2px;
+}
+
+/* ---------- 动效 ---------- */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- 响应式 ---------- */
+
+@media (max-width: 991.98px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+    /* 单列时底图靠上，让天空与剪影落在品牌条区域 */
+    background-image: url("/static/login/bg.jpg");
+    background-position: center top;
+  }
+
+  .login-brand {
+    align-items: flex-start;
+    padding: 34px 26px 30px;
+    /* 手机上品牌条较矮，适当透出天空光感 */
+    background:
+      radial-gradient(95% 120% at 10% 0%, rgba(58, 8, 8, 0.3), transparent 60%),
+      linear-gradient(160deg, rgba(146, 28, 28, 0.48) 0%, rgba(112, 20, 20, 0.56) 55%, rgba(62, 10, 10, 0.76) 100%);
+  }
+
+  .brand-inner { max-width: none; }
+
+  .brand-head { margin-bottom: 18px; }
+
+  .brand-mark {
+    width: 46px;
+    height: 46px;
+    font-size: 21px;
+  }
+
+  .brand-school {
+    gap: 5px;
+    padding-left: 12px;
+  }
+
+  .school-name {
+    font-size: 15px;
+    letter-spacing: 0.06em;
+  }
+
+  .school-en {
+    font-size: 8px;
+    letter-spacing: 0.16em;
+  }
+
+  .brand-foot { margin-top: 30px; }
+
+  .brand-title {
+    font-size: 26px;
+    letter-spacing: 0.12em;
+  }
+
+  .brand-sub {
+    margin-top: 10px;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+  }
+
+  .brand-rule { margin: 18px 0 0; }
+  .brand-points, .brand-foot { display: none; }
+
+  .login-panel {
+    justify-content: flex-start;
+    padding: 34px 18px 40px;
+  }
+
+  .login-panel::before { display: none; }
+
+  /* 平板：卡片略宽，输入框 16px 防止 iOS 聚焦自动放大 */
+  .login-card { max-width: 460px; }
+
+  .gov-input.form-control { font-size: 16px; }
+}
+
+/* 平板竖屏 / 大屏手机 */
+@media (max-width: 767.98px) {
+  .login-brand { padding: 28px 22px 26px; }
+
+  .brand-title {
+    font-size: 23px;
+    letter-spacing: 0.1em;
+  }
+
+  .brand-sub {
+    margin-top: 8px;
+    font-size: 11.5px;
+    letter-spacing: 0.18em;
+  }
+
+  .brand-rule { margin: 16px 0 0; }
+
+  .login-panel { padding: 28px 16px 36px; }
+
+  .login-card { padding: 30px 24px 26px; }
+
+  .card-title { font-size: 23px; }
+}
+
+/* 手机 */
+@media (max-width: 575.98px) {
+  .login-brand { padding: 22px 18px 22px; }
+
+  .brand-head {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .school-name {
+    font-size: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  .school-en {
+    font-size: 7.5px;
+    letter-spacing: 0.1em;
+  }
+
+  .brand-title {
+    font-size: 21px;
+    letter-spacing: 0.08em;
+  }
+
+  .brand-sub {
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+  }
+
+  .login-panel { padding: 24px 14px 30px; }
+
+  .login-card {
+    max-width: 100%;
+    padding: 26px 18px 22px;
+  }
+
+  .login-card::after { display: none; }
+
+  .card-title { font-size: 22px; }
+  .gov-btn { letter-spacing: 0.24em; }
+
+  .login-foot {
+    margin-top: 18px;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+}
+
+/* 手机横屏 / 高度很小的窗口：压缩品牌条，避免登录框被挤出首屏 */
+@media (max-height: 560px) and (orientation: landscape) {
+  .login-brand { padding: 18px 22px; }
+
+  .brand-head { margin-bottom: 12px; }
+
+  .brand-mark {
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .school-en { display: none; }
+
+  .brand-title {
+    font-size: 20px;
+    letter-spacing: 0.08em;
+  }
+
+  .brand-sub {
+    margin-top: 6px;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+  }
+
+  .brand-rule { display: none; }
+
+  .login-panel {
+    justify-content: flex-start;
+    padding: 20px 16px 28px;
+  }
+
+  .login-card { padding: 24px 22px 20px; }
+
+  .login-card::after { display: none; }
+
+  .login-foot { margin-top: 14px; }
+}
+
+/* ---------- 统一登录 · 三身份分段控件 ---------- */
+
+.seg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 5px;
+  margin-bottom: 22px;
+  background: #F6F2EA;
+  border: 1px solid #E3DDD0;
+  border-radius: 4px;
+}
+
+.seg-btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  color: var(--gov-muted);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.seg-btn .seg-label {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: inherit;
+}
+
+.seg-btn .seg-sub {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: inherit;
+  opacity: 0.7;
+}
+
+.seg-btn:hover {
+  color: var(--gov-ink-soft);
+  background: rgba(200, 164, 93, 0.08);
+}
+
+.seg-btn.on {
+  color: #FFF9F0;
+  background: linear-gradient(180deg, #A62727 0%, #8E1B1B 100%);
+  border-color: #6B1010;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.16) inset,
+    0 6px 14px -10px rgba(116, 19, 19, 0.95);
+}
+
+.seg-btn.on .seg-sub { opacity: 0.82; }
+
+/* role-pane 切换：JS 控制 hidden 属性 */
+.role-pane { }
+
+/* 学生 Tab 提示 */
+.hintbox {
+  margin-top: 16px;
+  padding: 10px 12px;
+  font-size: 12.5px;
+  line-height: 1.7;
+  border-radius: 3px;
+}
+
+.hintbox b { display: inline-block; margin-right: 6px; }
+
+.hintbox-info {
+  color: #4F6F9E;
+  background: #F2F6FB;
+  border: 1px solid #D6E2F2;
+  border-left: 3px solid #4F6F9E;
+}
+
+/* 家长入口 */
+.parent-entry {
+  padding-top: 6px;
+}
+
+.parent-entry .gov-btn {
+  width: 100%;
+}
+
+.parent-howto {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  width: 100%;
+  font-size: 13px;
+  color: var(--gov-ink-soft);
+  background: #FBF9F3;
+  border: 1px solid var(--gov-line);
+  border-radius: 3px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.parent-howto:hover {
+  border-color: var(--gov-gold);
+  background: #FDFBF5;
+}
+
+.parent-howto .caret {
+  font-size: 11px;
+  color: var(--gov-muted);
+  transition: transform 0.18s ease;
+}
+
+.parent-howto[aria-expanded="true"] .caret {
+  transform: rotate(180deg);
+}
+
+.parent-howto-body {
+  margin-top: 10px;
+  padding: 14px 16px;
+  background: #FBF9F3;
+  border: 1px solid var(--gov-line);
+  border-left: 3px solid var(--gov-gold);
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 1.8;
+  color: var(--gov-ink-soft);
+}
+
+.parent-howto-body ol {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.parent-howto-body .tiny {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--gov-muted);
+}
+
+@media (max-width: 575.98px) {
+  .seg { gap: 3px; padding: 4px; }
+  .seg-btn { padding: 9px 4px; }
+  .seg-btn .seg-label { font-size: 13px; }
+  .seg-btn .seg-sub { font-size: 10px; letter-spacing: 0.04em; }
+}
+
+/* ---------- 减少动态效果 ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-inner,
+  .login-card {
+    animation: none;
+  }
+
+  .gov-btn,
+  .wecom-btn,
+  .gov-input.form-control {
+    transition: none;
+  }
+
+  .gov-btn:hover,
+  .gov-btn:focus-visible {
+    transform: none;
+  }
+}

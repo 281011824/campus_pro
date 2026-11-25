@@ -1,0 +1,20 @@
+[Unit]
+Description=Head Teacher Workbench Website (FastAPI, main cloud)
+After=network-online.target htw-redis.service
+Wants=network-online.target
+Requires=htw-redis.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/school_pro/website
+EnvironmentFile=/opt/school_pro/htw.env
+ExecStart=/opt/school_pro/website/.venv/bin/uvicorn app.main:app \
+    --host 127.0.0.1 --port 5004 \
+    --workers 2 \
+    --proxy-headers --forwarded-allow-ips 127.0.0.1
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

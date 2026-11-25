@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#123a6b">
+<title>学生成长门户 · 京山市中等职业技术学校</title>
+<link rel="stylesheet" href="/static/student/app.css?v=20261125student2">
+</head>
+<body>
+<div id="app">
+
+  <header class="appbar">
+    <button type="button" id="btn-back" class="appbar-back" hidden aria-label="返回">‹</button>
+    <div class="appbar-title">
+      <b id="app-title">成长门户</b>
+      <small id="app-sub">京山中职 · 学生成长</small>
+    </div>
+    <a class="appbar-right" href="/api/v1/logout">退出</a>
+  </header>
+
+  <main id="view" aria-live="polite">
+    <div class="sk-card"><div class="sk-line w40"></div><div class="sk-line w80"></div></div>
+  </main>
+
+  <nav class="tabbar" id="tabbar" aria-label="主导航">
+    <button type="button" data-tab="home" class="on" aria-current="page">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11 12 4l8 7v9a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1z"/></svg>
+      <span>首页</span>
+    </button>
+    <button type="button" data-tab="assess">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+      <span>测评</span>
+    </button>
+    <button type="button" data-tab="timeline">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>
+      <span>时间轴</span>
+    </button>
+    <button type="button" data-tab="todo">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6 2 2 3-3M4 13l2 2 3-3M4 20l2 2 3-3"/><path d="M13 6h7M13 13h7M13 20h7"/></svg>
+      <span>待办</span>
+    </button>
+    <button type="button" data-tab="mine">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.5-3.5 4-5 7-5s5.5 1.5 7 5"/></svg>
+      <span>我的</span>
+    </button>
+  </nav>
+
+</div>
+
+<noscript><p style="padding:20px;text-align:center">本页面需要启用 JavaScript 才能查看成长数据。</p></noscript>
+
+<script src="/static/student/app.js?v=20261125student2"></script>
+<script src="/static/student/views/home.js?v=20261125student2"></script>
+<script src="/static/student/views/assess.js?v=20261125student2"></script>
+<script src="/static/student/views/quiz.js?v=20261125student2"></script>
+<script src="/static/student/views/profile.js?v=20261125student2"></script>
+<script src="/static/student/views/batch.js?v=20261125student2"></script>
+<script src="/static/student/views/timeline.js?v=20261125student2"></script>
+<script src="/static/student/views/todo.js?v=20261125student2"></script>
+<script src="/static/student/views/plan.js?v=20261125student2"></script>
+<script src="/static/student/views/share.js?v=20261125student2"></script>
+<script src="/static/student/views/privacy.js?v=20261125student2"></script>
+<script src="/static/student/views/mine.js?v=20261125student2"></script>
+<script>window.App.boot();</script>
+</body>
+</html>
